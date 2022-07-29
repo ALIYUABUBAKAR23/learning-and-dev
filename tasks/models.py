@@ -36,3 +36,11 @@ class Task(BaseModel):
 
     def __str__(self):
         return self.name
+    
+    @classmethod
+    def get_task_list(cls, **kwargs):
+        """
+        This method fetches a users list of tasks using key word arguments i.e kwargs
+        """
+        tasks = Task.objects.filter(**kwargs).values()
+        return tasks
