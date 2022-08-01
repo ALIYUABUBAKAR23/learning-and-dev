@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 from erp.models import BaseModel
 
+
 # Create your models here.
 
 STATES = (
@@ -50,15 +51,30 @@ SEX=(
     ('Female','female'),
 )
 
-DEPARTMENTS=(
-    ('Accounting','accounting'),
-    ('Human Resources','human resources'),
-    ('Developers','developers'),
-    ('Business Analysis','business analysis'),
-    ('Business Development','business development'),
-)
+# DEPARTMENTS=(
+#     ('Accounting','accounting'),
+#     ('Human Resources','human resources'),
+#     ('Developers','developers'),
+#     ('Business Analysis','business analysis'),
+#     ('Business Development','business development'),
+# )
 
+class Department(models.Model):
+    name= models.CharField(max_length=200, blank=True, null=True)
+    description= models.CharField(max_length=500, blank=True, null=True)
+    head_of_department= models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
+    class Meta:
+        verbose_name =("Department")
+        verbose_name_plural =("Departments")
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def get_deptartments(cls, **kwargs):
+        dept = Department.objects.all().values('name')
+        return dept
 
 class Staff(BaseModel):
     first_name = models.CharField(max_length=200, blank=True)
@@ -77,7 +93,8 @@ class Staff(BaseModel):
     commencement_date = models.DateTimeField(max_length=200,blank=True)
     salary = models.IntegerField(blank=True)
     role = models.CharField(max_length=200, blank=True)
-    department = models.CharField(choices=DEPARTMENTS, max_length=200, null=True, blank=True)
+    department = models.ForeignKey(Department, null=True, on_delete=models.SET_NULL)
+    # department = models.CharField(choices=DEPARTMENTS, max_length=20, blank=True )
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     class Meta:
@@ -101,4 +118,3 @@ class Staff(BaseModel):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
 
-        
