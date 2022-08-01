@@ -14,6 +14,7 @@ class GetStaff(APIView):
 
 class LoggedInStaff(APIView):
     def get(self,request):
-        logged_in = Staff.logged_in()
-        # print(logged_in)
-        return Response(data=logged_in, status=status.HTTP_200_OK)
+        user = request.user
+        user_profile = Staff.get_user_profile(user_id=user.id)
+        # print(user_profile)
+        return Response(data=user_profile, status=status.HTTP_200_OK)

@@ -68,13 +68,13 @@ class Staff(BaseModel):
     dob = models.DateField(null=False, blank=True)
     state_of_origin = models.CharField(choices=STATES, max_length=20, blank=True)
     address = models.CharField(max_length=500, blank=True)
-    phone_no = models.IntegerField(blank=True)
+    phone_no = models.CharField(max_length=14, blank=True)
     email = models.EmailField(max_length=200, blank=True)
     twitter = models.CharField(max_length=200, null=True, blank=True)
     tnstagram = models.CharField(max_length=200, null=True, blank=True)
     linkedIn = models.CharField(max_length=200, null=True, blank=True)
-    staff_ID = models.CharField(max_length=200, blank=True)
-    commencement_Date = models.DateTimeField(max_length=200,blank=True)
+    staff_id = models.CharField(max_length=200, blank=True)
+    commencement_date = models.DateTimeField(max_length=200,blank=True)
     salary = models.IntegerField(blank=True)
     role = models.CharField(max_length=200, blank=True)
     department = models.CharField(choices=DEPARTMENTS, max_length=200, null=True, blank=True)
@@ -87,19 +87,18 @@ class Staff(BaseModel):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
+    # @classmethod
+    # def full_name(self):
+    #     return f" {self.first_name} {self.last_name} "
+
     @classmethod
     def get_staff_list(cls, **kwargs):
-        # full_name= f'{Staff.first_name} {Staff.first_name}' 
-        # all_staff1 = list(Staff.objects.all().values_list('first_name', flat=True)) 
-        # all_staff2 = list(Staff.objects.all().values_list('last_name', flat=True)) 
-        all_staff = Staff.objects.all().values_list('full_name', flat= True)
-        # return full_name
-        # return f'{all_staff1} {all_staff2}'
+        all_staff = Staff.objects.all().values('first_name','last_name')
         return all_staff
 
     @classmethod 
-    def logged_in(cls, **kwargs):
-        logged_in_staff = Staff.objects.all().values_list('user', flat=True)
-        return logged_in_staff
+    def get_user_profile(cls, **kwargs):
+        user_profile = Staff.objects.filter(**kwargs).values()
+        return user_profile
 
         
