@@ -44,3 +44,39 @@ class Task(BaseModel):
         """
         tasks = Task.objects.filter(**kwargs).values()
         return tasks
+
+    @classmethod
+    def create_task(cls, **kwargs):
+        task = None
+        try:
+            task = Task.objects.create(**kwargs)
+        except Exception as e:
+            print(f"Failed to create task. Error below: \n {e}")
+        return task
+
+    @classmethod
+    def update_task(cls, task_id, **kwargs):
+        task = None
+        try:
+            task = Task.objects.filter(id=task_id).update(**kwargs)
+        except Exception as e:
+            print(f"Failed to create task. Error below: \n {e}")
+        return task
+
+    @classmethod
+    def delete_task(cls, task_id):
+        task = None
+        try:
+            task = Task.objects.filter(id=task_id).delete()
+        except Exception as e:
+            print(f"Failed to create task. Error below: \n {e}")
+        return task
+
+    @classmethod
+    def delete_all_tasks(cls):
+        task = None
+        try:
+            task = Task.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to create task. Error below: \n {e}")
+        return task
