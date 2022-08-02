@@ -87,7 +87,7 @@ class Staff(BaseModel):
     phone_no = models.CharField(max_length=14, blank=True)
     email = models.EmailField(max_length=200, blank=True)
     twitter = models.CharField(max_length=200, null=True, blank=True)
-    tnstagram = models.CharField(max_length=200, null=True, blank=True)
+    instagram = models.CharField(max_length=200, null=True, blank=True)
     linkedIn = models.CharField(max_length=200, null=True, blank=True)
     staff_id = models.CharField(max_length=200, blank=True)
     commencement_date = models.DateTimeField(max_length=200,blank=True)
@@ -118,3 +118,29 @@ class Staff(BaseModel):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
 
+    @classmethod
+    def create_staff(cls, **kwargs):
+        staff = None
+        try:
+            staff = Staff.objects.create(**kwargs)
+        except Exception as e:
+            print(f"Failed to create staff. Error below: \n {e}")
+        return staff
+
+    @classmethod
+    def update_staff(cls,staff_id,**kwargs):
+        staff = None
+        try:
+            staff = Staff.objects.filter(id=staff_id).update(**kwargs)
+        except Exception as e:
+            print(f"Failed to update staff. Error below: \n {e}")
+        return staff
+
+    @classmethod
+    def delete_all_staff(cls):
+        staff = None
+        try:
+            staff = Staff.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to delete tasks. Error below: \n {e}")
+        return staff
