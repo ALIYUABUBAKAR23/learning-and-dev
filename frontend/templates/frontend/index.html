@@ -1,0 +1,15 @@
+<!-- Main HTML File of the Web application -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<title>Django and React Web Application</title>
+		{% load static %}
+	</head>
+	<body style="margin: 0;">
+		<div id="app"></div>
+		<script src = "{% static 'frontend/main.js' %}"></script>
+	</body>
+</html>
