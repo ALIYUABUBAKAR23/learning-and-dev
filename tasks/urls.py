@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.urls import path
 
-from tasks.views import GetTasks
+from tasks.views import TasksAPI
 
 urlpatterns = [
-    path("fetch_tasks", GetTasks.as_view(), name="fetch_tasks"),
+    path("fetch_tasks", TasksAPI.as_view(), name="fetch_tasks"),
 ]
