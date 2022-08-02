@@ -58,10 +58,40 @@ class GetProfile(APIView):
         # print(user_profile)
         return Response(data=user_profile, status=status.HTTP_200_OK)
 
+
+
 class DepartmentAPI(APIView):
     def get(self,request):
         depts =Department.get_deptartments()
         return Response(data=depts, status=status.HTTP_200_OK)
+
+    def post(self,request):
+        department_data = request.data
+        
+        department = Department.create_department(**department_data)
+        if department is None:
+            return Response(data={'message':'department failed to be created. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={'message':'department created successfully'}, status=status.HTTP_201_CREATED)
+
+    def put(self,request):
+        department_id= request.data.get("id", None)
+        if department_id is None:
+            return Response(data={"message":"Failed to update department. No department ID was specified."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        department_data = request.data
+        department_data.pop("id")
+
+        department = Department.update_department(department_id, **department_data)
+        if department is None:
+            return Response(data={"message":"Failed to update department."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={"message":"Successfully updated department."}, status=status.HTTP_201_CREATED)
+
+    def delete(self,request):
+        department = Department.delete_all_department()
+        if department is None:
+            return Response(data={"message":"Failed to delete department."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={"message":"Successfully deleted department."}, status=status.HTTP_201_CREATED)
+
 
 
 '''
@@ -83,5 +113,12 @@ class DepartmentAPI(APIView):
     "commencement_date" : "2022-06-24 8:00" ,
     "salary" : 200000 ,
     "role" : "developer"
+}
+'''
+'''
+{
+    "name" : "Developers" ,
+    "description" : "Django Developer" ,
+    "head_of_department_id" : 2
 }
 '''

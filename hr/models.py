@@ -60,9 +60,9 @@ SEX=(
 # )
 
 class Department(models.Model):
-    name= models.CharField(max_length=200, blank=True, null=True)
-    description= models.CharField(max_length=500, blank=True, null=True)
-    head_of_department= models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    description = models.CharField(max_length=500, blank=True, null=True)
+    head_of_department = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name =("Department")
@@ -73,8 +73,35 @@ class Department(models.Model):
 
     @classmethod
     def get_deptartments(cls, **kwargs):
-        dept = Department.objects.all().values('name')
+        dept = Department.objects.all().values()
         return dept
+
+    @classmethod
+    def create_department(cls, **kwargs):
+        department = None
+        try:
+            department = Department.objects.create(**kwargs)
+        except Exception as e:
+            print(f"Failed to create department. Error below: \n {e}")
+        return department
+
+    @classmethod
+    def update_department(cls,department_id,**department_data):
+        department = None
+        try:
+            department = Department.objects.filter(id=department_id).update(**department_data)
+        except Exception as e:
+            print(f"Failed to update department. Error below: \n {e}")
+        return department
+
+    @classmethod
+    def delete_all_department(cls):
+        department = None
+        try:
+            department = Department.objects.all().delete()
+        except Exception as e:
+            print (f"The department could not b deleted. Error below: /n {e}")
+        return department
 
 class Staff(BaseModel):
     first_name = models.CharField(max_length=200, blank=True)
