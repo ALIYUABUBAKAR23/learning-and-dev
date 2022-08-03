@@ -2,10 +2,10 @@ from django.shortcuts import render
 from rest_framework import filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from hr.models import Staff, Department
 import datetime
 from datetime import datetime
 
+from hr.models import Staff, Department
 # Create your views here.
 
 class StaffAPI(APIView):
@@ -50,8 +50,7 @@ class StaffAPI(APIView):
         return Response(data={"message":"Successfully deleted staff."}, status=status.HTTP_201_CREATED)
 
 
-
-class GetProfile(APIView):
+class ProfileAPI(APIView):
     def get(self,request):
         user = request.user
         user_profile = Staff.get_user_profile(user_id=user.id)
@@ -59,10 +58,9 @@ class GetProfile(APIView):
         return Response(data=user_profile, status=status.HTTP_200_OK)
 
 
-
 class DepartmentAPI(APIView):
     def get(self,request):
-        depts =Department.get_deptartments()
+        depts =Department.get_departments()
         return Response(data=depts, status=status.HTTP_200_OK)
 
     def post(self,request):
@@ -91,7 +89,6 @@ class DepartmentAPI(APIView):
         if department is None:
             return Response(data={"message":"Failed to delete department."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message":"Successfully deleted department."}, status=status.HTTP_201_CREATED)
-
 
 
 '''

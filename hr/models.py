@@ -72,7 +72,7 @@ class Department(models.Model):
         return self.name
 
     @classmethod
-    def get_deptartments(cls, **kwargs):
+    def get_departments(cls, **kwargs):
         dept = Department.objects.all().values("name")
         return dept
 
