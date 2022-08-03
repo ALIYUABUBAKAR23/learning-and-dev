@@ -1,3 +1,4 @@
+import profile
 from django.shortcuts import render
 from rest_framework import filters, status
 from rest_framework.views import APIView
@@ -22,7 +23,10 @@ class ProfileAPI(APIView):
 
     def post(self, request):
         user_profile = request.data 
-        return Response(data=user_profile, status=status.HTTP_200_OK)
+        user_profile = Staff.create_profile(**user_profile)
+        if user_profile: 
+            return Response(data={"message":"Successfully created user profile."}, status=status.HTTP_201_CREATED)
+        return Response(data={"message":"Failed to create user profile."}, status=status.HTTP_501_NOT_IMPLEMENTED) 
     
     def put(self, request):
         profile_id = request.data.get("id", None)

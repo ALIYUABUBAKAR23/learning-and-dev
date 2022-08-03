@@ -149,7 +149,7 @@ class Staff(BaseModel):
 
     @classmethod
     def get_staff_list(cls, **kwargs):
-        all_staff = Staff.objects.all().values('first_name','last_name')
+        all_staff = Staff.objects.all().values()
         return all_staff
 
     @classmethod 
@@ -200,5 +200,30 @@ class Staff(BaseModel):
     "description": "test the post request to the backend",
     "head_of_department_id": "1"
   }
+
+"""
+
+"""
+
+{
+    "first_name":"John",
+    "last_name":"Doe",
+    "full_name": "John Doe",
+    "sex": "male",
+    "dob":"1977/07/07" ,
+    "state_of_origin":"Yola" ,
+    "address":"Somewhere in the Village",
+    "phone_no":"01010101010",
+    "email":"john_doe@gamil.com" ,
+    "twitter":"doesjohn",
+    "tnstagram":"slayjohnny",
+    "linkedIn": "Johnathan Doe",
+    "staff_id":"007" ,
+    "commencement_date":"2022/08/03" ,
+    "salary": "777777",
+    "role":"General Manager" ,
+    "department_id":"1",
+    "user_id":"1"  
+}
 
 """
