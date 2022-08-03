@@ -24,6 +24,25 @@ class ProfileAPI(APIView):
         user_profile = request.data 
         return Response(data=user_profile, status=status.HTTP_200_OK)
     
+    def put(self, request):
+        profile_id = request.data.get("id", None)
+        if not profile_id:
+            return Response(data={"message":"No ID Supplied."}, status=status.HTTP_501_NOT_IMPLEMENTED)
+        profile_data = request.data 
+        profile_data.pop("id")
+        profile = Staff.update_profile(profile_id, **profile_data)
+        if profile:
+            return Response(data={"message":"Successfully updated profile."}, status=status.HTTP_201_CREATED)
+        return Response(data={"message":"Failed to update profile."}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    def delete(self, request):
+        # profile_id = request.data.get("id", None)
+        # profile = Profile.delete_profile(profile_id)
+        profile = Staff.delete_all_profiles()
+        if profile is None:
+            return Response(data={"message":"Failed to delete profile."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={"message":"Successfully deleted profile."}, status=status.HTTP_201_CREATED)
+    
 
 class DepartmentAPI(APIView):
     def get(self, request):
@@ -48,4 +67,10 @@ class DepartmentAPI(APIView):
             return Response(data={"message":"Successfully updated department."}, status=status.HTTP_201_CREATED)
         return Response(data={"message":"Failed to update department."}, status=status.HTTP_501_NOT_IMPLEMENTED)  
     
-        
+    def delete(self, request):
+        # department_id = request.data.get("id", None)
+        # department = department.delete_department(department_id)
+        department = Department.delete_all_departments()
+        if department is None:
+            return Response(data={"message":"Failed to delete department."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={"message":"Successfully deleted department."}, status=status.HTTP_201_CREATED)  

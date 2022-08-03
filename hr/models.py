@@ -94,6 +94,24 @@ class Department(models.Model):
         except Exception as e:
             print(e)
         return department
+    
+    @classmethod
+    def delete_department(cls, department_id):
+        department = None
+        try:
+            department = Department.objects.filter(id=department_id).delete()
+        except Exception as e:
+            print(f"Failed to create department. Error below: \n {e}")
+        return department
+
+    @classmethod
+    def delete_all_departments(cls):
+        department = None
+        try:
+            department = Department.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to create department. Error below: \n {e}")
+        return department
             
     
 
@@ -138,6 +156,42 @@ class Staff(BaseModel):
     def get_user_profile(cls, **kwargs):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
+    
+    @classmethod
+    def create_profile(cls, **kwargs):
+        profile = None
+        try:             
+            profile = Staff.objects.create(**kwargs)
+        except Exception as e:
+            print(e)
+        return profile
+    
+    @classmethod
+    def update_profile(cls, profile_id, **kwargs):
+        profile = None
+        try:
+            profile= Staff.objects.filter(id = profile_id).update(**kwargs)
+        except Exception as e:
+            print(e)
+        return profile
+    
+    @classmethod
+    def delete_profile(cls, profile_id):
+        profile = None
+        try:
+            profile = Staff.objects.filter(id=profile_id).delete()
+        except Exception as e:
+            print(f"Failed to create profile. Error below: \n {e}")
+        return profile
+
+    @classmethod
+    def delete_all_profiles(cls):
+        profile = None
+        try:
+            profile = Staff.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to create profile. Error below: \n {e}")
+        return profile
 
 """
 
