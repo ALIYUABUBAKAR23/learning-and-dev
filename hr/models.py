@@ -1,4 +1,5 @@
 from email.headerregistry import Address
+from logging import exception
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -73,8 +74,46 @@ class Department(models.Model):
 
     @classmethod
     def get_departments(cls, **kwargs):
-        dept = Department.objects.all().values("name")
+        dept = Department.objects.all().values('name')
         return dept
+    
+    @classmethod
+    def create_department(cls, **kwargs):
+        department = None
+        try:             
+            department = Department.objects.create(**kwargs)
+        except Exception as e:
+            print(e)
+        return department
+    
+    @classmethod
+    def update_department(cls, department_id, **kwargs):
+        department = None
+        try:
+            department= Department.objects.filter(id = department_id).update(**kwargs)
+        except Exception as e:
+            print(e)
+        return department
+    
+    @classmethod
+    def delete_department(cls, department_id):
+        department = None
+        try:
+            department = Department.objects.filter(id=department_id).delete()
+        except Exception as e:
+            print(f"Failed to create department. Error below: \n {e}")
+        return department
+
+    @classmethod
+    def delete_all_departments(cls):
+        department = None
+        try:
+            department = Department.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to create department. Error below: \n {e}")
+        return department
+            
+    
 
     @classmethod
     def create_department(cls, **kwargs):
@@ -137,37 +176,81 @@ class Staff(BaseModel):
 
     @classmethod
     def get_staff_list(cls, **kwargs):
-        all_staff = Staff.objects.all().values('first_name','last_name')
+        all_staff = Staff.objects.all().values()
         return all_staff
 
     @classmethod 
     def get_user_profile(cls, **kwargs):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
+    
+    @classmethod
+    def create_profile(cls, **kwargs):
+        profile = None
+        try:             
+            profile = Staff.objects.create(**kwargs)
+        except Exception as e:
+            print(e)
+        return profile
+    
+    @classmethod
+    def update_profile(cls, profile_id, **kwargs):
+        profile = None
+        try:
+            profile= Staff.objects.filter(id = profile_id).update(**kwargs)
+        except Exception as e:
+            print(e)
+        return profile
+    
+    @classmethod
+    def delete_profile(cls, profile_id):
+        profile = None
+        try:
+            profile = Staff.objects.filter(id=profile_id).delete()
+        except Exception as e:
+            print(f"Failed to create profile. Error below: \n {e}")
+        return profile
 
     @classmethod
-    def create_staff(cls, **kwargs):
-        staff = None
+    def delete_all_profiles(cls):
+        profile = None
         try:
-            staff = Staff.objects.create(**kwargs)
+            profile = Staff.objects.all().delete()
         except Exception as e:
-            print(f"Failed to create staff. Error below: \n {e}")
-        return staff
+            print(f"Failed to create profile. Error below: \n {e}")
+        return profile
 
-    @classmethod
-    def update_staff(cls,staff_id,**kwargs):
-        staff = None
-        try:
-            staff = Staff.objects.filter(id=staff_id).update(**kwargs)
-        except Exception as e:
-            print(f"Failed to update staff. Error below: \n {e}")
-        return staff
+"""
 
-    @classmethod
-    def delete_all_staff(cls):
-        staff = None
-        try:
-            staff = Staff.objects.all().delete()
-        except Exception as e:
-            print(f"Failed to delete tasks. Error below: \n {e}")
-        return staff
+{
+    "name": "test post request",
+    "description": "test the post request to the backend",
+    "head_of_department_id": "1"
+  }
+
+"""
+
+"""
+
+{
+    "first_name":"John",
+    "last_name":"Doe",
+    "full_name": "John Doe",
+    "sex": "male",
+    "dob":"1977/07/07" ,
+    "state_of_origin":"Yola" ,
+    "address":"Somewhere in the Village",
+    "phone_no":"01010101010",
+    "email":"john_doe@gamil.com" ,
+    "twitter":"doesjohn",
+    "tnstagram":"slayjohnny",
+    "linkedIn": "Johnathan Doe",
+    "staff_id":"007" ,
+    "commencement_date":"2022/08/03" ,
+    "salary": "777777",
+    "role":"General Manager" ,
+    "department_id":"1",
+    "user_id":"1"  
+}
+
+"""
