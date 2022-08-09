@@ -1,6 +1,6 @@
 from email.headerregistry import Address
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 
 from erp.models import BaseModel
 
@@ -62,7 +62,7 @@ SEX=(
 class Department(models.Model):
     name= models.CharField(max_length=200, blank=True, null=True)
     description= models.CharField(max_length=500, blank=True, null=True)
-    head_of_department= models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    head_of_department= models.ForeignKey(settings.AUTH_USER_MODEL, related_name='head_of_department', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name =("Department")
@@ -95,7 +95,7 @@ class Staff(BaseModel):
     role = models.CharField(max_length=200, blank=True)
     department = models.ForeignKey(Department, null=True, on_delete=models.SET_NULL)
     # department = models.CharField(choices=DEPARTMENTS, max_length=20, blank=True )
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = ("staff")
@@ -117,4 +117,3 @@ class Staff(BaseModel):
     def get_user_profile(cls, **kwargs):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
-

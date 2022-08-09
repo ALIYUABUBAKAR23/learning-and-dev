@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
 
 from erp.models import BaseModel
 
@@ -24,19 +24,21 @@ class Task(BaseModel):
     name = models.CharField(max_length=200, null=False, blank=True)
     description = models.TextField(null=False, blank=True)
     comment = models.TextField(null=False, blank=True)
-    assigned_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    assigned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     assigned_to = models.JSONField(null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(choices=TASK_STATUS, max_length=200, null=True, blank=True)
-    
+    status = models.CharField(
+        choices=TASK_STATUS, max_length=200, null=True, blank=True)
+
     class Meta:
         verbose_name = ("task")
         verbose_name_plural = ("tasks")
 
     def __str__(self):
         return self.name
-    
+
     @classmethod
     def get_task_list(cls, **kwargs):
         """
