@@ -1,5 +1,6 @@
 from email.headerregistry import Address
 from django.conf import settings
+
 from django.db import models
 
 from erp.models import BaseModel
@@ -72,9 +73,74 @@ class Department(models.Model):
         return self.name
 
     @classmethod
-    def get_deptartments(cls, **kwargs):
+    def get_departments(cls, **kwargs):
         dept = Department.objects.all().values('name')
         return dept
+    
+    @classmethod
+    def create_department(cls, **kwargs):
+        department = None
+        try:             
+            department = Department.objects.create(**kwargs)
+        except Exception as e:
+            print(e)
+        return department
+    
+    @classmethod
+    def update_department(cls, department_id, **kwargs):
+        department = None
+        try:
+            department= Department.objects.filter(id = department_id).update(**kwargs)
+        except Exception as e:
+            print(e)
+        return department
+    
+    @classmethod
+    def delete_department(cls, department_id):
+        department = None
+        try:
+            department = Department.objects.filter(id=department_id).delete()
+        except Exception as e:
+            print(f"Failed to create department. Error below: \n {e}")
+        return department
+
+    @classmethod
+    def delete_all_departments(cls):
+        department = None
+        try:
+            department = Department.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to create department. Error below: \n {e}")
+        return department
+            
+    
+
+    @classmethod
+    def create_department(cls, **kwargs):
+        department = None
+        try:
+            department = Department.objects.create(**kwargs)
+        except Exception as e:
+            print(f"Failed to create department. Error below: \n {e}")
+        return department
+
+    @classmethod
+    def update_department(cls,department_id,**department_data):
+        department = None
+        try:
+            department = Department.objects.filter(id=department_id).update(**department_data)
+        except Exception as e:
+            print(f"Failed to update department. Error below: \n {e}")
+        return department
+
+    @classmethod
+    def delete_all_department(cls):
+        department = None
+        try:
+            department = Department.objects.all().delete()
+        except Exception as e:
+            print (f"The department could not b deleted. Error below: /n {e}")
+        return department
 
 class Staff(BaseModel):
     first_name = models.CharField(max_length=200, blank=True)
@@ -87,7 +153,7 @@ class Staff(BaseModel):
     phone_no = models.CharField(max_length=14, blank=True)
     email = models.EmailField(max_length=200, blank=True)
     twitter = models.CharField(max_length=200, null=True, blank=True)
-    tnstagram = models.CharField(max_length=200, null=True, blank=True)
+    instagram = models.CharField(max_length=200, null=True, blank=True)
     linkedIn = models.CharField(max_length=200, null=True, blank=True)
     staff_id = models.CharField(max_length=200, blank=True)
     commencement_date = models.DateTimeField(max_length=200,blank=True)
@@ -110,10 +176,11 @@ class Staff(BaseModel):
 
     @classmethod
     def get_staff_list(cls, **kwargs):
-        all_staff = Staff.objects.all().values('first_name','last_name')
+        all_staff = Staff.objects.all().values()
         return all_staff
 
     @classmethod 
     def get_user_profile(cls, **kwargs):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
+
