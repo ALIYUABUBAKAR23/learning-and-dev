@@ -1,7 +1,7 @@
 from email.headerregistry import Address
-from logging import exception
+from django.conf import settings
+
 from django.db import models
-from django.contrib.auth.models import User
 
 from erp.models import BaseModel
 
@@ -61,9 +61,9 @@ SEX=(
 # )
 
 class Department(models.Model):
-    name = models.CharField(max_length=200, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
-    head_of_department = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    name= models.CharField(max_length=200, blank=True, null=True)
+    description= models.CharField(max_length=500, blank=True, null=True)
+    head_of_department= models.ForeignKey(settings.AUTH_USER_MODEL, related_name='head_of_department', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name =("Department")
@@ -161,7 +161,7 @@ class Staff(BaseModel):
     role = models.CharField(max_length=200, blank=True)
     department = models.ForeignKey(Department, null=True, on_delete=models.SET_NULL)
     # department = models.CharField(choices=DEPARTMENTS, max_length=20, blank=True )
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = ("staff")
@@ -183,74 +183,4 @@ class Staff(BaseModel):
     def get_user_profile(cls, **kwargs):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
-    
-    @classmethod
-    def create_profile(cls, **kwargs):
-        profile = None
-        try:             
-            profile = Staff.objects.create(**kwargs)
-        except Exception as e:
-            print(e)
-        return profile
-    
-    @classmethod
-    def update_profile(cls, profile_id, **kwargs):
-        profile = None
-        try:
-            profile= Staff.objects.filter(id = profile_id).update(**kwargs)
-        except Exception as e:
-            print(e)
-        return profile
-    
-    @classmethod
-    def delete_profile(cls, profile_id):
-        profile = None
-        try:
-            profile = Staff.objects.filter(id=profile_id).delete()
-        except Exception as e:
-            print(f"Failed to create profile. Error below: \n {e}")
-        return profile
 
-    @classmethod
-    def delete_all_profiles(cls):
-        profile = None
-        try:
-            profile = Staff.objects.all().delete()
-        except Exception as e:
-            print(f"Failed to create profile. Error below: \n {e}")
-        return profile
-
-"""
-
-{
-    "name": "test post request",
-    "description": "test the post request to the backend",
-    "head_of_department_id": "1"
-  }
-
-"""
-
-"""
-
-{
-    "first_name":"John",
-    "last_name":"Doe",
-    "full_name": "John Doe",
-    "sex": "male",
-    "dob":"1977/07/07" ,
-    "state_of_origin":"Yola" ,
-    "address":"Somewhere in the Village",
-    "phone_no":"01010101010",
-    "email":"john_doe@gamil.com" ,
-    "twitter":"doesjohn",
-    "tnstagram":"slayjohnny",
-    "linkedIn": "Johnathan Doe",
-    "staff_id":"007" ,
-    "commencement_date":"2022/08/03" ,
-    "salary": "777777",
-    "role":"General Manager" ,
-    "department_id":"1",
-    "user_id":"1"  
-}
-
-"""

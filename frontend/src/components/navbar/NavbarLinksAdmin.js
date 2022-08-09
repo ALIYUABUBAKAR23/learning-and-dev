@@ -26,6 +26,7 @@ import { MdNotificationsNone, MdInfoOutline } from "react-icons/md";
 import { IoMdMoon, IoMdSunny } from "react-icons/io";
 import { FaEthereum } from "react-icons/fa";
 import routes from "../../routes";
+import Logout from "../../views/auth/signIn/Logout";
 export default function HeaderLinks(props) {
   const { secondary } = props;
   const { colorMode, toggleColorMode } = useColorMode();
@@ -275,7 +276,10 @@ export default function HeaderLinks(props) {
               _focus={{ bg: "none" }}
               color='red.400'
               borderRadius='8px'
-              px='14px'>
+              px='14px'
+              onClick={() => {
+                Logout();
+              }}>
               <Text fontSize='sm'>Log out</Text>
             </MenuItem>
           </Flex>
