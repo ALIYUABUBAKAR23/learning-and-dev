@@ -29,17 +29,23 @@
 # React Setup
 
 - $ cd > PROJECT ROOT > frontend # frontend app folder          
-- $
+
 - $ # Install node modules and packages
 - $ npm install
-- $
+
 - $ # Start frontend server
 - $ npm start
-- $
 - $ # Access the React app in browser: http://127.0.0.1:8001/
 
 
+# Create User
+Visit the following url route: http://127.0.0.1:8000/rest-auth/registration/
+Do not include a username when creating your user account.
+After successful creation, check your terminal for the email link, click it and login.
 
+# Login
+Login url route: http://127.0.0.1:8000/rest-auth/login
+Enter your email and password.
 
 # Developer and Development House Rules For Django Backend
 - Create Fat Models i.e Models should have their queries inside them. Achieved by using @classmethod functions a Model.
