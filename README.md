@@ -40,6 +40,7 @@
 
 
 
+
 # Developer and Development House Rules For Django Backend
 - Create Fat Models i.e Models should have their queries inside them. Achieved by using @classmethod functions a Model.
 - Create lean Views i.e Views should have no queries in them. Achieved by calling Model functions in a View.
