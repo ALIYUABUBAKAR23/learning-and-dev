@@ -67,7 +67,6 @@ class User(AbstractUser):
     commencement_date = models.DateField(max_length=200, null=True, blank=True)
     salary = models.IntegerField(blank=True, null=True)
     role = models.CharField(max_length=200, null=True, blank=True)
-    contract = models.CharField(max_length=200, null=True, blank=True)
     bank_name = models.CharField(max_length=100, null=True, blank=True)
     bank_account = models.CharField(max_length=20, null=True, blank=True)
     department = models.ForeignKey(

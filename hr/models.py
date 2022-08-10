@@ -184,7 +184,7 @@ class Staff(BaseModel):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
 
-class Contract():
+class Contract(BaseModel):
     contract_type = models.CharField(max_length=200, blank=True)
     date_issued = models.DateField(null=False, blank=True)
     contract_length = models.CharField(max_length=200, blank=True)
@@ -192,7 +192,7 @@ class Contract():
     contract_document = models.CharField(max_length=200, blank=True)
     end_date = models.CharField(max_length=200, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
-    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='approved_by')
     
     class Meta:
         verbose_name =("Contract")
@@ -203,7 +203,7 @@ class Contract():
 
     @classmethod
     def get_contracts(cls, **kwargs):
-        dept = Contract.objects.all().values('name')
+        dept = Contract.objects.all().values()
         return dept
     
     @classmethod
