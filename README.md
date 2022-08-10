@@ -48,7 +48,7 @@ Login url route: http://127.0.0.1:8000/rest-auth/login
 Enter your email and password.
 
 # Developer and Development House Rules For Django Backend
-- Create Fat Models i.e Models should have their queries inside them. Achieved by using @classmethod functions a Model.
+- Create Fat Models i.e Models should have their queries inside them. Achieved by using @classmethod functions in a Model.
 - Create lean Views i.e Views should have no queries in them. Achieved by calling Model functions in a View.
 - Use Pascalcase for naming views e.g MyContactListView(APIView)
 - Use Pascalcase for naming models e.g MyContact(models.Model)
