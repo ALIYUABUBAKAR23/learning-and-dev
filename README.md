@@ -1,42 +1,43 @@
 
 # Django Server Setup
 
--$ cd < PROJECT ROOT > # application root folder          
--$ # Virtualenv modules installation (Unix based systems)
--$ virtualenv --no-site-packages env
--$ source env/bin/activate
--$
--$ # Virtualenv modules installation (Windows based systems)
--$ # virtualenv --no-site-packages env
--$ # .\env\Scripts\activate
--$
--$ # Install modules - SQLite Database
--$ pip3 install -r requirements.txt
--$
--$ # Create tables
--$ python manage.py makemigrations
--$ python manage.py migrate
--$
--$ # Start the application (development mode)
--$ python manage.py runserver # default port 8000
--$
--$ # Start the app - custom port
--$ # python manage.py runserver 0.0.0.0:<your_port>
--$
--$ # Access the web app in browser: http://127.0.0.1:8000/
+- $ cd < PROJECT ROOT > # application root folder          
+- $ # Virtualenv modules installation (Unix based systems)
+- $ virtualenv --no-site-packages env
+- $ source env/bin/activate
+- $
+- $ # Virtualenv modules installation (Windows based systems)
+- $ # virtualenv --no-site-packages env
+- $ # .\env\Scripts\activate
+- $
+- $ # Install modules - SQLite Database
+- $ pip3 install -r requirements.txt
+- $
+- $ # Create tables
+- $ python manage.py makemigrations
+- $ python manage.py migrate
+- $
+- $ # Start the application (development mode)
+- $ python manage.py runserver # default port 8000
+- $
+- $ # Start the app - custom port
+- $ # python manage.py runserver 0.0.0.0:<your_port>
+- $
+- $ # Access the web app in browser: http://127.0.0.1:8000/
 
 
 # React Setup
 
--$ cd > PROJECT ROOT > frontend # frontend app folder          
--$
--$ # Install node modules and packages
--$ npm install
--$
--$ # Start frontend server
--$ npm start
--$
--$ # Access the React app in browser: http://127.0.0.1:8001/
+- $ cd > PROJECT ROOT > frontend # frontend app folder          
+- $
+- $ # Install node modules and packages
+- $ npm install
+- $
+- $ # Start frontend server
+- $ npm start
+- $
+- $ # Access the React app in browser: http://127.0.0.1:8001/
+
 
 
 
