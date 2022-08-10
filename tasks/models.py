@@ -15,6 +15,12 @@ TASK_STATUS = (
     ('Cancelled', 'cancelled'),
 )
 
+TASK_PRIORITY = (
+    ('High','high'),
+    ('Medium', 'medium'),
+    ('Low', 'low'),
+)
+
 
 class Task(BaseModel):
     """
@@ -31,6 +37,9 @@ class Task(BaseModel):
     due_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(
         choices=TASK_STATUS, max_length=200, null=True, blank=True)
+    priority = models.CharField(
+        choices=TASK_PRIORITY, max_length=200, null=True, blank=True)
+    
 
     class Meta:
         verbose_name = ("task")
