@@ -176,10 +176,3 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'api.authentication.serializers.UserInfoSerializer',
     'TOKEN_SERIALIZER': 'api.authentication.serializers.TokenSerializer',
 }
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',  # <-- And here
-    ],
-}

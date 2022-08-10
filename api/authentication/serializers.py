@@ -96,17 +96,17 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 # This is to allow you to override the UserDetailsSerializer at any time.
 # If you're sure you won't, you can skip this and use DefaultUserDetailsSerializer directly
-rest_auth_serializers = getattr(settings, 'REST_AUTH_SERIALIZERS', {})
-UserDetailsSerializer = import_callable(
-    rest_auth_serializers.get('USER_DETAILS_SERIALIZER', DefaultUserDetailsSerializer)
-)
+# rest_auth_serializers = getattr(settings, 'REST_AUTH_SERIALIZERS', {})
+# UserDetailsSerializer = import_callable(
+#     rest_auth_serializers.get('USER_DETAILS_SERIALIZER', DefaultUserDetailsSerializer)
+# )
 
 class TokenSerializer(serializers.ModelSerializer):
     user = UserInfoSerializer(read_only=True)
 
     class Meta:
         model = TokenModel
-        fields = ('key', 'user', )
+        fields = ('key', 'user' )
 
 """
 {
