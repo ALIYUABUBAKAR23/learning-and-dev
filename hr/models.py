@@ -77,41 +77,41 @@ class Department(models.Model):
         dept = Department.objects.all().values('name')
         return dept
     
-    @classmethod
-    def create_department(cls, **kwargs):
-        department = None
-        try:             
-            department = Department.objects.create(**kwargs)
-        except Exception as e:
-            print(e)
-        return department
+    # @classmethod
+    # def create_department(cls, **kwargs):
+    #     department = None
+    #     try:             
+    #         department = Department.objects.create(**kwargs)
+    #     except Exception as e:
+    #         print(e)
+    #     return department
     
-    @classmethod
-    def update_department(cls, department_id, **kwargs):
-        department = None
-        try:
-            department= Department.objects.filter(id = department_id).update(**kwargs)
-        except Exception as e:
-            print(e)
-        return department
+    # @classmethod
+    # def update_department(cls, department_id, **kwargs):
+    #     department = None
+    #     try:
+    #         department= Department.objects.filter(id = department_id).update(**kwargs)
+    #     except Exception as e:
+    #         print(e)
+    #     return department
     
-    @classmethod
-    def delete_department(cls, department_id):
-        department = None
-        try:
-            department = Department.objects.filter(id=department_id).delete()
-        except Exception as e:
-            print(f"Failed to create department. Error below: \n {e}")
-        return department
+    # @classmethod
+    # def delete_department(cls, department_id):
+    #     department = None
+    #     try:
+    #         department = Department.objects.filter(id=department_id).delete()
+    #     except Exception as e:
+    #         print(f"Failed to create department. Error below: \n {e}")
+    #     return department
 
-    @classmethod
-    def delete_all_departments(cls):
-        department = None
-        try:
-            department = Department.objects.all().delete()
-        except Exception as e:
-            print(f"Failed to create department. Error below: \n {e}")
-        return department
+    # @classmethod
+    # def delete_all_departments(cls):
+    #     department = None
+    #     try:
+    #         department = Department.objects.all().delete()
+    #     except Exception as e:
+    #         print(f"Failed to create department. Error below: \n {e}")
+    #     return department
             
     
 
@@ -134,7 +134,7 @@ class Department(models.Model):
         return department
 
     @classmethod
-    def delete_all_department(cls):
+    def delete_all_departments(cls):
         department = None
         try:
             department = Department.objects.all().delete()

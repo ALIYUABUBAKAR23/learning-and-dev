@@ -22,6 +22,7 @@ from django.conf.urls import url
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tasks/', include('tasks.urls')),
+    path('resources/', include('resources.urls')),
     path('hr/', include('hr.urls')),
     path('api/', include('api.urls')),
     path('customers/', include('crm.urls')),
