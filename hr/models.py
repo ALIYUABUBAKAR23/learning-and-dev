@@ -184,3 +184,88 @@ class Staff(BaseModel):
         user_profile = Staff.objects.filter(**kwargs).values()
         return user_profile
 
+class Contract(BaseModel):
+    contract_type = models.CharField(max_length=200, blank=True)
+    date_issued = models.DateField(null=False, blank=True)
+    contract_length = models.CharField(max_length=200, blank=True)
+    contract_details = models.CharField(max_length=200, blank=True)
+    contract_document = models.CharField(max_length=200, blank=True)
+    end_date = models.CharField(max_length=200, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='approved_by')
+    
+    class Meta:
+        verbose_name =("Contract")
+        verbose_name_plural =("Contracts")
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def get_contracts(cls, **kwargs):
+        dept = Contract.objects.all().values()
+        return dept
+    
+    @classmethod
+    def create_contract(cls, **kwargs):
+        contract = None
+        try:             
+            contract = Contract.objects.create(**kwargs)
+        except Exception as e:
+            print(e)
+        return contract
+    
+    @classmethod
+    def update_contract(cls, contract_id, **kwargs):
+        contract = None
+        try:
+            contract= Contract.objects.filter(id = contract_id).update(**kwargs)
+        except Exception as e:
+            print(e)
+        return contract
+    
+    @classmethod
+    def delete_contract(cls, contract_id):
+        contract = None
+        try:
+            contract = Contract.objects.filter(id=contract_id).delete()
+        except Exception as e:
+            print(f"Failed to create contract. Error below: \n {e}")
+        return contract
+
+    @classmethod
+    def delete_all_contracts(cls):
+        contract = None
+        try:
+            contract = Contract.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to create contract. Error below: \n {e}")
+        return contract
+        
+
+    @classmethod
+    def create_contract(cls, **kwargs):
+        contract = None
+        try:
+            contract = Contract.objects.create(**kwargs)
+        except Exception as e:
+            print(f"Failed to create contract. Error below: \n {e}")
+        return contract
+
+    @classmethod
+    def update_contract(cls,contract_id,**contract_data):
+        contract = None
+        try:
+            contract = Contract.objects.filter(id=contract_id).update(**contract_data)
+        except Exception as e:
+            print(f"Failed to update contract. Error below: \n {e}")
+        return contract
+
+    @classmethod
+    def delete_all_contract(cls):
+        contract = None
+        try:
+            contract = Contract.objects.all().delete()
+        except Exception as e:
+            print (f"The contract could not b deleted. Error below: /n {e}")
+        return contract

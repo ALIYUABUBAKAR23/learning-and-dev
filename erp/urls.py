@@ -25,6 +25,7 @@ urlpatterns = [
     path('resources/', include('resources.urls')),
     path('hr/', include('hr.urls')),
     path('api/', include('api.urls')),
+    path('customers/', include('crm.urls')),
     path("", include("frontend.urls")),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),

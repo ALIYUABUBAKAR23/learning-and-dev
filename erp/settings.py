@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'tasks',
     'hr',
     'resources',
+    'crm',
     'frontend',
     'api.authentication',
 ]
@@ -176,11 +177,4 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'api.authentication.serializers.UserInfoSerializer',
     'TOKEN_SERIALIZER': 'api.authentication.serializers.TokenSerializer',
-}
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',  # <-- And here
-    ],
 }
