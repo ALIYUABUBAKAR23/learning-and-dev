@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'crm',
     'frontend',
     'api.authentication',
+    'api.accounting',
 ]
 
 MIDDLEWARE = [
