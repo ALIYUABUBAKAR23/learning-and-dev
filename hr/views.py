@@ -110,3 +110,11 @@ class ContractAPI(APIView):
         if contract is None:
             return Response(data={"message":"Failed to delete contract."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message":"Successfully deleted contract."}, status=status.HTTP_201_CREATED)
+
+
+'''
+  {
+    "name": 2,
+    "description": "DO PR BEFORE THE END OF THE DAY"
+  }
+'''

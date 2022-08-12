@@ -49,7 +49,7 @@ class GetCustomers(APIView):
         customer = None
         customer_id = request.GET.get('customer_id', None)
         if customer_id:
-            customer = Customer.delete_customer()
+            customer = Customer.delete_customer(customer_id)
         else:
             customer = Customer.delete_all_customers()
         if customer is None:

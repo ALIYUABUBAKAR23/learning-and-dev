@@ -4,4 +4,5 @@ from . import views
 
 urlpatterns = [
     path('accounts/', include('api.accounting.urls')),
+    path('messages/', include('api.broadcast.urls')),
 ]

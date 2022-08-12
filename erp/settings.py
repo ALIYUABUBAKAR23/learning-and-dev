@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'frontend',
     'api.authentication',
     'api.accounting',
+    'api.broadcast',
 ]
 
 MIDDLEWARE = [
