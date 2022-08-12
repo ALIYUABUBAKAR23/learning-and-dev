@@ -76,8 +76,8 @@ class Department(models.Model):
 
     @classmethod
     def get_departments(cls, **kwargs):
-        dept = Department.objects.all().values('name')
-        return dept
+        department = Department.objects.all().values('name')
+        return department
 
     
     # @classmethod
@@ -213,8 +213,8 @@ class Contract(BaseModel):
 
     @classmethod
     def get_contracts(cls, **kwargs):
-        dept = Contract.objects.all().values()
-        return dept
+        contract = Contract.objects.all().values()
+        return contract
 
     @classmethod
     def create_contract(cls, **kwargs):
@@ -294,8 +294,8 @@ class Location(BaseModel):
 
     @classmethod
     def get_locations(cls, **kwargs):
-        dept = Location.objects.all().values()
-        return dept
+        location = Location.objects.all().values()
+        return location
 
     @classmethod
     def create_location(cls, **kwargs):

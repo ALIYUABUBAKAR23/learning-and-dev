@@ -50,8 +50,8 @@ class ProfileAPI(APIView):
 
 class DepartmentAPI(APIView):
     def get(self, request):
-        depts = Department.get_departments()
-        return Response(data=depts, status=status.HTTP_200_OK)
+        department = Department.get_departments()
+        return Response(data=department, status=status.HTTP_200_OK)
     
     def post(self, request):
         department = request.data
@@ -82,8 +82,8 @@ class DepartmentAPI(APIView):
 
 class ContractAPI(APIView):
     def get(self, request):
-        depts = Contract.get_contracts()
-        return Response(data=depts, status=status.HTTP_200_OK)
+        contract = Contract.get_contracts()
+        return Response(data=contract, status=status.HTTP_200_OK)
     
     def post(self, request):
         contract = request.data
@@ -113,8 +113,8 @@ class ContractAPI(APIView):
     
 class LocationAPI(APIView):
     def get(self, request):
-        depts = Location.get_locations()
-        return Response(data=depts, status=status.HTTP_200_OK)
+        location = Location.get_locations()
+        return Response(data=location, status=status.HTTP_200_OK)
     
     def post(self, request):
         location = request.data
