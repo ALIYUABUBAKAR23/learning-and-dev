@@ -110,7 +110,8 @@ class ContractAPI(APIView):
         if contract is None:
             return Response(data={"message":"Failed to delete contract."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message":"Successfully deleted contract."}, status=status.HTTP_201_CREATED)
-    
+
+   
 class LocationAPI(APIView):
     def get(self, request):
         location = Location.get_locations()
@@ -141,3 +142,4 @@ class LocationAPI(APIView):
         if location is None:
             return Response(data={"message":"Failed to delete location."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message":"Successfully deleted location."}, status=status.HTTP_201_CREATED)
+
