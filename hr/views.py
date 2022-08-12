@@ -4,7 +4,7 @@ from rest_framework import filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from hr.models import Staff, Department, Contract
+from hr.models import Staff, Department, Contract, Location
 
 
 class GetStaff(APIView):
@@ -50,8 +50,8 @@ class ProfileAPI(APIView):
 
 class DepartmentAPI(APIView):
     def get(self, request):
-        depts = Department.get_departments()
-        return Response(data=depts, status=status.HTTP_200_OK)
+        department = Department.get_departments()
+        return Response(data=department, status=status.HTTP_200_OK)
     
     def post(self, request):
         department = request.data
@@ -82,8 +82,8 @@ class DepartmentAPI(APIView):
 
 class ContractAPI(APIView):
     def get(self, request):
-        depts = Contract.get_contracts()
-        return Response(data=depts, status=status.HTTP_200_OK)
+        contract = Contract.get_contracts()
+        return Response(data=contract, status=status.HTTP_200_OK)
     
     def post(self, request):
         contract = request.data
@@ -111,10 +111,35 @@ class ContractAPI(APIView):
             return Response(data={"message":"Failed to delete contract."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message":"Successfully deleted contract."}, status=status.HTTP_201_CREATED)
 
+   
+class LocationAPI(APIView):
+    def get(self, request):
+        location = Location.get_locations()
+        return Response(data=location, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        location = request.data
+        location = Location.create_location(**location) 
+        if location: 
+            return Response(data={"message":"Successfully created location."}, status=status.HTTP_201_CREATED)
+        return Response(data={"message":"Failed to create location."}, status=status.HTTP_501_NOT_IMPLEMENTED)    
+    
+    def put(self, request):
+        location_id = request.data.get("id", None)
+        if not location_id:
+            return Response(data={"message":"No ID Supplied."}, status=status.HTTP_501_NOT_IMPLEMENTED)
+        location_data = request.data 
+        location_data.pop("id")
+        location = Location.update_location(location_id, **location_data)
+        if location:
+            return Response(data={"message":"Successfully updated location."}, status=status.HTTP_201_CREATED)
+        return Response(data={"message":"Failed to update location."}, status=status.HTTP_501_NOT_IMPLEMENTED)  
+    
+    def delete(self, request):
+        # location_id = request.data.get("id", None)
+        # location = location.delete_location(location_id)
+        location = Location.delete_all_locations()
+        if location is None:
+            return Response(data={"message":"Failed to delete location."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={"message":"Successfully deleted location."}, status=status.HTTP_201_CREATED)
 
-'''
-  {
-    "name": 2,
-    "description": "DO PR BEFORE THE END OF THE DAY"
-  }
-'''
