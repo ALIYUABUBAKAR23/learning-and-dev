@@ -84,13 +84,22 @@ class TasksAPI(APIView):
 """
     {    
         "contract_type": "new",
-        "date_issued": "01/01/1000",
+        "date_issued": "01-01-1000",
         "contract_length": "1 day",
         "contract_details": "super long",
         "contract_document": "important",
-        "end_date": "01/02/1000",  
+        "end_date": "01-02-1000",  
         "user": "",
         "approved_by": ""
     }
+
+"""
+
+"""
+{
+    "name": "John Smith",
+    "address":"Number 17, Spice Street",
+    "state": "Kano"    
+}
 
 """

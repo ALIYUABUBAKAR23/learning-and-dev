@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from hr.models import Department, Contract
+from hr.models import Department, Contract, Location
 
 
 # Register your models here.
@@ -8,3 +8,4 @@ from hr.models import Department, Contract
 # admin.site.register(Staff)
 admin.site.register(Department)
 admin.site.register(Contract)
+admin.site.register(Location)
