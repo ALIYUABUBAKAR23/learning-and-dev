@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'hr',
     'resources',
     'crm',
+    'business_analysis',
     'frontend',
     'api.authentication',
     'api.accounting',
@@ -158,6 +159,8 @@ SESSION_COOKIE_HTTPONLY = True
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
 AUTH_USER_MODEL = "authentication.User"  # new
+#AUTH_CUSTOMER_MODEL = "authentication.Customer"  # new
+
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
