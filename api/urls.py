@@ -6,4 +6,6 @@ from . import views
 urlpatterns = [
     path('accounts/', include('api.accounting.urls')),
     path('', ProjectAPI.as_view()), # new to test project model endpoints
+    path('messages/', include('api.broadcast.urls')),
+    path('tasks/', include('api.tasks.urls')),
 ]
