@@ -279,3 +279,85 @@ class Contract(BaseModel):
         except Exception as e:
             print(f"The contract could not b deleted. Error below: /n {e}")
         return contract
+
+class Location(BaseModel):
+    name = models.CharField(max_length=200, blank=True)
+    address = models.CharField(max_length=200, blank=True)
+    state = models.CharField(max_length=200, blank=True)
+    
+    class Meta:
+        verbose_name = ("Location")
+        verbose_name_plural = ("Locations")
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def get_locations(cls, **kwargs):
+        dept = Location.objects.all().values()
+        return dept
+
+    @classmethod
+    def create_location(cls, **kwargs):
+        location = None
+        try:
+            location = Location.objects.create(**kwargs)
+        except Exception as e:
+            print(e)
+        return location
+
+    @classmethod
+    def update_location(cls, location_id, **kwargs):
+        location = None
+        try:
+            location = Location.objects.filter(id=location_id).update(**kwargs)
+        except Exception as e:
+            print(e)
+        return location
+
+    @classmethod
+    def delete_location(cls, location_id):
+        location = None
+        try:
+            location = Location.objects.filter(id=location_id).delete()
+        except Exception as e:
+            print(f"Failed to create location. Error below: \n {e}")
+        return location
+
+    @classmethod
+    def delete_all_locations(cls):
+        location = None
+        try:
+            location = Location.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to create location. Error below: \n {e}")
+        return location
+
+    @classmethod
+    def create_location(cls, **kwargs):
+        location = None
+        try:
+            location = Location.objects.create(**kwargs)
+        except Exception as e:
+            print(f"Failed to create location. Error below: \n {e}")
+        return location
+
+    @classmethod
+    def update_location(cls, location_id, **location_data):
+        location = None
+        try:
+            location = Location.objects.filter(
+                id=location_id).update(**location_data)
+        except Exception as e:
+            print(f"Failed to update location. Error below: \n {e}")
+        return location
+
+    @classmethod
+    def delete_all_location(cls):
+        location = None
+        try:
+            location = Location.objects.all().delete()
+        except Exception as e:
+            print(f"The location could not b deleted. Error below: /n {e}")
+        return location
+    
