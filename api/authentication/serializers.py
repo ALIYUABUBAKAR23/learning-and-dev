@@ -27,7 +27,6 @@ class CustomRegisterSerializer(RegisterSerializer):
     commencement_date = serializers.DateField()
     salary = serializers.IntegerField()
     role = serializers.CharField(max_length=200)
-    contract = serializers.CharField(max_length=200)
     bank_name = serializers.CharField(max_length=100)
     bank_account = serializers.CharField(max_length=20)
     department_id = serializers.IntegerField()
@@ -41,6 +40,8 @@ class CustomRegisterSerializer(RegisterSerializer):
         user = super().save(request)
         user.sex = self.data.get('sex')
         user.middle_name = self.data.get('middle_name')
+        user.first_name = self.data.get('first_name')
+        user.last_name = self.data.get('last_name')
         user.state_of_origin = self.data.get('state_of_origin')
         user.address = self.data.get('address')
         user.phone_number = self.data.get('phone_number')
@@ -51,7 +52,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.commencement_date = self.data.get('commencement_date')
         user.salary = self.data.get('salary')
         user.role = self.data.get('role')
-        user.contract = self.data.get('contract')
         user.bank_name = self.data.get('bank_name')
         user.bank_account = self.data.get('bank_account')
         user.department_id = self.data.get('department_id')
@@ -84,7 +84,6 @@ class UserInfoSerializer(serializers.ModelSerializer):
             'commencement_date',
             'salary',
             'role',
-            'contract',
             'bank_name',
             'bank_account',
             'department',
@@ -128,7 +127,6 @@ class TokenSerializer(serializers.ModelSerializer):
     "commencement_date": "2022-01-01",
     "salary": 500000,
     "role": "Full Stack Developer",
-    "contract": "Full Time",
     "bank_name": "UBA",
     "bank_account": "1234567890",
     "department_id": "1",
