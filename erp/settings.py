@@ -49,13 +49,13 @@ INSTALLED_APPS = [
     'django_webpack_dev_server',
     'hr',
     'crm',
-    'business_analysis',
     'frontend',
     'api.authentication',
     'api.accounting',
     'api.broadcast',
     'api.tasks',
-    'api.resources'
+    'api.business_analysis',
+    'api.resources',
 ]
 
 MIDDLEWARE = [

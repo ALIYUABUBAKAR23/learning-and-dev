@@ -1,4 +1,3 @@
-
 from django.db import models
 
 from erp.models import BaseModel
