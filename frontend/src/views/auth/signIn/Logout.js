@@ -9,9 +9,9 @@ const Logout = (props) => {
     .then(() => {
       clearAuthToken();
       if (!props) {
-        window.location.href = '/auth/sign-in';
+        window.location.href = '/';
       } else {
-        window.location.href = '/auth/sign-in';
+        window.location.href = '/';
       }
     })
     .catch(console.log);
