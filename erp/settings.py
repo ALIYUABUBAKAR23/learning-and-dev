@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'hr',
     'resources',
     'crm',
-    #'business_analysis',
     'frontend',
     'api.authentication',
     'api.accounting',
