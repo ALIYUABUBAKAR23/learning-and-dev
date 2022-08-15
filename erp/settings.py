@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django_webpack_dev_server',
     'hr',
     'resources',
-    'crm',
+    'api.crm',
     'business_analysis',
     'frontend',
     'api.authentication',
