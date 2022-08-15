@@ -18,12 +18,10 @@ from django.urls import include, path
 from allauth.account.views import confirm_email
 from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 from django.conf.urls import url
-from business_analysis import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('resources/', include('resources.urls')),
     path('business_analysis/', include("business_analysis.urls")),  
     path('hr/', include('hr.urls')),
     path('api/', include('api.urls')),

@@ -9,4 +9,5 @@ urlpatterns = [
     path('messages/', include('api.broadcast.urls')),
     path('tasks/', include('api.tasks.urls')),
     path('customers/', include('api.crm.urls')),
+    path('resources/', include('api.resources.urls')),
 ]
