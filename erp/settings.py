@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'api.accounting',
     'api.broadcast',
     'api.tasks',
-    'api.resources'
+    'api.business_analysis',
+    'api.resources',
 ]
 
 MIDDLEWARE = [
