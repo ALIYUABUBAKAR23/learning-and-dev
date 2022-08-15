@@ -18,7 +18,6 @@ from django.urls import include, path
 from allauth.account.views import confirm_email
 from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 from django.conf.urls import url
-from business_analysis import views
 
 
 urlpatterns = [
