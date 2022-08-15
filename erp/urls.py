@@ -24,7 +24,6 @@ from business_analysis import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('resources/', include('resources.urls')),
-    path('business_analysis/', include("business_analysis.urls")),  
     path('hr/', include('hr.urls')),
     path('api/', include('api.urls')),
     path('customers/', include('crm.urls')),

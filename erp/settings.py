@@ -50,13 +50,13 @@ INSTALLED_APPS = [
     'hr',
     'resources',
     'crm',
-    'business_analysis',
+    #'business_analysis',
     'frontend',
     'api.authentication',
     'api.accounting',
     'api.broadcast',
     'api.tasks',
-    #'api.business_analysis'
+    'api.business_analysis'
 ]
 
 MIDDLEWARE = [
