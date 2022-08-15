@@ -65,16 +65,19 @@ function SignIn() {
         console.log("check our details:", response.data);
         const { key, user } = response.data;
         const inHalfADay = 0.5;
-        Cookies.set("token", key, { expires: inHalfADay });
+        if (key) {
+          Cookies.set("token", key, { expires: inHalfADay });
+          window.location.href = "/";
+        }
         // if (user.should_reset_pass) {
         //   history.push(`/reset-password/${user.id}`);
         //   return;
         //   "key": "adc9b440eb7660b61227943c8d6a8734f466bf22"
         // }
-        window.location.href = "/";
       })
       .catch((error) => {
-        setFormErrors(error.response.data.detail);
+        console.log(error);
+        setFormErrors(error);
       });
   };
 

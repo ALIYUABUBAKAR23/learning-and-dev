@@ -40,6 +40,8 @@ class CustomRegisterSerializer(RegisterSerializer):
         user = super().save(request)
         user.sex = self.data.get('sex')
         user.middle_name = self.data.get('middle_name')
+        user.first_name = self.data.get('first_name')
+        user.last_name = self.data.get('last_name')
         user.state_of_origin = self.data.get('state_of_origin')
         user.address = self.data.get('address')
         user.phone_number = self.data.get('phone_number')
