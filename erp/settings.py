@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'dj_rest_auth',
     'django_webpack_dev_server',
-    'hr',
     'api.crm',
     'frontend',
     'api.authentication',
@@ -56,6 +55,7 @@ INSTALLED_APPS = [
     'api.tasks',
     'api.business_analysis',
     'api.resources',
+    'api.hr',
 ]
 
 MIDDLEWARE = [

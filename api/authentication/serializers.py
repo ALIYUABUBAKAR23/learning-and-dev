@@ -8,7 +8,7 @@ from rest_auth.utils import import_callable
 from rest_auth.serializers import UserDetailsSerializer as DefaultUserDetailsSerializer
 
 from .models import STATES, SEX, User
-from hr.models import Department
+from api.hr.models import Department
 
 
 class CustomRegisterSerializer(RegisterSerializer):

@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.db.models import TextField, IntegerField
 
 from api.authentication.models import User
-from api.hr.models import Department
+from api.hr.models import Department, Contract, Location
 
 
 class DepartmentModelTest(TestCase):
@@ -80,7 +80,7 @@ class DepartmentModelTest(TestCase):
     def test_delete_department_method(self):
         department_id = 1
         department = Department.delete_department(department_id)
-        self.assertEqual(department, (1, {'departments.Department': 1}))
+        self.assertEqual(department, (1, {'hr.Department': 1}))
 
     # def test_first_name_max_length(self):
     #     department = Department.objects.get(id=1)
@@ -164,11 +164,11 @@ class ContractModelTest(TestCase):
         self.assertTrue(isinstance(contract_length_field, IntegerField))    
         self.assertTrue(isinstance(contract_details_field, TextField))    
         self.assertIsInstance(self.contract.contract_type, str)
-        self.assertIsInstance(self.contract.date_issued, datetime)
+        self.assertIsInstance(self.contract.date_issued, str)
         self.assertIsInstance(self.contract.contract_length, int)
         self.assertIsInstance(self.contract.contract_details, str)
         self.assertIsInstance(self.contract.contract_document, str)
-        self.assertIsInstance(self.contract.end_date, datetime)
+        self.assertIsInstance(self.contract.end_date, str)
         self.assertIsInstance(self.contract.user_id, int)
         self.assertIsInstance(self.contract.approved_by_id, int)
 
@@ -194,7 +194,7 @@ class ContractModelTest(TestCase):
     def test_delete_contract_method(self):
         contract_id = 1
         contract = Contract.delete_contract(contract_id)
-        self.assertEqual(contract, (1, {'contracts.Contract': 1}))
+        self.assertEqual(contract, (1, {'hr.Contract': 1}))
 
     # def test_first_name_max_length(self):
     #     contract = Contract.objects.get(id=1)
@@ -284,7 +284,7 @@ class LocationModelTest(TestCase):
     def test_delete_location_method(self):
         location_id = 1
         location = Location.delete_location(location_id)
-        self.assertEqual(location, (1, {'locations.Location': 1}))
+        self.assertEqual(location, (1, {'hr.Location': 1}))
 
     # def test_first_name_max_length(self):
     #     location = Location.objects.get(id=1)
