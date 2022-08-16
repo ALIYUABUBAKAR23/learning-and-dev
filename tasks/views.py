@@ -53,6 +53,13 @@ class TasksAPI(APIView):
             return Response(data={"message":"Failed to delete task."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message":"Successfully deleted task."}, status=status.HTTP_201_CREATED)
 
+"""
+    {    
+        "name": "accounting",
+        "description": "bruh",
+        "head_of_department": "chizi"
+    }
+"""
 
 """
   {
