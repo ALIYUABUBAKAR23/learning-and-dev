@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from hr.models import Department, Contract, Location
+from api.hr.models import Department, Contract, Location
 
 
 # Register your models here.

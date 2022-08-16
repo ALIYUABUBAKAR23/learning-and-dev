@@ -3,7 +3,7 @@ from django.conf import settings
 from django.db import models
 
 from erp.models import BaseModel
-from hr.models import Department
+from api.hr.models import Department
 
 # Create your models here.
 
