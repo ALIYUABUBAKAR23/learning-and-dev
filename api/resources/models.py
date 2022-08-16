@@ -1,7 +1,6 @@
 from django.db import models
-from django.conf import settings
 
-# Create your models here.
+
 class Inventory(models.Model):
      name = models.CharField(max_length=200, blank=True, null=True)
      type = models.CharField(max_length=200, blank=True, null=True)
@@ -14,7 +13,7 @@ class Inventory(models.Model):
 
      class Meta:
         verbose_name =("inventory")
-        verbose_name_plural = ("inventory")
+        verbose_name_plural = ("inventories")
 
      def __str__(self):
         return self.name
