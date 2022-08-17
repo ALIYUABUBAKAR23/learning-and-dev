@@ -2,9 +2,10 @@ from datetime import datetime
 from django.test import TestCase
 from django.db import models
 
-from api.broadcast.models import Broadcast 
+from api.broadcast.models import Broadcast
 from api.authentication.models import User
 from api.hr.models import Department
+
 
 class BroadcastModelTest(TestCase):
     @classmethod
@@ -62,17 +63,21 @@ class BroadcastModelTest(TestCase):
         )
 
     def test_broadcast_has_correct_fields(self):
-        date_of_purchase_field = Broadcast._meta.get_field("date_of_purchase")
-        self.assertTrue(isinstance(date_of_purchase_field, models.DateField))
-
-        self.assertIsInstance(self.broadcast.name, str)
-        self.assertIsInstance(self.broadcast.type, str)
-        self.assertIsInstance(self.broadcast.date_of_purchase, str)
-        self.assertIsInstance(self.broadcast.purchase_condition, str)
-        self.assertIsInstance(self.broadcast.current_condition, dict)
-        self.assertIsInstance(self.broadcast.current_location, str)
-        self.assertIsInstance(self.broadcast.model_number, str)
-        self.assertIsInstance(self.broadcast.serial_number, str)
+        sender_field = Broadcast._meta.get_field("sender")
+        reciever_field = Broadcast._meta.get_field("reciever")
+        title_field = Broadcast._meta.get_field("title")
+        message_field = Broadcast._meta.get_field("message")
+        file_field = Broadcast._meta.get_field("file")
+        self.assertTrue(isinstance(sender_field, models.ForeignKey))
+        self.assertTrue(isinstance(reciever_field, models.ForeignKey))
+        self.assertTrue(isinstance(title_field, models.CharField))
+        self.assertTrue(isinstance(message_field, models.TextField))
+        self.assertTrue(isinstance(file_field, models.CharField))
+        self.assertIsInstance(self.broadcast.title, str)
+        self.assertIsInstance(self.broadcast.message, str)
+        self.assertIsInstance(self.broadcast.sender_id, int)
+        self.assertIsInstance(self.broadcast.reciever_id, int)
+        self.assertIsInstance(self.broadcast.file, str)
 
     def test_it_has_timestamps(self):
         self.assertIsInstance(self.broadcast.created_at, datetime)
@@ -80,7 +85,11 @@ class BroadcastModelTest(TestCase):
 
     def test_create_broadcast_method(self):
         broadcast = Broadcast.objects.get(id=1)
-        self.assertEqual(broadcast.name, 'Unit tests 1')
+        self.assertEqual(broadcast.title, 'Unit tests 1')
+        self.assertEqual(broadcast.message, 'CRUD test 1')
+        self.assertEqual(broadcast.sender_id, 1)
+        self.assertEqual(broadcast.reciever_id, 1)
+        self.assertEqual(broadcast.file, 'good')
 
     def test_get_broadcast_list_method(self):
         # broadcast_id=1
@@ -89,13 +98,13 @@ class BroadcastModelTest(TestCase):
 
     def test_update_broadcast_method(self):
         broadcast_id = 1
-        broadcast = Broadcast.update_broadcast(broadcast_id, type='See hafa')
+        broadcast = Broadcast.update_broadcast(broadcast_id, message='See hafa')
         self.assertEqual(broadcast, 1)
 
     def test_delete_broadcast_method(self):
         broadcast_id = 1
         broadcast = Broadcast.delete_broadcast(broadcast_id)
-        self.assertEqual(broadcast, (1, {'resources.Broadcast': 1}))
+        self.assertEqual(broadcast, (1, {'broadcast.Broadcast': 1}))
 
     # def test_first_name_max_length(self):
     #     broadcast = Broadcast.objects.get(id=1)
@@ -111,4 +120,3 @@ class BroadcastModelTest(TestCase):
     #     broadcast = Broadcast.objects.get(id=1)
     #     # This will also fail if the urlconf is not defined.
     #     self.assertEqual(author.get_absolute_url(), '/catalog/author/1')
-
