@@ -22,10 +22,8 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('business_analysis/', include("business_analysis.urls")),  
     path('hr/', include('hr.urls')),
     path('api/', include('api.urls')),
-    path('customers/', include('crm.urls')),
     path("", include("frontend.urls")),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),

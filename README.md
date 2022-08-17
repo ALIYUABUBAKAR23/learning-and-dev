@@ -5,24 +5,24 @@
 - $ # Virtualenv modules installation (Unix based systems)
 - $ virtualenv --no-site-packages env
 - $ source env/bin/activate
-- $
+- 
 - $ # Virtualenv modules installation (Windows based systems)
 - $ # virtualenv --no-site-packages env
 - $ # .\env\Scripts\activate
-- $
+- 
 - $ # Install modules - SQLite Database
 - $ pip3 install -r requirements.txt
-- $
+- 
 - $ # Create tables
 - $ python manage.py makemigrations
 - $ python manage.py migrate
-- $
+- 
 - $ # Start the application (development mode)
 - $ python manage.py runserver # default port 8000
-- $
+- 
 - $ # Start the app - custom port
 - $ # python manage.py runserver 0.0.0.0:<your_port>
-- $
+- 
 - $ # Access the web app in browser: http://127.0.0.1:8000/
 
 
@@ -35,7 +35,7 @@
 
 - $ # Start frontend server
 - $ npm start
-- $ # Access the React app in browser: http://127.0.0.1:8001/
+- $ # Access the React app in browser: http://127.0.0.1:8080/
 
 
 # Create User
@@ -46,6 +46,23 @@ After successful creation, check your terminal for the email link, click it and 
 # Login
 Login url route: http://127.0.0.1:8000/rest-auth/login
 Enter your email and password.
+
+# Running specific tests
+
+If you want to run a subset of your tests you can do so by specifying the full dot path to the package(s), module, TestCase subclass or method. For example, run test for the api.hr app, you can:
+
+# Run the specified module
+python3 manage.py test api.hr.tests
+
+# Run the specified module
+python3 manage.py test api.hr.tests.test_models #default test you should be running whenever you create or update a model
+
+# Run the specified class
+python3 manage.py test api.hr.tests.test_models.YourTestClass
+
+# Run the specified method
+python3 manage.py test api.hr.tests.test_models.YourTestClass.test_one_plus_one_equals_two
+
 
 # Developer and Development House Rules For Django Backend
 - Create Fat Models i.e Models should have their queries inside them. Achieved by using @classmethod functions in a Model.
