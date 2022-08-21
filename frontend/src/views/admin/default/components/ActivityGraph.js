@@ -16,11 +16,11 @@ import { MdBarChart, MdOutlineCalendarToday } from "react-icons/md";
 // Assets
 import { RiArrowUpSFill } from "react-icons/ri";
 import {
-  lineChartDataTotalSpent,
-  lineChartOptionsTotalSpent,
+  lineChartDataActivityGraph,
+  lineChartOptionsActivityGraph,
 } from "../../../../variables/charts";
 
-export default function TotalSpent(props) {
+export default function ActivityGraph(props) {
   const { ...rest } = props;
 
   // Chakra Color Mode
@@ -78,47 +78,44 @@ export default function TotalSpent(props) {
           </Button>
         </Flex>
       </Flex>
-      <Flex w='100%' flexDirection={{ base: "column", lg: "row" }}>
+      <Flex w='100%' flexDirection={{ base: "row", lg: "row" }}>
         <Flex flexDirection='column' me='20px' mt='28px'>
           <Text
-            color={textColor}
+            color='secondaryGray.600'
+            fontSize='sm'
+            fontWeight='500'
+            mt='4px'
+            me='12px'>
+            Activity Level
+          </Text>
+        </Flex>
+        <Box minH='260px' minW='80%' mt='auto'>
+          <LineChart
+            chartData={lineChartDataActivityGraph}
+            chartOptions={lineChartOptionsActivityGraph}
+          />
+        </Box>
+      </Flex>
+      <Flex flexDirection='column' me='20px' mt='28px'>
+          <Text
+            color="#78ca57"
             fontSize='34px'
             textAlign='start'
             fontWeight='700'
             lineHeight='100%'>
-            $37.5K
+            +16%
           </Text>
           <Flex align='center' mb='20px'>
             <Text
               color='secondaryGray.600'
-              fontSize='sm'
+              fontSize='md'
               fontWeight='500'
               mt='4px'
               me='12px'>
-              Total Spent
-            </Text>
-            <Flex align='center'>
-              <Icon as={RiArrowUpSFill} color='green.500' me='2px' mt='2px' />
-              <Text color='green.500' fontSize='sm' fontWeight='700'>
-                +2.45%
-              </Text>
-            </Flex>
-          </Flex>
-
-          <Flex align='center'>
-            <Icon as={IoCheckmarkCircle} color='green.500' me='4px' />
-            <Text color='green.500' fontSize='md' fontWeight='700'>
-              On track
+              Growth since the previous month
             </Text>
           </Flex>
         </Flex>
-        <Box minH='260px' minW='75%' mt='auto'>
-          <LineChart
-            chartData={lineChartDataTotalSpent}
-            chartOptions={lineChartOptionsTotalSpent}
-          />
-        </Box>
-      </Flex>
     </Card>
   );
 }

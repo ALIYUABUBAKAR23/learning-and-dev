@@ -38,18 +38,15 @@ import MiniCalendar from "../../../components/calendar/MiniCalendar";
 import MiniStatistics from "../../../components/card/MiniStatistics";
 import IconBox from "../../../components/icons/IconBox";
 import { React, useEffect, useState } from "react";
-import {
-  MdAddTask,
-  MdAttachMoney,
-  MdBarChart,
-  MdFileCopy,
-} from "react-icons/md";
 import CheckTable from "../../admin/default/components/CheckTable";
 import ComplexTable from "../../admin/default/components/ComplexTable";
+import RecentReports from "../../admin/default/components/RecentReports";
+import SharedReports from "../../admin/default/components/SharedReports";
+import AnnouncementTable from "../../admin/default/components/AnnouncementTable";
 import DailyTraffic from "../../admin/default/components/DailyTraffic";
 import PieCard from "../../admin/default/components/PieCard";
 import Tasks from "../../admin/default/components/Tasks";
-import TotalSpent from "../../admin/default/components/TotalSpent";
+import ActivityGraph from "../../admin/default/components/ActivityGraph";
 import WeeklyRevenue from "../../admin/default/components/WeeklyRevenue";
 import {
   columnsDataCheck,
@@ -59,6 +56,17 @@ import tableDataCheck from "../../admin/default/variables/tableDataCheck.json";
 import tableDataComplex from "../../admin/default/variables/tableDataComplex.json";
 import axios from "axios";
 import APIClient from "../../../lib/APIClient";
+//assets
+import {
+  MdOutlineAssignmentLate,
+  MdOutlineAssignmentInd,
+  MdPendingActions,  
+  MdOutlineAssignment
+} from "react-icons/md";
+import {
+  BiTask,
+  BiTaskX,
+} from "react-icons/bi"
 
 export default function UserReports() {
   // Chakra Color Mode
@@ -79,108 +87,126 @@ export default function UserReports() {
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       <SimpleGrid
         columns={{ base: 1, md: 2, lg: 3, "2xl": 6 }}
-        gap="20px"
-        mb="20px"
-      >
+        gap='20px'
+        mb='20px'>
         <MiniStatistics
+        //green
           startContent={
             <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdBarChart} color={brandColor} />
-              }
+              w='56px'
+              h='56px'
+              bg='linear-gradient(90deg, #119554 0%, #11d954 100%)'
+              icon={<Icon w='32px' h='32px' as={BiTask} color='white' />}
             />
           }
-          name="Earnings"
-          value="$350.4"
+          name='Completed Tasks'
+          value='6'
         />
         <MiniStatistics
+        //red
           startContent={
             <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdAttachMoney} color={brandColor} />
-              }
+              w='56px'
+              h='56px'
+              bg='linear-gradient(90deg, #a30000 0%, #ff4900 100%)'
+              icon={<Icon w='32px' h='32px' as={BiTaskX} color='white' />}
             />
           }
-          name="Spend this month"
-          value="$642.39"
+          name='Cancelled Tasks'
+          value='6'
         />
-        <MiniStatistics growth="+23%" name="Sales" value="$574.34" />
         <MiniStatistics
+        //yellow
+          startContent={
+            <IconBox
+              w='56px'
+              h='56px'
+              bg='linear-gradient(90deg, #c6b654 0%, #e8d054 100%)'
+              icon={<Icon w='32px' h='32px' as={MdPendingActions} color='white' />}
+            />
+          }
+          name='Pending Tasks'
+          value='6'
+        />
+        <MiniStatistics
+        //grey
+          startContent={
+            <IconBox
+              w='56px'
+              h='56px'
+              bg='linear-gradient(90deg, #5a575a 0%, #c9c7c5 100%)'
+              icon={<Icon w='32px' h='32px' as={MdOutlineAssignmentLate} color='white' />}
+            />
+          }
+          name='Postponed Tasks'
+          value='6'
+        />
+        <MiniStatistics
+        //blue
+          startContent={
+            <Flex mt='10px'>
+              <IconBox
+              w='56px'
+              h='56px'
+              bg='linear-gradient(90deg, #1306ef 0%, #13bcef 100%)'
+              icon={<Icon w='32px' h='32px' as={MdOutlineAssignmentInd} color='white' />}
+            />
+            </Flex>
+          }
           endContent={
-            <Flex me="-16px" mt="10px">
-              <FormLabel htmlFor="balance">
-                <Avatar src={Usa} />
+            <Flex>
+              <FormLabel htmlFor='balance'>
               </FormLabel>
               <Select
-                id="balance"
-                variant="mini"
-                mt="5px"
-                me="0px"
-                defaultValue="usd"
-              >
-                <option value="usd">USD</option>
-                <option value="eur">EUR</option>
-                <option value="gba">GBA</option>
+                id='balance'
+                variant='mini'
+                mt='5px'
+                me='0px'
+                defaultValue='usd'>
+                <option value='usd'>USD</option>
+                <option value='eur'>EUR</option>
+                <option value='gba'>GBA</option>
               </Select>
             </Flex>
           }
-          name="Your balance"
-          value="$1,000"
+          name='Assigned by Lutor'
+          value='2'
         />
         <MiniStatistics
+        //pink
           startContent={
             <IconBox
-              w="56px"
-              h="56px"
-              bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
-              icon={<Icon w="28px" h="28px" as={MdAddTask} color="white" />}
+              w='56px'
+              h='56px'
+              bg='linear-gradient(90deg, #cc89a8 0%, #eac2d6 100%)'
+              icon={<Icon w='32px' h='32px' as={MdOutlineAssignment} color='white' />}
             />
           }
-          name="New Tasks"
-          value="154"
-        />
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdFileCopy} color={brandColor} />
-              }
-            />
-          }
-          name="Total Projects"
-          value="2935"
+          name='Total Tasks'
+          value='18'
         />
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px" mb="20px">
-        <TotalSpent />
-        <WeeklyRevenue />
+        <ActivityGraph />
+        <Tasks />      
       </SimpleGrid>
       <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <DailyTraffic />
-          <PieCard />
-        </SimpleGrid>
-      </SimpleGrid>
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-        <ComplexTable
+          <MiniCalendar h="100%" minW="100%" selectRange={false} />
+          <AnnouncementTable
           columnsData={columnsDataComplex}
           tableData={tableDataComplex}
         />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <Tasks />
-          <MiniCalendar h="100%" minW="100%" selectRange={false} />
-        </SimpleGrid>
+      </SimpleGrid>
+      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
+      <RecentReports
+          columnsData={columnsDataComplex}
+          tableData={tableDataComplex}
+        />
+      <SharedReports
+          columnsData={columnsDataComplex}
+          tableData={tableDataComplex}
+        />
       </SimpleGrid>
     </Box>
   );

@@ -18,11 +18,11 @@ function App() {
   }
 
   const token = getToken();
-
+/* 
   if (!token) {
     return <SignIn />;
   }
-
+ */
   return (
       <Switch>
         <Route path={`/auth`} component={AuthLayout} />

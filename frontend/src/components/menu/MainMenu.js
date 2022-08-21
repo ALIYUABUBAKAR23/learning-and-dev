@@ -21,6 +21,8 @@ import {
   MdOutlineSettings,
 } from "react-icons/md";
 
+import {AiFillCaretDown} from "react-icons/ai";
+
 export default function Banner(props) {
   const { ...rest } = props;
 
@@ -67,7 +69,7 @@ export default function Banner(props) {
         onClick={onOpen1}
         borderRadius='10px'
         {...rest}>
-        <Icon as={MdOutlineMoreHoriz} color={iconColor} w='24px' h='24px' />
+        <Icon as={AiFillCaretDown} color={iconColor} w='20px' h='20px' />
       </MenuButton>
       <MenuList
         w='150px'
