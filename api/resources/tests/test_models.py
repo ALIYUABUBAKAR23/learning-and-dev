@@ -48,7 +48,7 @@ class InventoryModelTest(TestCase):
         self.assertIsInstance(self.inventory.type, str)
         self.assertIsInstance(self.inventory.date_of_purchase, str)
         self.assertIsInstance(self.inventory.purchase_condition, str)
-        self.assertIsInstance(self.inventory.current_condition, dict)
+        self.assertIsInstance(self.inventory.current_condition, str)
         self.assertIsInstance(self.inventory.current_location, str)
         self.assertIsInstance(self.inventory.model_number, str)
         self.assertIsInstance(self.inventory.serial_number, str)
@@ -111,7 +111,7 @@ class ItemModelTest(TestCase):
             description='CRUD test 1',
             serial_number='56566',
             date_of_purchase='2022-08-03',
-            cost=20000,
+            cost=20000.00,
             inventory_id=1,
             purchase_quantity=20,
             quantity=10,
@@ -121,7 +121,7 @@ class ItemModelTest(TestCase):
             description='CRUD test 2',
             serial_number='3232',
             date_of_purchase='2022-08-03',
-            cost=20000,
+            cost=20000.00,
             inventory_id=1,
             purchase_quantity=20,
             quantity=10,
@@ -131,7 +131,7 @@ class ItemModelTest(TestCase):
             description='CRUD test 2',
             serial_number='32322',
             date_of_purchase='2022-08-03',
-            cost=20000,
+            cost=20000.00,
             inventory_id=1,
             purchase_quantity=20,
             quantity=10,

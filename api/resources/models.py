@@ -1,10 +1,11 @@
 from django.db import models
+from erp.models import BaseModel
 
 
-class Inventory(models.Model):
+class Inventory(BaseModel):
      name = models.CharField(max_length=200, blank=True, null=True)
      type = models.CharField(max_length=200, blank=True, null=True)
-     date_of_purchase = models.CharField(max_length=200, blank=True, null=True)
+     date_of_purchase = models.DateField(null=False, blank=True)
      purchase_condition = models.CharField(max_length=200, blank=True, null=True)
      current_condition = models.CharField(max_length=200, blank=True, null=True)
      current_location = models.CharField(max_length=200, blank=True)
@@ -19,7 +20,7 @@ class Inventory(models.Model):
         return self.name
 
      @classmethod
-     def get_inventory(cls, **kwargs):
+     def get_inventory_list(cls, **kwargs):
         inventory = Inventory.objects.all().values()
         return inventory
      
@@ -60,12 +61,12 @@ class Inventory(models.Model):
         return inventory
             
 # Items class and functions
-class Item(models.Model):
+class Item(BaseModel):
      name = models.CharField(max_length=200, blank=True, null=True)
-     description = models.CharField(max_length=200, blank=True, null=True)
+     description = models.TextField(null=False, blank=True)
      serial_number = models.CharField(max_length=200, blank=True)
      date_of_purchase = models.DateField(null=False, blank=True)
-     cost = models.IntegerField(blank=True)
+     cost = models.FloatField(blank=True)
      inventory = models.ForeignKey(Inventory, null=True, on_delete=models.SET_NULL)
      purchase_quantity = models.IntegerField(blank=True)
      quantity = models.IntegerField(blank=True)
@@ -78,7 +79,7 @@ class Item(models.Model):
         return self.name
 
      @classmethod
-     def get_item(cls, **kwargs):
+     def get_item_list(cls, **kwargs):
         item = Item.objects.all().values()
         return item
      

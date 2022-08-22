@@ -1,0 +1,52 @@
+[
+  {
+    "name":"Computer",
+    "description":"Macbook",
+    "serial_number":"0076TY34",
+    "date_of_purchase": "12.Jan.2021",
+    "cost": 1500, 
+    "inventory": "001", 
+    "purchase_quantity": 32, 
+    "quantity": 53
+  },
+  {
+    "name":"Computer",
+    "description":"Dell",
+    "serial_number":"0089PR87",
+    "date_of_purchase": "12.Feb.2022",
+    "cost": 1000, 
+    "inventory": "002", 
+    "purchase_quantity": 17, 
+    "quantity": 40
+  },
+  {
+    "name":"Speaker",
+    "description":"JBL",
+    "serial_number":"00YT90Y34",
+    "date_of_purchase": "20.Nov.2019",
+    "cost": 500, 
+    "inventory": "003", 
+    "purchase_quantity": 30, 
+    "quantity": 70
+  },
+  {
+    "name":"Keyboard",
+    "description":"Logitech",
+    "serial_number":"00PL7TY81",
+    "date_of_purchase": "09.Sep.2021",
+    "cost": 300, 
+    "inventory": "004", 
+    "purchase_quantity": 15, 
+    "quantity": 30
+  },
+  {
+    "name":"Mouse",
+    "description":"Apple",
+    "serial_number":"00LKTY17",
+    "date_of_purchase": "05.Aug.2022",
+    "cost": 180, 
+    "inventory": "005", 
+    "purchase_quantity": 27, 
+    "quantity": 54
+  }
+]

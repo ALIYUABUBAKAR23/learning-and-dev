@@ -8,7 +8,7 @@ from .models import Item
 
 class InventoryAPI(APIView):
     def get(self, request):
-        inventory = Inventory.get_inventory()
+        inventory = Inventory.get_inventory_list()
         return Response(data=inventory, status=status.HTTP_200_OK)
     
     def post(self, request):
@@ -38,7 +38,7 @@ class InventoryAPI(APIView):
 #Item API
 class ItemAPI(APIView):
     def get(self, request):
-        item = Item.get_item()
+        item = Item.get_item_list()
         return Response(data=item, status=status.HTTP_200_OK)
     
     def post(self, request):
