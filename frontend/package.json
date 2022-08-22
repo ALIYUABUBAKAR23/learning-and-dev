@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "proxy": "http://127.0.0.1:8000",
+  "proxy": "http://127.0.0.1:8000/api/",
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production"
@@ -37,6 +37,7 @@
     "react-apexcharts": "^1.4.0",
     "react-calendar": "^3.7.0",
     "react-custom-scrollbars-2": "^4.2.1",
+    "react-datepicker": "^4.8.0",
     "react-dom": "^17.0.2",
     "react-dropzone": "^12.0.4",
     "react-icons": "^4.3.1",

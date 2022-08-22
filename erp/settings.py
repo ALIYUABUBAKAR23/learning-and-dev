@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'django.contrib.sites',
+    # "corsheaders",
     'allauth',
     'allauth.account',
     'rest_auth.registration',
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -154,7 +156,7 @@ CSRF_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_SAMESITE = 'Strict'
 CSRF_COOKIE_HTTPONLY = False  # False since we will grab it via universal-cookies
 SESSION_COOKIE_HTTPONLY = True
-
+CORS_ALLOW_ALL_ORIGINS = True
 # PROD ONLY
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
