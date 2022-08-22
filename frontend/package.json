@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "proxy": "http://127.0.0.1:8000/api/",
+  "proxy": "http://127.0.0.1:8000/",
   "scripts": {
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production"
