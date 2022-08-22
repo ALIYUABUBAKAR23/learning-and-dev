@@ -18,5 +18,5 @@ from django.urls import path
 from .views import TasksAPI
 
 urlpatterns = [
-    path("fetch_tasks", TasksAPI.as_view(), name="fetch_tasks"),
+    path("tasks", TasksAPI.as_view(), name="fetch_tasks"),
 ]
