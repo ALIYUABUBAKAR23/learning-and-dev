@@ -49,7 +49,7 @@ import ComplexTable from "./components/ComplexTable";
 import DailyTraffic from "./components/DailyTraffic";
 import PieCard from "./components/PieCard";
 import Tasks from "./components/Tasks";
-import TotalSpent from "./components/TotalSpent";
+import ActivityGraph from "./components/ActivityGraph";
 import WeeklyRevenue from "./components/WeeklyRevenue";
 import {
   columnsDataCheck,
@@ -73,35 +73,61 @@ export default function UserReports() {
             <IconBox
               w='56px'
               h='56px'
-              bg={boxBg}
+              bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
               icon={
                 <Icon w='32px' h='32px' as={MdBarChart} color={brandColor} />
               }
             />
           }
-          name='Earnings'
-          value='$350.4'
+          name='Completed Tasks'
+          value='6'
         />
         <MiniStatistics
           startContent={
             <IconBox
               w='56px'
               h='56px'
-              bg={boxBg}
+              bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
               icon={
-                <Icon w='32px' h='32px' as={MdAttachMoney} color={brandColor} />
+                <Icon w='32px' h='32px' as={MdBarChart} color={brandColor} />
               }
             />
           }
-          name='Spend this month'
-          value='$642.39'
+          name='Cancelled Tasks'
+          value='6'
         />
-        <MiniStatistics growth='+23%' name='Sales' value='$574.34' />
+        <MiniStatistics
+          startContent={
+            <IconBox
+              w='56px'
+              h='56px'
+              bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
+              icon={
+                <Icon w='32px' h='32px' as={MdBarChart} color={brandColor} />
+              }
+            />
+          }
+          name='Pending Tasks'
+          value='6'
+        />
+        <MiniStatistics
+          startContent={
+            <IconBox
+              w='56px'
+              h='56px'
+              bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
+              icon={
+                <Icon w='32px' h='32px' as={MdBarChart} color={brandColor} />
+              }
+            />
+          }
+          name='Postponed Tasks'
+          value='6'
+        />
         <MiniStatistics
           endContent={
             <Flex me='-16px' mt='10px'>
               <FormLabel htmlFor='balance'>
-                <Avatar src={Usa} />
               </FormLabel>
               <Select
                 id='balance'
@@ -113,10 +139,11 @@ export default function UserReports() {
                 <option value='eur'>EUR</option>
                 <option value='gba'>GBA</option>
               </Select>
+              <Avatar src={Usa} />
             </Flex>
           }
-          name='Your balance'
-          value='$1,000'
+          name='Assigned by Lutor'
+          value='2'
         />
         <MiniStatistics
           startContent={
@@ -124,30 +151,18 @@ export default function UserReports() {
               w='56px'
               h='56px'
               bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
-              icon={<Icon w='28px' h='28px' as={MdAddTask} color='white' />}
-            />
-          }
-          name='New Tasks'
-          value='154'
-        />
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w='56px'
-              h='56px'
-              bg={boxBg}
               icon={
-                <Icon w='32px' h='32px' as={MdFileCopy} color={brandColor} />
+                <Icon w='32px' h='32px' as={MdBarChart} color={brandColor} />
               }
             />
           }
-          name='Total Projects'
-          value='2935'
+          name='Total Tasks'
+          value='18'
         />
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
-        <TotalSpent />
+        <ActivityGraph />
         <WeeklyRevenue />
       </SimpleGrid>
       <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>

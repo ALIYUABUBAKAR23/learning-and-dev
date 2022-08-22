@@ -16,11 +16,11 @@ import { MdBarChart, MdOutlineCalendarToday } from "react-icons/md";
 // Assets
 import { RiArrowUpSFill } from "react-icons/ri";
 import {
-  lineChartDataTotalSpent,
-  lineChartOptionsTotalSpent,
+  lineChartDataActivityGraph,
+  lineChartOptionsActivityGraph,
 } from "../../../../variables/charts";
 
-export default function TotalSpent(props) {
+export default function ActivityGraph(props) {
   const { ...rest } = props;
 
   // Chakra Color Mode
@@ -114,8 +114,8 @@ export default function TotalSpent(props) {
         </Flex>
         <Box minH='260px' minW='75%' mt='auto'>
           <LineChart
-            chartData={lineChartDataTotalSpent}
-            chartOptions={lineChartOptionsTotalSpent}
+            chartData={lineChartDataActivityGraph}
+            chartOptions={lineChartOptionsActivityGraph}
           />
         </Box>
       </Flex>

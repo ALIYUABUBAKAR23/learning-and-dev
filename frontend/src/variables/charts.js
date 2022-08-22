@@ -251,18 +251,14 @@ export const pieChartData = [63, 25, 12];
 
 // Total Spent Default
 
-export const lineChartDataTotalSpent = [
-  {
-    name: "Revenue",
-    data: [50, 64, 48, 66, 49, 68],
-  },
+export const lineChartDataActivityGraph = [
   {
     name: "Profit",
     data: [30, 40, 24, 46, 20, 46],
   },
 ];
 
-export const lineChartOptionsTotalSpent = {
+export const lineChartOptionsActivityGraph = {
   chart: {
     toolbar: {
       show: false,
@@ -276,10 +272,10 @@ export const lineChartOptionsTotalSpent = {
       color: "#4318FF",
     },
   },
-  colors: ["#4318FF", "#39B8FF"],
+  colors: ["#39B8FF"],
   markers: {
-    size: 0,
-    colors: "white",
+    size: 2,
+    colors: "red",
     strokeColors: "#7551FF",
     strokeWidth: 3,
     strokeOpacity: 0.9,
@@ -304,11 +300,11 @@ export const lineChartOptionsTotalSpent = {
   },
   xaxis: {
     type: "numeric",
-    categories: ["SEP", "OCT", "NOV", "DEC", "JAN", "FEB"],
+    categories: ["WEEK 1", "WEEK 2", "WEEK 3", "WEEK 4", "WEEK 5", "WEEK 6"],
     labels: {
       style: {
         colors: "#A3AED0",
-        fontSize: "12px",
+        fontSize: "10px",
         fontWeight: "500",
       },
     },
