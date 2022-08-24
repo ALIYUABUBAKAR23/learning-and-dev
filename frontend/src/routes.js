@@ -6,6 +6,7 @@ import {
   MdPerson,
   MdHome,
   MdLock,
+  MdWork,
   MdOutlineShoppingCart,
 } from "react-icons/md";
 
@@ -16,9 +17,12 @@ import Profile from "./views/admin/profile";
 import DataTables from "./views/admin/dataTables";
 import Resources from "./views/admin/resources";
 import RTL from "./views/admin/rtl";
+import Projects from "./views/admin/projects";
+
 
 // Auth Imports
 import SignInCentered from "./views/auth/signIn";
+import Project from "./views/admin/profile/components/Project";
 
 const routes = [
   {
@@ -84,6 +88,13 @@ const routes = [
       />
     ),
     component: Resources,
+  },
+  {
+    name: "Projects",
+    layout: "/admin",
+    icon: <Icon as={MdWork} width="20px" height="20px" color="inherit" />,
+    path: "/projects",
+    component: Projects,
   },
 ];
 

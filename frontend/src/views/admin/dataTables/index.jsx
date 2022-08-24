@@ -31,27 +31,18 @@ import {
   columnsDataCheck,
   columnsDataColumns,
   columnsDataComplex,
-  columnsDataProjects
 } from "../dataTables/variables/columnsData";
 import tableDataDevelopment from "../dataTables/variables/tableDataDevelopment.json";
 import tableDataCheck from "../dataTables/variables/tableDataCheck.json";
 import tableDataColumns from "../dataTables/variables/tableDataColumns.json";
 import tableDataComplex from "../dataTables/variables/tableDataComplex.json";
-import ProjectTable from "../dataTables/components/ProjectTable";
 
 import React from "react";
-import tableDataProjects from "../dataTables/variables/tableDataProjects.json";
 
 export default function Settings() {
   // Chakra Color Mode
   return (
-    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
-      <SimpleGrid>
-        <ProjectTable
-          columnsData={columnsDataProjects}
-          tableData={tableDataProjects}
-          />
-      </SimpleGrid>
+    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>    
       <SimpleGrid
         mb='20px'
         columns={{ sm: 1, md: 2 }}
