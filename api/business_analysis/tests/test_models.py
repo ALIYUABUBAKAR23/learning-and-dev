@@ -2,6 +2,8 @@ from datetime import datetime
 from django.test import TestCase
 from django.db import models
 
+from django.db.models.deletion import SET_NULL
+
 from api.business_analysis.models import *
 from api.crm.models import Customer
 from api.authentication.models import User
