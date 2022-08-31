@@ -36,12 +36,13 @@ import tableDataDevelopment from "../dataTables/variables/tableDataDevelopment.j
 import tableDataCheck from "../dataTables/variables/tableDataCheck.json";
 import tableDataColumns from "../dataTables/variables/tableDataColumns.json";
 import tableDataComplex from "../dataTables/variables/tableDataComplex.json";
+
 import React from "react";
 
 export default function Settings() {
   // Chakra Color Mode
   return (
-    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
+    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>    
       <SimpleGrid
         mb='20px'
         columns={{ sm: 1, md: 2 }}
