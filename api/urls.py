@@ -11,4 +11,5 @@ urlpatterns = [
     path('customers/', include('api.crm.urls')),
     path('resources/', include('api.resources.urls')),
     path('hr/', include('api.hr.urls')),
+    path('users/', include('api.authentication.urls')),
 ]

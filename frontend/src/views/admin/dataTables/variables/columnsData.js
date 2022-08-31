@@ -92,4 +92,8 @@ export const columnsDataComplex = [
     Header: "PRIORITY",
     accessor: "priority",
   },
+  {
+    Header: "ACTIONS",
+    accessor: "actions",
+  },
 ];
