@@ -10,6 +10,7 @@ from .models import Task
 
 class TasksAPI(APIView):
     def get(self, request):
+        # print(request.META)
         user = request.user
         print(f'user = {user}')
         print(f'user.id = {user.id}')
@@ -19,9 +20,11 @@ class TasksAPI(APIView):
 
     def post(self, request):
         task_data = request.data
-
-        task_data['start_date'] = datetime.strptime(task_data['start_date'], '%Y-%m-%d %H:%M')
-        task_data['due_date'] = datetime.strptime(task_data['due_date'], '%Y-%m-%d %H:%M')
+        task_data['start_date'] = datetime.fromisoformat(task_data['start_date'])
+        task_data['due_date'] = datetime.fromisoformat(task_data['due_date'])
+        task_data['assigned_by_id'] = request.user.id
+        print(task_data)
+        # return Response(data={"message":"Task recieved successfully."}, status=status.HTTP_200_OK)
         
         task = Task.create_task(**task_data)
         if task is None:
