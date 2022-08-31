@@ -87,3 +87,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    @classmethod
+    def get_user_list(cls, **kwargs):
+        """
+        This method fetches a users list of tasks using key word arguments i.e kwargs
+        """
+        users = User.objects.filter(**kwargs).values("first_name","last_name","middle_name","id",)
+        return users

@@ -36,11 +36,45 @@ import tableDataDevelopment from "../dataTables/variables/tableDataDevelopment.j
 import tableDataCheck from "../dataTables/variables/tableDataCheck.json";
 import tableDataColumns from "../dataTables/variables/tableDataColumns.json";
 import tableDataComplex from "../dataTables/variables/tableDataComplex.json";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TaskTable from "./components/TaskTable"
+import axios from "axios";
+import Cookies from "js-cookie";
+import { baseUrl } from "../../../utility";
 
 export default function Settings() {
   // Chakra Color Mode
+  const [taskList, setTaskList] = useState([])
+
+  const setList = (data) => {
+    setTaskList(data);
+  };
+
+  const getTasks = () =>{
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        'authorization':`Token ${Cookies.get('token')}`,
+      },
+    };
+
+    axios
+      .get(`${baseUrl}tasks/tasks`, config)
+      .then((response) => {
+        console.log("check our tasks: ", response.data);
+        setTaskList(response.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    getTasks();
+  }, [setTaskList]);
+
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       <SimpleGrid
@@ -50,7 +84,8 @@ export default function Settings() {
         >
         <TaskTable
           columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
+          tableData={taskList}
+          setTaskList={setList}
         />
       </SimpleGrid>
     </Box>
