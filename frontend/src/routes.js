@@ -16,6 +16,7 @@ import Profile from "./views/admin/profile";
 import DataTables from "./views/admin/dataTables";
 import Resources from "./views/admin/resources";
 import RTL from "./views/admin/rtl";
+import Task from "./views/admin/tasks"
 
 // Auth Imports
 import SignInCentered from "./views/auth/signIn";
@@ -70,6 +71,13 @@ const routes = [
     path: "/rtl-default",
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: RTL,
+  },
+  {
+    name: "Tasks",
+    layout: "/admin",
+    path: "/tasks",
+    icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
+    component: Task,
   },
   {
     name: "Resources",

@@ -109,7 +109,7 @@ class ProjectModelTest(TestCase):
         location_field = Project._meta.get_field("location")
         self.assertTrue(isinstance(name_field, models.CharField))
         self.assertTrue(isinstance(description_field, models.TextField))
-        self.assertTrue(isinstance(owner_field, models.ForeignKey(to=Customer)))
+        self.assertTrue(isinstance(owner_field, models.ForeignKey))
         self.assertTrue(isinstance(actual_start_date_field, models.DateField))
         self.assertTrue(isinstance(expected_start_date_field, models.DateField))
         self.assertTrue(isinstance(actual_end_date_field, models.DateField))
@@ -117,7 +117,7 @@ class ProjectModelTest(TestCase):
         self.assertTrue(isinstance(estimated_cost_field, models.FloatField))
         self.assertTrue(isinstance(actual_cost_field, models.FloatField))
         self.assertTrue(isinstance(current_budget_field, models.FloatField))
-        self.assertTrue(isinstance(project_lead_field, models.ForeignKey(to=User)))
+        self.assertTrue(isinstance(project_lead_field, models.ForeignKey))
         self.assertTrue(isinstance(location_field, models.CharField))
 
         self.assertIsInstance(self.project.name, str)
