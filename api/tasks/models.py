@@ -56,6 +56,9 @@ class Task(BaseModel):
         This method fetches a users list of tasks using key word arguments i.e kwargs
         """
         tasks = Task.objects.filter(**kwargs).values()
+        # Compute the values list "manually".
+        for task in tasks:
+            print(task['id'])
         return tasks
 
     @classmethod

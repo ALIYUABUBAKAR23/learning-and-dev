@@ -39,9 +39,11 @@
 
 
 # Create User
-Visit the following url route: http://127.0.0.1:8000/rest-auth/registration/
+Because the user depends on having a department, firstly create a department.
+- Firstly, create a department by visiting http://127.0.0.1:8000/api/hr/departments. 
+- Then, visit the following url route: http://127.0.0.1:8000/rest-auth/registration/
 Do not include a username when creating your user account.
-After successful creation, check your terminal for the email link, click it and login.
+- After successful creation, check your terminal for the email link, click it and login.
 
 # Login
 Login url route: http://127.0.0.1:8000/rest-auth/login

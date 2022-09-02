@@ -65,10 +65,6 @@ export const columnsDataComplex = [
     accessor: "description",
   },
   {
-    Header: "COMMENT",
-    accessor: "comment",
-  },
-  {
     Header: "ASSIGNED BY",
     accessor: "assigned_by",
   },
