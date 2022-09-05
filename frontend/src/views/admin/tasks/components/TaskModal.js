@@ -48,10 +48,12 @@ function TaskModal(props) {
   const {
     onSelect,
     userList,
+    editTask,
     assignedTo,
     onChange,
     onOptionSelect,
     onSubmit,
+    setTaskToEdit,
     onOpen,
     isOpen, 
     onClose
@@ -62,11 +64,13 @@ function TaskModal(props) {
       closeOnOverlayClick={false}
       isOpen={isOpen}
       size="xl"
-      onClose={onClose}
+      onClose={() => { setTaskToEdit(null); onClose();}}
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create A New Task</ModalHeader>
+        <ModalHeader> 
+          {editTask ? "Edit Task" : "Create New Task"} 
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Stack spacing={4}>
@@ -75,6 +79,7 @@ function TaskModal(props) {
               <Input
                 name="name"
                 placeholder="Name"
+                value={editTask?.name}
                 borderRadius="16px"
                 onChange={onChange}
               />
@@ -85,6 +90,7 @@ function TaskModal(props) {
               <Textarea
                 name="description"
                 placeholder="Enter A Brief Or Detailed Description Of The Task"
+                value={editTask?.description}
                 onChange={onChange}
               />
               <InputRightElement
@@ -98,6 +104,7 @@ function TaskModal(props) {
               <Textarea
                 name="comment"
                 placeholder="Add A Comment About This Task"
+                value={editTask?.comment}
                 onChange={onChange}
               />
               <InputRightElement
@@ -108,7 +115,7 @@ function TaskModal(props) {
             <InputGroup>
               <InputLeftAddon children="Task Assignee" borderRadius="16px" />
               <HStack spacing={4}>
-                {assignedTo?.map((user, index) => (
+                {editTask?.assigned_to ? (editTask?.assigned_to.map((user, index) => (
                   <Tag
                     size={"lg"}
                     key={index}
@@ -117,7 +124,16 @@ function TaskModal(props) {
                   >
                     {user.name}
                   </Tag>
-                ))}
+                ))) : (assignedTo?.map((user, index) => (
+                  <Tag
+                    size={"lg"}
+                    key={index}
+                    variant="solid"
+                    colorScheme="teal"
+                  >
+                    {user.name}
+                  </Tag>
+                )))}
               </HStack>
               <Select
                 options={userList}
@@ -132,6 +148,7 @@ function TaskModal(props) {
               <Input
                 name="start_date"
                 placeholder="Start Date"
+                value={editTask?.start_date}
                 borderRadius="16px"
                 type="datetime-local"
                 onChange={onChange}
@@ -146,6 +163,7 @@ function TaskModal(props) {
               <Input
                 name="due_date"
                 placeholder="Due Date"
+                value={editTask?.due_date}
                 borderRadius="16px"
                 type="datetime-local"
                 onChange={onChange}
@@ -159,6 +177,7 @@ function TaskModal(props) {
               <InputLeftAddon children="Status" borderRadius="16px" />
               <Select
                 name="status"
+                value={{ label: editTask?.status , value: editTask?.status }}
                 options={taskStatusOptions}
                 onChange={onOptionSelect}
               />
@@ -167,6 +186,7 @@ function TaskModal(props) {
               <InputLeftAddon children="Priority" borderRadius="16px" />
               <Select
                 name="priority"
+                value={{ label: editTask?.priority , value: editTask?.priority }}
                 options={taskPriorityOptions}
                 onChange={onOptionSelect}
               />
@@ -174,11 +194,11 @@ function TaskModal(props) {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="brand" mr={3} onClick={onClose}>
+          <Button colorScheme="brand" mr={3} onClick={() => { setTaskToEdit(null); onClose();}}>
             Close
           </Button>
-          <Button variant="ghost" onClick={onSubmit}>
-            Create
+          <Button variant="ghost" onClick={() => { editTask ? onSubmit('put') : onSubmit();}}>
+            {editTask ? "Edit" : "Create"} 
           </Button>
         </ModalFooter>
       </ModalContent>
