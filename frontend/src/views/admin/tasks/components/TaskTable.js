@@ -40,7 +40,7 @@ import {
 import Select from 'react-select';
 // Custom components
 import Card from "../../../../components/card/Card";
-import Menu from "../../../../components/menu/MainMenu";
+import Menu from "./MainMenu";
 
 // Assets
 import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
@@ -87,6 +87,7 @@ export default function ColumnsTable(props) {
   const [assignedTo, setAssignedTo] = useState([])
   const [formErrors, setFormErrors] = useState(null);
   const [userList, setUserList] = useState([])
+  const [taskToEdit, setTaskToEdit] = useState()
 
   const taskStatusOptions = [
     {label:"Open", value:"Open"},
@@ -123,7 +124,7 @@ export default function ColumnsTable(props) {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   const getUsers = () =>{
     const config = {
@@ -144,9 +145,9 @@ export default function ColumnsTable(props) {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
-  const createTask = (taskData) =>{
+  const createTask = (taskData, httpVerb='post') =>{
 
     const config = {
       headers: {
@@ -158,7 +159,7 @@ export default function ColumnsTable(props) {
     };
 
     axios
-      .post(`${baseUrl}tasks/tasks`, taskData, config)
+      .httpVerb(`${baseUrl}tasks/tasks`, taskData, config)
       .then((response) => {
         onClose();
         getTasks();
@@ -169,8 +170,13 @@ export default function ColumnsTable(props) {
         console.log(error);
         toast.error('Not created!');
       });
-  }
+  };
 
+  const setEditTask = (taskData) =>{
+    console.log('task data: ', taskData);
+    setTaskToEdit(taskData);
+    onOpen();
+  };
   const onChange = (event) => {
     console.log('see the event: ', event);
     const { name, value } = event.target;
@@ -203,12 +209,12 @@ export default function ColumnsTable(props) {
     setAssignedTo(newState);
   };
 
-  const onSubmit = () => {
+  const onSubmit = (httpVerb) => {
     
     console.log("check our post:", taskData);
     const task = { ...taskData };
     task['assigned_to'] = [...assignedTo];
-    createTask(task);
+    createTask(task, httpVerb);
   };
 
 
@@ -321,7 +327,10 @@ export default function ColumnsTable(props) {
                     );
                   }else if (cell.column.Header === "ACTIONS") {
                     data = (
-                      <Menu />
+                      <Menu 
+                        editData={cell.row.original}
+                        setTaskToEdit={setEditTask}
+                      />
                     );
                   } else {
                     data = (
@@ -358,6 +367,8 @@ export default function ColumnsTable(props) {
         onChange={onChange}
         onOptionSelect={onOptionSelect}
         onSubmit={onSubmit}
+        editTask={taskToEdit}
+        setTaskToEdit={setEditTask}
       />
     </Card>
   );

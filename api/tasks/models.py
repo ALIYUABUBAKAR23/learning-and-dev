@@ -3,8 +3,10 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.forms.models import model_to_dict
 
 from erp.models import BaseModel
+from api.authentication.models import User
 
 
 TASK_STATUS = (
@@ -58,7 +60,8 @@ class Task(BaseModel):
         tasks = Task.objects.filter(**kwargs).values()
         # Compute the values list "manually".
         for task in tasks:
-            print(task['id'])
+            user = User.objects.filter(id=task['assigned_by_id']).get()
+            task['assigned_by'] = f"{user.first_name} {user.middle_name} {user.last_name}"
         return tasks
 
     @classmethod
