@@ -27,6 +27,7 @@ import {
   InputLeftAddon,
   HStack,
   Tag,
+  FormControl,
 } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
@@ -39,18 +40,19 @@ import {
 import Select from 'react-select';
 // Custom components
 import Card from "../../../../components/card/Card";
-import Menu from "../../../../components/menu/MainMenu";
+import Menu from "../../../../components/menu/ProjectTableMenu";
 
 // Assets
-import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
-import APIClient from "../../../../lib/APIClient";
 import { CalendarIcon, CheckIcon, PhoneIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { PersonIcon } from "../../../../components/icons/Icons";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 import {baseUrl} from "../../../../utility/index";
 import Cookies from "js-cookie";
 import toast from 'react-hot-toast';
+
+import DeleteModal from "../components/DeleteModal";
+import EditModal from "../components/EditModal";
+import CreateModal from "../components/CreateModal";
 
 export default function ColumnsTable(props) {
   const { columnsData, tableData, setProjectList } = props;
@@ -80,28 +82,20 @@ export default function ColumnsTable(props) {
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose} = useDisclosure()
+  const { isOpen: isCreateOpen , onOpen: onCreateOpen, onClose: onCreateClose } = useDisclosure()
+  const { isOpen: isDeleteOpen , onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
+  const { isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+  
   const [projectData, setProjectData] = useState({});
-  // const [assignedTo, setAssignedTo] = useState([])
   const [projectLead, setProjectLead] = useState([])
+  const [owner, setOwner] = useState([])    
+
+  //delete to menu 
+  const [value, setValue] = React.useState("");  
+
   const [formErrors, setFormErrors] = useState(null);
   const [userList, setUserList] = useState([])
-  
-  const taskStatusOptions = [
-    {label:"Open", value:"Open"},
-    {label:"Pending", value:"Pending"},
-    {label:"Suspended", value:"Suspended"},
-    {label:"Postponed", value:"Postponed"},
-    {label:"Completed", value:"Completed"},
-    {label:"Incomplete", value:"Incomplete"},
-    {label:"Cancelled", value:"Cancelled"},
-  ] 
-   
-  const taskPriorityOptions = [
-    {label:"High", value:"High"},
-    {label:"Medium", value:"Medium"},
-    {label:"Low", value:"Low"},
-  ]
   
   const getProjects = () =>{
     const config = {
@@ -169,11 +163,38 @@ export default function ColumnsTable(props) {
         toast.error('Project Not created!');
       });
   }
+/* 
+  const deleteProject = (projectData) =>{
+
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        'authorization':`Token ${Cookies.get('token')}`,
+      },
+    };
+
+    axios
+      .delete(`${baseUrl}business_analysis/projects/${projectData.id}`,config)
+      .then((response) => {
+        //onClose();
+        getProjects();
+        console.log("check our response:", response.data);
+        toast.success(`${response.data.message}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error('Project Not deleted!');
+      });
+  }
+   */
+  const handleClick = (data) => {
+    console.log(data);
+  }
 
   const onChange = (event) => {
-    console.log('see the event: ', event);
     const { name, value } = event.target;
-    console.log('see the name, event : ', name, ' ,',value);
     const project = { ...projectData };
     project[name] = value;
     setProjectData(project);
@@ -200,19 +221,20 @@ export default function ColumnsTable(props) {
       newState = [];
     }
     setProjectLead(newState);
+    setOwner(newState);
   };
 
   const onSubmit = () => {
-    
-    console.log("check our post:", projectData);
+    //console.log("check our post:", projectData);
     const project = { ...projectData };
-    project['project_lead'] = [...projectLead];
+    //project['project_lead'] = [...projectLead];
     createProject(project);
   };
 
 
   useEffect(() => {
     getUsers();
+    getProjects();
   }, []);
   return (
     <Card
@@ -263,6 +285,8 @@ export default function ColumnsTable(props) {
               <Tr {...row.getRowProps()} key={index}>
                 {row.cells.map((cell, index) => {
                   let data = "";
+                  let targetP = {};
+
                   if (cell.column.Header === "NAME") {
                     data = (
                       <Text color={textColor} fontSize="sm" fontWeight="700">
@@ -288,9 +312,14 @@ export default function ColumnsTable(props) {
                       </Flex>
                     );
                   }else if (cell.column.Header === "ACTIONS") {
+                    targetP = cell.row.original
                     data = (
-                      <Menu />
-                    );
+                      <Flex>
+                        <Menu onDelete={onDeleteOpen} onEdit={onEditOpen}/>
+                        <DeleteModal isOpen={isDeleteOpen} onClose={onDeleteClose} targetProject={targetP}/>                      
+                        <EditModal isOpen={isEditOpen} onClose={onEditClose} targetProject={targetP}/>                      
+                      </Flex>
+                    );                    
                   } else {
                     data = (
                       <Text color={textColor} fontSize="sm" fontWeight="700">
@@ -316,6 +345,7 @@ export default function ColumnsTable(props) {
           })}
         </Tbody>
       </Table>
+      {/* <CreateModal isOpen={isCreateOpen} onClose={onCreateClose} action={onSubmit}/>                   */}
       <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xl" onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -327,6 +357,7 @@ export default function ColumnsTable(props) {
               <InputGroup>
                 <InputLeftAddon children="Name" borderRadius="16px" />
                 <Input
+                  isRequired
                   name="name"
                   placeholder="Name"
                   borderRadius="16px"
@@ -343,8 +374,7 @@ export default function ColumnsTable(props) {
                   children={<CheckIcon color="green.500" />}
                 />
               </InputGroup>
-              {/* Project Lead field */}
-              {/*               
+              {/* Project Lead field */}            
               <InputGroup>
                 <InputLeftAddon children="Project Lead" borderRadius="16px" />
                 <HStack spacing={4}>
@@ -361,34 +391,84 @@ export default function ColumnsTable(props) {
                   className="basic-multi-select"
                   classNamePrefix="select"
                 />
-              </InputGroup> */}
-              {/* Start Date field */}
+              </InputGroup>
+              {/* Expected Start Date field */}
               <InputGroup>
-                <InputLeftAddon children="Start Date" borderRadius="16px" />
-                <Input name="actual_start_date" placeholder="Start Date" borderRadius="16px" type="datetime-local" onChange={onChange}/>
+                <InputLeftAddon children="Expected Start Date" borderRadius="16px" />
+                <Input name="expected_start_date" placeholder="Start Date" borderRadius="16px" type="date" onChange={onChange}/>
                 <InputRightElement
                   borderRadius="16px"
                   children={<CalendarIcon color="green.500" />}
                 />
               </InputGroup>
-              {/* End Date field */}
+              {/* Actual Start Date field */}
               <InputGroup>
-                <InputLeftAddon children="End Date" borderRadius="16px" />
-                <Input name="actual_end_date" placeholder="End Date" borderRadius="16px" type="datetime-local" onChange={onChange}/>
+                <InputLeftAddon children="Actual Start Date" borderRadius="16px" />
+                <Input name="actual_start_date" placeholder="Start Date" borderRadius="16px" type="date" onChange={onChange}/>
                 <InputRightElement
                   borderRadius="16px"
                   children={<CalendarIcon color="green.500" />}
                 />
               </InputGroup>
-              {/* Cost field */}
+              {/* Expected End Date field */}
               <InputGroup>
-                <InputLeftAddon children="Cost" borderRadius="16px" />
+                <InputLeftAddon children="Expected End Date" borderRadius="16px" />
+                <Input name="expected_end_date" placeholder="Expected End Date" borderRadius="16px" type="date" onChange={onChange}/>
+                <InputRightElement
+                  borderRadius="16px"
+                  children={<CalendarIcon color="green.500" />}
+                />
+              </InputGroup>
+              {/* Actual End Date field */}
+              <InputGroup>
+                <InputLeftAddon children="Actual End Date" borderRadius="16px" />
+                <Input name="actual_end_date" placeholder="Actual End Date" borderRadius="16px" type="date" onChange={onChange}/>
+                <InputRightElement
+                  borderRadius="16px"
+                  children={<CalendarIcon color="green.500" />}
+                />
+              </InputGroup>
+              {/* Actual Cost field */}
+              <InputGroup>
+                <InputLeftAddon children="Actual Cost" borderRadius="16px" />
                 <Input name="actual_cost" placeholder="Actual Cost" borderRadius="16px" type="number" onChange={onChange}/>
               </InputGroup>
+              {/*Estimated Cost field */}
+              <InputGroup>
+                <InputLeftAddon children="Estimated Cost" borderRadius="16px" />
+                <Input name="estimated_cost" placeholder="Estimated Cost" borderRadius="16px" type="number" onChange={onChange}/>
+              </InputGroup>              
               {/* Budget field */}
               <InputGroup>
                 <InputLeftAddon children="Budget" borderRadius="16px" />
                 <Input name="current_budget" placeholder="Budget" borderRadius="16px" type="number" onChange={onChange}/>
+              </InputGroup>
+              {/* Owner field */}            
+              <InputGroup>
+                <InputLeftAddon children="Owner" borderRadius="16px" />
+                <HStack spacing={4}>
+                  {owner?.map((user, index) => (
+                    <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
+                      {user.name}
+                    </Tag>
+                  ))}
+                </HStack>
+                <Select
+                  options={userList}
+                  isMulti
+                  onChange={onSelect}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                />
+              </InputGroup>
+              {/* Location field */}
+              <InputGroup>
+                <InputLeftAddon children="Location" borderRadius="16px" />
+                <Textarea name="location" placeholder='Enter Location of project' onChange={onChange} />
+                <InputRightElement
+                  borderRadius="16px"
+                  children={<CheckIcon color="green.500" />}
+                />
               </InputGroup>
             </Stack>
           </ModalBody>
@@ -400,6 +480,7 @@ export default function ColumnsTable(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
     </Card>
   );
 }

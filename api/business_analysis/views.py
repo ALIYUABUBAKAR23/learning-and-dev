@@ -4,7 +4,9 @@ from django.shortcuts import render
 from rest_framework import filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics
 
+from .serializers import ProjectSerializer
 from .models import Project
 
 """
@@ -75,4 +77,9 @@ class ProjectAPI(APIView):
             return Response(data={"message":"Failed to delete project."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         return Response(data={"message":"Successfully deleted project."}, status=status.HTTP_201_CREATED)
-    
+
+
+
+class SingleProjectAPI(generics.RetrieveAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer

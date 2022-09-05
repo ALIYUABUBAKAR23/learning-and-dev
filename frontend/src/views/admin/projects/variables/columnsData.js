@@ -8,20 +8,44 @@ export const columnsDataProjects = [
     accessor: "description",
   },
   {
-    Header: "START DATE",
+    Header: "PROJECT LEAD",
+    accessor: "project_lead",
+  },
+  {
+    Header: "ACTUAL START DATE",
     accessor: "actual_start_date",
   },
   {
-    Header: "END DATE",
+    Header: "EXPECTED START DATE",
+    accessor: "expected_start_date",
+  },
+  {
+    Header: "ACTUAL END DATE",
     accessor: "actual_end_date",
   },
   {
-    Header: "COST",
+    Header: "EXPECTED END DATE",
+    accessor: "expected_end_date",
+  },
+  {
+    Header: "ACTUAL COST",
     accessor: "actual_cost",
+  },  
+  {
+    Header: "ESTIMATED COST",
+    accessor: "estimated_cost",
   },  
   {
     Header: "BUDGET",
     accessor: "current_budget",
+  },
+  {
+    Header: "OWNER",
+    accessor: "owner",
+  },
+  {
+    Header: "LOCATION",
+    accessor: "location",
   },
   {
     Header: "ACTIONS",
