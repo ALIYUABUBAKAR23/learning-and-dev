@@ -8,6 +8,9 @@ import {
   MdLock,
   MdWork,
   MdOutlineShoppingCart,
+  MdReceipt,
+  MdLocalPostOffice,
+  MdGroupWork,
 } from "react-icons/md";
 
 // Admin Imports
@@ -19,10 +22,13 @@ import Resources from "./views/admin/resources";
 import RTL from "./views/admin/rtl";
 import Projects from "./views/admin/projects";
 import Task from "./views/admin/tasks"
+import HumanResources from "./views/admin/hr"
+import Departments from "./views/admin/departments";
 
 // Auth Imports
 import SignInCentered from "./views/auth/signIn";
 import Project from "./views/admin/profile/components/Project";
+import departments from "./views/admin/departments";
 
 const routes = [
   {
@@ -102,6 +108,20 @@ const routes = [
     icon: <Icon as={MdWork} width="20px" height="20px" color="inherit" />,
     path: "/projects",
     component: Projects,
+  },
+  {
+    name: "Human Resources",
+    layout: "/admin",
+    icon: <Icon as={MdReceipt} width="20px" height="20px" color="inherit" />,
+    path: "/hr",
+    component: HumanResources,
+  },
+  {
+    name: "Departments",
+    layout: "/admin",
+    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    path: "/departments",
+    component: Departments,
   },
 ];
 
