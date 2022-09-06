@@ -63,12 +63,13 @@ import {
     const [userList, setUserList] = useState([])
     const [owner, setOwner] = useState([])    
 
+    var currentProject = targetProject
+
     const onChange = (event) => {
       const { name, value } = event.target;
-      const project = { ...projectData };
-      project[name] = value;
-      setProjectData(project);
-      setFormErrors(null);
+      currentProject[name] = value;
+      setProjectData(currentProject);
+      setFormErrors(true);
     };
 
     const onSelect = (event) => {
@@ -84,11 +85,9 @@ import {
       setProjectLead(newState);
       setOwner(newState);
     };
-  
-  
-    /* 
-    const updateProject = (projectData) =>{
-  
+
+
+    const getProjects = () =>{
       const config = {
         headers: {
           Accept: "application/json",
@@ -99,25 +98,44 @@ import {
       };
   
       axios
-        .put(`${baseUrl}business_analysis/projects/${projectData.id}`, config)
+        .get(`${baseUrl}business_analysis/projects`, config)
         .then((response) => {
-          onClose();
-          //getProjects();
-          console.log("check our response:", response.data);
-          toast.success(`${response.data.message}`);
+          props.setProjectList(response.data)
         })
         .catch((error) => {
           console.log(error);
-          toast.error('Project Not Edited!');
         });
-    } */
-
-    const test = () =>{
-        console.log(targetProject)
-        //updateProject(targetProject)
     }
+  
+  
+    const updateProject = (projectData) =>{
+        const config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get("csrftoken"),
+            'authorization':`Token ${Cookies.get('token')}`,
+          },
+        };
+    
+        axios
+          .put(`${baseUrl}business_analysis/projects/${projectData.id}/`, projectData, {config})
+          .then(() => {
+            onClose();
+            getProjects();
+            toast.success(`Updated Successfully`);
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error('Project Not Edited!');
+          });
+  }
 
-
+    const onSubmit = () => {
+      updateProject(currentProject);
+    };
+  
+  
 
     return (
       <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xl" onClose={onClose}>
@@ -131,11 +149,11 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Name" borderRadius="16px" />
                 <Input
+                  isRequired
                   name="name"
                   placeholder="Name"
                   borderRadius="16px"
                   onChange={onChange}
-                  value={targetProject.name}
                 />
               </InputGroup>
               {/* Description field */}
@@ -143,6 +161,7 @@ import {
                 <InputLeftAddon children="Description" borderRadius="16px" />
                 
                 <Textarea 
+                  isRequired
                   name="description" 
                   placeholder='Enter A Brief Or Detailed Description Of The Task' 
                   value={targetProject.description}
@@ -164,6 +183,7 @@ import {
                 </HStack>
                 <Select
                   options={userList}
+                  isRequired
                   isMulti
                   onChange={onSelect}
                   className="basic-multi-select"
@@ -175,6 +195,7 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Expected Start Date" borderRadius="16px" />
                 <Input 
+                  isRequired
                   name="actual_start_date" placeholder="Start Date" 
                   borderRadius="16px" type="date" onChange={onChange}
                   value={targetProject.expected_start_date}
@@ -188,6 +209,7 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Actual Start Date" borderRadius="16px" />
                 <Input 
+                  isRequired
                   name="expected_start_date" placeholder="Start Date" 
                   borderRadius="16px" type="date" onChange={onChange}
                   value={targetProject.actual_start_date}
@@ -200,7 +222,7 @@ import {
               {/* Expected End Date field */}
               <InputGroup>
                 <InputLeftAddon children="Expected End Date" borderRadius="16px" />
-                <Input name="expected_end_date" placeholder="Expected End Date" 
+                <Input isRequired name="expected_end_date" placeholder="Expected End Date" 
                   borderRadius="16px" type="date" onChange={onChange}
                   value={targetProject.expected_end_date}
                   />
@@ -212,7 +234,7 @@ import {
               {/* Actual End Date field */}
               <InputGroup>
                 <InputLeftAddon children="Actual End Date" borderRadius="16px" />
-                <Input name="actual_end_date" placeholder="Actual End Date" 
+                <Input isRequired name="actual_end_date" placeholder="Actual End Date" 
                   borderRadius="16px" type="date" onChange={onChange}
                   value={targetProject.actual_end_date}
                   />
@@ -225,6 +247,7 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Actual Cost" borderRadius="16px" />
                 <Input 
+                  isRequired
                   name="actual_cost" placeholder="Actual Cost" borderRadius="16px" 
                   type="number" onChange={onChange}
                   value={targetProject.actual_cost}
@@ -234,6 +257,7 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Estimated Cost" borderRadius="16px" />
                 <Input 
+                  isRequired
                   name="estimated_cost" placeholder="Estimated Cost" borderRadius="16px" 
                   type="number" onChange={onChange}
                   value={targetProject.estimated_cost}
@@ -243,9 +267,9 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Budget" borderRadius="16px" />
                 <Input 
+                  isRequired
                   name="current_budget" placeholder="Budget" borderRadius="16px" 
                   type="number" onChange={onChange}
-                  value={targetProject.budget}
                   />
               </InputGroup>
               {/* Owner field */}            
@@ -259,10 +283,10 @@ import {
                   ))}
                 </HStack>
                 <Select
+                  isRequired
                   options={userList}
                   isMulti
                   onChange={onSelect}
-                  value={targetProject.owner}
                   className="basic-multi-select"
                   classNamePrefix="select"
                 />
@@ -271,8 +295,9 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Location" borderRadius="16px" />
                 <Textarea 
+                  isRequired
                   name="location" placeholder='Enter Location of project' 
-                  onChange={onChange} value={targetProject.location}
+                  onChange={onChange}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -285,7 +310,7 @@ import {
             <Button colorScheme="brand" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost" onClick={test}>Update</Button>
+            <Button variant="ghost" onClick={onSubmit}>Update</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

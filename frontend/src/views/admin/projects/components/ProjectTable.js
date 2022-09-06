@@ -163,35 +163,6 @@ export default function ColumnsTable(props) {
         toast.error('Project Not created!');
       });
   }
-/* 
-  const deleteProject = (projectData) =>{
-
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
-      },
-    };
-
-    axios
-      .delete(`${baseUrl}business_analysis/projects/${projectData.id}`,config)
-      .then((response) => {
-        //onClose();
-        getProjects();
-        console.log("check our response:", response.data);
-        toast.success(`${response.data.message}`);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Project Not deleted!');
-      });
-  }
-   */
-  const handleClick = (data) => {
-    console.log(data);
-  }
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -234,7 +205,6 @@ export default function ColumnsTable(props) {
 
   useEffect(() => {
     getUsers();
-    getProjects();
   }, []);
   return (
     <Card
@@ -314,10 +284,10 @@ export default function ColumnsTable(props) {
                   }else if (cell.column.Header === "ACTIONS") {
                     targetP = cell.row.original
                     data = (
-                      <Flex>
+                      <Flex >
                         <Menu onDelete={onDeleteOpen} onEdit={onEditOpen}/>
-                        <DeleteModal isOpen={isDeleteOpen} onClose={onDeleteClose} targetProject={targetP}/>                      
-                        <EditModal isOpen={isEditOpen} onClose={onEditClose} targetProject={targetP}/>                      
+                        <DeleteModal isOpen={isDeleteOpen} onClose={onDeleteClose} targetProject={targetP}  setProjectList={setProjectList}/>                      
+                        <EditModal isOpen={isEditOpen} onClose={onEditClose} targetProject={targetP} setProjectList={setProjectList}/>                      
                       </Flex>
                     );                    
                   } else {

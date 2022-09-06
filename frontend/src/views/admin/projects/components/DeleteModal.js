@@ -65,6 +65,27 @@ import {
     const [projectLead, setProjectLead] = useState([])
     const [owner, setOwner] = useState([])    
 
+    const getProjects = () =>{
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
+          'authorization':`Token ${Cookies.get('token')}`,
+        },
+      };
+  
+      axios
+        .get(`${baseUrl}business_analysis/projects`, config)
+        .then((response) => {
+          console.log("check our projects: ", response.data);
+          props.setProjectList(response.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    
     const deleteProject = (projectData) =>{
   
       const config = {
@@ -80,9 +101,9 @@ import {
         .delete(`${baseUrl}business_analysis/projects/${projectData.id}`,config)
         .then((response) => {
           onClose();
-          //getProjects();
+          getProjects();
           console.log("check our response:", response.data);
-          toast.success(`${response.data.message}`);
+          toast.success(`Deleted ${targetProject.name}`);
         })
         .catch((error) => {
           console.log(error);
@@ -90,7 +111,7 @@ import {
         });
     }
 
-    const test = () =>{
+    const onSubmit = () =>{
         console.log(targetProject)
         deleteProject(targetProject)
     }
@@ -106,7 +127,7 @@ import {
             </ModalBody>
             <ModalFooter>
             <Button variant="ghost" mr={3}>Cancel</Button>
-                <Button colorScheme="red" onClick={test}>
+                <Button colorScheme="red" onClick={onSubmit}>
                     Delete
                 </Button>
             </ModalFooter>
