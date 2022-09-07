@@ -65,10 +65,6 @@ export const columnsDataComplex = [
     accessor: "description",
   },
   {
-    Header: "COMMENT",
-    accessor: "comment",
-  },
-  {
     Header: "ASSIGNED BY",
     accessor: "assigned_by",
   },
@@ -92,6 +88,34 @@ export const columnsDataComplex = [
     Header: "PRIORITY",
     accessor: "priority",
   },
+  {
+    Header: "ACTIONS",
+    accessor: "actions",
+  },
+];
+
+export const columnsDataProjects = [
+  {
+    Header: "NAME",
+    accessor: "name",
+  },
+  {
+    Header: "DESCRIPTION",
+    accessor: "description",
+  },
+  {
+    Header: "PROJECT LEAD",
+    accessor: "project_lead",
+  },
+  {
+    Header: "START DATE",
+    accessor: "start_date",
+  },
+  {
+    Header: "END DATE",
+    accessor: "end_date",
+  },
+
   {
     Header: "ACTIONS",
     accessor: "actions",
