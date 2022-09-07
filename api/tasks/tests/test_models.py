@@ -5,6 +5,7 @@ from api.tasks.models import Task
 from api.authentication.models import User
 from api.hr.models import Department
 
+
 class TaskModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -32,29 +33,23 @@ class TaskModelTest(TestCase):
             department_id="1",
             spouse_name="Bestie",
             date_of_birth="1991-01-01",
-            is_married=False    
+            is_married=False,
         )
         cls.task = Task.create_task(
-            name='Unit tests 1', 
-            description='CRUD test 1',
-            comment = 'Test comment',
-            assigned_by_id = 1,
-            assigned_to = {"id":2, "id":3},
-            start_date = "2022-08-03 11:45",
-            due_date = "2022-08-05 12:00",
-            status = 'pending',
-            priority = 'low'
+            name="Unit tests 1",
+            description="CRUD test 1",
+            comment="Test comment",
+            assigned_by_id=1,
+            assigned_to={"id": 2, "id": 3},
+            start_date="2022-08-03 11:45",
+            due_date="2022-08-05 12:00",
+            status="pending",
+            priority="low",
         )
-        Task.create_task(
-            name='Unit tests 2', 
-            description='CRUD test 2'
-        )
-        Task.create_task(
-            name='Unit tests 3', 
-            description='CRUD test 3'
-        )
+        Task.create_task(name="Unit tests 2", description="CRUD test 2")
+        Task.create_task(name="Unit tests 3", description="CRUD test 3")
 
-    def test_task_has_correct_fields(self):                   
+    def test_task_has_correct_fields(self):
         self.assertIsInstance(self.task.name, str)
         self.assertIsInstance(self.task.description, str)
         self.assertIsInstance(self.task.comment, str)
@@ -65,15 +60,15 @@ class TaskModelTest(TestCase):
         self.assertIsInstance(self.task.status, str)
         self.assertIsInstance(self.task.priority, str)
 
-    def test_it_has_timestamps(self):                           
+    def test_it_has_timestamps(self):
         self.assertIsInstance(self.task.created_at, datetime)
         self.assertIsInstance(self.task.updated_at, datetime)
 
     def test_create_task_method(self):
         task = Task.objects.get(id=1)
-        self.assertEqual(task.name, 'Unit tests 1')
+        self.assertEqual(task.name, "Unit tests 1")
         task = Task.objects.get(id=2)
-        self.assertEqual(task.description, 'CRUD test 2')
+        self.assertEqual(task.description, "CRUD test 2")
 
     def test_get_task_list_method(self):
         # task_id=1
@@ -81,14 +76,14 @@ class TaskModelTest(TestCase):
         self.assertEqual(len(task), 3)
 
     def test_update_task_method(self):
-        task_id=1
-        task = Task.update_task(task_id, comment='See hafa')
+        task_id = 1
+        task = Task.update_task(task_id, comment="See hafa")
         self.assertEqual(task, 1)
 
     def test_delete_task_method(self):
-        task_id=1
+        task_id = 1
         task = Task.delete_task(task_id)
-        self.assertEqual(task, (1, {'tasks.Task': 1}))
+        self.assertEqual(task, (1, {"tasks.Task": 1}))
 
     # def test_first_name_max_length(self):
     #     task = Task.objects.get(id=1)
