@@ -7,7 +7,9 @@ export const getSiteUrl = (pathName = null) => {
     return siteUrl;
   };
 
-export const baseUrl = "http://127.0.0.1:8000/api/";
+export const baseUrl = "http://127.0.0.1:8000/api/"
+export const baseUserUrl = "http://127.0.0.1:8000/"
+
 
 export const handleWidgetChange = (onChange, formData) => (
   event,
@@ -53,3 +55,4 @@ export const handleWidgetChange2 = (onChange, setNewData, formData, changedData)
   onChange(newFormData);
   setNewData(updatedFormData);
 };
+

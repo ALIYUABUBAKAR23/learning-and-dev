@@ -75,7 +75,7 @@ class Department(BaseModel):
 
     @classmethod
     def get_departments(cls, **kwargs):
-        department = Department.objects.all().values('name')
+        department = Department.objects.all().values('name','description','head_of_department')
         return department
 
     
