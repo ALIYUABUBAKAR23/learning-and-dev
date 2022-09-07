@@ -21,10 +21,17 @@ import {
   MdOutlineSettings,
 } from "react-icons/md";
 
-import {AiFillCaretDown} from "react-icons/ai";
+import { AiFillCaretDown } from "react-icons/ai";
 
 export default function Banner(props) {
-  const { editData, setTaskToEdit, ...rest } = props;
+  const {
+    editData,
+    setTaskToEdit,
+    onOpen,
+    setTaskForDelete,
+    onOpenConfirm,
+    ...rest
+  } = props;
 
   const textColor = useColorModeValue("secondaryGray.500", "white");
   const textHover = useColorModeValue(
@@ -57,55 +64,63 @@ export default function Banner(props) {
   return (
     <Menu isOpen={isOpen1} onClose={onClose1}>
       <MenuButton
-        align='center'
-        justifyContent='center'
+        align="center"
+        justifyContent="center"
         bg={bgButton}
         _hover={bgHover}
         _focus={bgFocus}
         _active={bgFocus}
-        w='37px'
-        h='37px'
-        lineHeight='100%'
+        w="37px"
+        h="37px"
+        lineHeight="100%"
         onClick={onOpen1}
-        borderRadius='10px'
-        {...rest}>
-        <Icon as={AiFillCaretDown} color={iconColor} w='20px' h='20px' />
+        borderRadius="10px"
+        {...rest}
+      >
+        <Icon as={AiFillCaretDown} color={iconColor} w="20px" h="20px" />
       </MenuButton>
       <MenuList
-        w='150px'
-        minW='unset'
-        maxW='150px !important'
-        border='transparent'
-        backdropFilter='blur(63px)'
+        w="150px"
+        minW="unset"
+        maxW="150px !important"
+        border="transparent"
+        backdropFilter="blur(63px)"
         bg={bgList}
         boxShadow={bgShadow}
-        borderRadius='20px'
-        p='15px'>
+        borderRadius="20px"
+        p="15px"
+      >
         <MenuItem
-          onClick={ ()=> setTaskToEdit(editData)} 
-          transition='0.2s linear'
+          onClick={() => setTaskToEdit(editData)}
+          transition="0.2s linear"
           color={textColor}
           _hover={textHover}
-          p='0px'
-          borderRadius='8px'
+          p="0px"
+          borderRadius="8px"
           _active={{
             bg: "transparent",
           }}
           _focus={{
             bg: "transparent",
           }}
-          mb='10px'>
-          <Flex align='center'>
-            <Icon as={MdOutlinePerson} h='16px' w='16px' me='8px' />
-            <Text fontSize='sm' fontWeight='400'>
+          mb="10px"
+        >
+          <Flex align="center">
+            <Icon as={MdOutlinePerson} h="16px" w="16px" me="8px" />
+            <Text fontSize="sm" fontWeight="400">
               Edit
             </Text>
           </Flex>
         </MenuItem>
+
         <MenuItem
-          transition='0.2s linear'
-          p='0px'
-          borderRadius='8px'
+          onClick={() => {
+            onOpenConfirm();
+            setTaskForDelete(editData);
+          }}
+          transition="0.2s linear"
+          p="0px"
+          borderRadius="8px"
           color={textColor}
           _hover={textHover}
           _active={{
@@ -114,10 +129,11 @@ export default function Banner(props) {
           _focus={{
             bg: "transparent",
           }}
-          mb='10px'>
-          <Flex align='center'>
-            <Icon as={MdOutlineCardTravel} h='16px' w='16px' me='8px' />
-            <Text fontSize='sm' fontWeight='400'>
+          mb="10px"
+        >
+          <Flex align="center">
+            <Icon as={MdOutlineCardTravel} h="16px" w="16px" me="8px" />
+            <Text fontSize="sm" fontWeight="400">
               Delete
             </Text>
           </Flex>
