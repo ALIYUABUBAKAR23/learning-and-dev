@@ -154,6 +154,7 @@ import {
                   placeholder="Name"
                   borderRadius="16px"
                   onChange={onChange}
+                  defaultValue ={targetProject.name}
                 />
               </InputGroup>
               {/* Description field */}
@@ -164,7 +165,7 @@ import {
                   isRequired
                   name="description" 
                   placeholder='Enter A Brief Or Detailed Description Of The Task' 
-                  value={targetProject.description}
+                  defaultValue ={targetProject.description}
                   onChange={onChange} />
                 <InputRightElement
                   borderRadius="16px"
@@ -188,7 +189,7 @@ import {
                   onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"                  
-                  value={targetProject.project_lead}
+                  defaultValue={targetProject.project_lead}
                 />
               </InputGroup>
               {/* Expected Start Date field */}
@@ -198,7 +199,7 @@ import {
                   isRequired
                   name="actual_start_date" placeholder="Start Date" 
                   borderRadius="16px" type="date" onChange={onChange}
-                  value={targetProject.expected_start_date}
+                  defaultValue={targetProject.expected_start_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -212,7 +213,7 @@ import {
                   isRequired
                   name="expected_start_date" placeholder="Start Date" 
                   borderRadius="16px" type="date" onChange={onChange}
-                  value={targetProject.actual_start_date}
+                  defaultValue={targetProject.actual_start_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -224,7 +225,7 @@ import {
                 <InputLeftAddon children="Expected End Date" borderRadius="16px" />
                 <Input isRequired name="expected_end_date" placeholder="Expected End Date" 
                   borderRadius="16px" type="date" onChange={onChange}
-                  value={targetProject.expected_end_date}
+                  defaultValue={targetProject.expected_end_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -236,7 +237,7 @@ import {
                 <InputLeftAddon children="Actual End Date" borderRadius="16px" />
                 <Input isRequired name="actual_end_date" placeholder="Actual End Date" 
                   borderRadius="16px" type="date" onChange={onChange}
-                  value={targetProject.actual_end_date}
+                  defaultValue={targetProject.actual_end_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -250,7 +251,7 @@ import {
                   isRequired
                   name="actual_cost" placeholder="Actual Cost" borderRadius="16px" 
                   type="number" onChange={onChange}
-                  value={targetProject.actual_cost}
+                  defaultValue={targetProject.actual_cost}
                   />
               </InputGroup>
               {/*Estimated Cost field */}
@@ -260,7 +261,7 @@ import {
                   isRequired
                   name="estimated_cost" placeholder="Estimated Cost" borderRadius="16px" 
                   type="number" onChange={onChange}
-                  value={targetProject.estimated_cost}
+                  defaultValue={targetProject.estimated_cost}
                   />
               </InputGroup>              
               {/* Budget field */}
@@ -269,7 +270,8 @@ import {
                 <Input 
                   isRequired
                   name="current_budget" placeholder="Budget" borderRadius="16px" 
-                  type="number" onChange={onChange}
+                  type="number" onChange={onChange} 
+                  defaultValue ={targetProject.current_budget}
                   />
               </InputGroup>
               {/* Owner field */}            
@@ -289,6 +291,7 @@ import {
                   onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"
+                  defaultValue ={targetProject.owner}
                 />
               </InputGroup>
               {/* Location field */}
@@ -298,6 +301,7 @@ import {
                   isRequired
                   name="location" placeholder='Enter Location of project' 
                   onChange={onChange}
+                  defaultValue ={targetProject.location}
                   />
                 <InputRightElement
                   borderRadius="16px"
