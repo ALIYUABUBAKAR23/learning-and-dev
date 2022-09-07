@@ -10,7 +10,6 @@ import AdminLayout from "./layouts/admin";
 import RTLLayout from "./layouts/rtl";
 import SignIn from "./views/auth/signIn";
 import Cookies from "js-cookie";
-import ResourcesLayout from "./layouts/resources";
 
 function App() {
   function getToken() {
@@ -20,16 +19,15 @@ function App() {
 
   const token = getToken();
 
-  if (!token) {
+  /*if (!token) {
     return <SignIn />;
-  }
+  }*/
   
   return (
       <Switch>
         <Route path={`/auth`} component={AuthLayout} />
         <Route path={`/admin`} component={AdminLayout} />
         <Route path={`/rtl`} component={RTLLayout} />
-        <Route path={`/resources`} component={ResourcesLayout} />
         <Redirect from="/" to="/admin" />
       </Switch>
   );
