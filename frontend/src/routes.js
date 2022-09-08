@@ -8,6 +8,7 @@ import {
   MdLock,
   MdWork,
   MdOutlineShoppingCart,
+  MdReceipt,
 } from "react-icons/md";
 
 // Admin Imports
@@ -18,7 +19,8 @@ import DataTables from "./views/admin/dataTables";
 import Resources from "./views/admin/resources";
 import RTL from "./views/admin/rtl";
 import Projects from "./views/admin/projects";
-import Task from "./views/admin/tasks"
+import Task from "./views/admin/tasks";
+import Contract from "./views/admin/contracts";
 
 // Auth Imports
 import SignInCentered from "./views/auth/signIn";
@@ -102,6 +104,13 @@ const routes = [
     icon: <Icon as={MdWork} width="20px" height="20px" color="inherit" />,
     path: "/projects",
     component: Projects,
+  },
+  {
+    name: "Contracts",
+    layout: "/admin",
+    icon: <Icon as={MdReceipt} width="20px" height="20px" color="inherit" />,
+    path: "/contracts",
+    component: Contract,
   },
 ];
 

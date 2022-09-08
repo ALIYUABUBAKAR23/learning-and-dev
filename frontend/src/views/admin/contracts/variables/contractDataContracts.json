@@ -1,0 +1,12 @@
+[
+  {
+    "contract_type":"Part-Time",
+    "date_issued":"1991-01-01",
+    "contract_length":"21",
+    "contract_details":"These are the details of the contract",
+    "contract_document":"a url link to the document",
+    "end_date":"1993-01-01",
+    "user_id":"1",
+    "approved_by_id":"1"
+  }
+]

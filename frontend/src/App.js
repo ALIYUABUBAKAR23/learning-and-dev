@@ -12,6 +12,7 @@ import SignIn from "./views/auth/signIn";
 import Cookies from "js-cookie";
 import ResourcesLayout from "./layouts/resources";
 
+
 function App() {
   function getToken() {
     const userToken = Cookies.get("token");
