@@ -1,26 +1,27 @@
-
 # Create your models here.
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.forms.models import model_to_dict
 
 from erp.models import BaseModel
+from api.authentication.models import User
 
 
 TASK_STATUS = (
-    ('Open', 'open'),
-    ('Pending', 'pending'),
-    ('Suspended', 'suspended'),
-    ('Postponed', 'postponed'),
-    ('Completed', 'completed'),
-    ('Incomplete', 'incomplete'),
-    ('Cancelled', 'cancelled'),
+    ("Open", "open"),
+    ("Pending", "pending"),
+    ("Suspended", "suspended"),
+    ("Postponed", "postponed"),
+    ("Completed", "completed"),
+    ("Incomplete", "incomplete"),
+    ("Cancelled", "cancelled"),
 )
 
 TASK_PRIORITY = (
-    ('High','high'),
-    ('Medium', 'medium'),
-    ('Low', 'low'),
+    ("High", "high"),
+    ("Medium", "medium"),
+    ("Low", "low"),
 )
 
 
@@ -29,23 +30,26 @@ class Task(BaseModel):
     Task model for user created/assigned tasks.
     It will keep track of tasks assigned, completion status and so forth.
     """
+
     name = models.CharField(max_length=200, null=False, blank=True)
     description = models.TextField(null=False, blank=True)
     comment = models.TextField(null=False, blank=True)
     assigned_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL
+    )
     assigned_to = models.JSONField(null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(
-        choices=TASK_STATUS, max_length=200, null=True, blank=True)
+        choices=TASK_STATUS, max_length=200, null=True, blank=True
+    )
     priority = models.CharField(
-        choices=TASK_PRIORITY, max_length=200, null=True, blank=True)
-    
+        choices=TASK_PRIORITY, max_length=200, null=True, blank=True
+    )
 
     class Meta:
-        verbose_name = ("task")
-        verbose_name_plural = ("tasks")
+        verbose_name = "task"
+        verbose_name_plural = "tasks"
 
     def __str__(self):
         return self.name
@@ -58,7 +62,10 @@ class Task(BaseModel):
         tasks = Task.objects.filter(**kwargs).values()
         # Compute the values list "manually".
         for task in tasks:
-            print(task['id'])
+            user = User.objects.filter(id=task["assigned_by_id"]).get()
+            task[
+                "assigned_by"
+            ] = f"{user.first_name} {user.middle_name} {user.last_name}"
         return tasks
 
     @classmethod

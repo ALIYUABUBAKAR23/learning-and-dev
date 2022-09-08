@@ -4,8 +4,15 @@ from django.shortcuts import render
 from rest_framework import filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from rest_framework import generics
 from .models import Project
+
+from .serializers import ProjectSerializer
+from rest_framework.decorators import api_view
+from django.http.response import JsonResponse
+from rest_framework.parsers import JSONParser 
+
+
 
 """
 GET POST PUT & DELETE
@@ -75,4 +82,36 @@ class ProjectAPI(APIView):
             return Response(data={"message":"Failed to delete project."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         return Response(data={"message":"Successfully deleted project."}, status=status.HTTP_201_CREATED)
+
+
+
+# class SingleProjectAPI(generics.RetrieveAPIView):
+#     queryset = Project.objects.all()
+#     serializer_class = ProjectSerializer
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def SingleProjectAPI(request, pk):
+    # find project by pk (id)
+    try: 
+        project = Project.objects.get(pk=pk) 
+
+        #Delete Project by Id
+        if request.method == 'DELETE': 
+            project.delete() 
+            return JsonResponse({'message': 'Tutorial was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+
+        #Update Project
+        elif request.method == 'PUT': 
+            project_data = JSONParser().parse(request) 
+            project_serializer = ProjectSerializer(project, data=project_data) 
+            
+            if project_serializer.is_valid(): 
+                project_serializer.save() 
+                return JsonResponse(project_serializer.data) 
+            return JsonResponse(project_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except Project.DoesNotExist: 
+        return JsonResponse({'message': 'The project does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+ 
+    # GET / PUT / DELETE tutorial
     

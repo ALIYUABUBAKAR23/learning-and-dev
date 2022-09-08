@@ -37,31 +37,24 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import Select from "react-select";
+import Select from 'react-select';
 // Custom components
 import Card from "../../../../components/card/Card";
-import Menu from "./MainMenu";
+import Menu from "../../../../components/menu/MainMenu";
 
 // Assets
 import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
 import APIClient from "../../../../lib/APIClient";
-import {
-  CalendarIcon,
-  CheckIcon,
-  PhoneIcon,
-  PlusSquareIcon,
-} from "@chakra-ui/icons";
+import { CalendarIcon, CheckIcon, PhoneIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { PersonIcon } from "../../../../components/icons/Icons";
 import axios from "axios";
 axios.defaults.withCredentials = true;
-import { baseUrl } from "../../../../utility/index";
+import {baseUrl} from "../../../../utility/index";
 import Cookies from "js-cookie";
-import toast from "react-hot-toast";
-import TaskModal from "./TaskModal";
-import ConfirmationModal from "./ConfirmationModal";
+import toast from 'react-hot-toast';
 
 export default function ColumnsTable(props) {
-  const { columnsData, tableData, setTaskList } = props;
+  const { columnsData, tableData, setItemList } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -89,208 +82,121 @@ export default function ColumnsTable(props) {
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenConfirm,
-    onOpen: onOpenConfirm,
-    onClose: onCloseConfirm,
-  } = useDisclosure();
-  const [taskData, setTaskData] = useState({});
-  const [assignedTo, setAssignedTo] = useState([]);
+  const [itemData, setItemData] = useState({});
+  const [assignedTo, setAssignedTo] = useState([])
   const [formErrors, setFormErrors] = useState(null);
-  const [userList, setUserList] = useState([]);
-  const [taskToEdit, setTaskToEdit] = useState();
-  const [taskToDelete, setTaskToDelete] = useState();
+  const [inventoryList, setInventoryList] = useState([])
 
-  const taskStatusOptions = [
-    { label: "Open", value: "Open" },
-    { label: "Pending", value: "Pending" },
-    { label: "Suspended", value: "Suspended" },
-    { label: "Postponed", value: "Postponed" },
-    { label: "Completed", value: "Completed" },
-    { label: "Incomplete", value: "Incomplete" },
-    { label: "Cancelled", value: "Cancelled" },
-  ];
 
-  const taskPriorityOptions = [
-    { label: "High", value: "High" },
-    { label: "Medium", value: "Medium" },
-    { label: "Low", value: "Low" },
-  ];
-
-  const getTasks = () => {
+  const getItems = () =>{
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
+        'authorization':`Token ${Cookies.get('token')}`,
       },
     };
 
     axios
-      .get(`${baseUrl}tasks/tasks`, config)
+      .get(`${baseUrl}resources/item`, config)
       .then((response) => {
-        console.log("check our tasks: ", response.data);
-        setTaskList(response.data);
+        console.log("check our items: ", response.data);
+        setItemList(response.data)
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
-  const getUsers = () => {
+  const getInventory = () =>{
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
+        'authorization':`Token ${Cookies.get('token')}`,
       },
     };
 
     axios
-      .get(`${baseUrl}users/`, config)
+      .get(`${baseUrl}resources/inventory`, config)
       .then((response) => {
-        console.log("check our users: ", response.data);
-        setUserList(
-          response.data.map((option) => ({
-            label: `${option.first_name} ${option.middle_name} ${option.last_name}`,
-            value: option.id,
-          }))
-        );
+        console.log("check our inventory: ", response.data);
+        setInventoryList(response.data.map(option => ({ label: `${option.name}`, value: option.id})))
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
-  const createTask = (taskData, httpVerb) => {
+  const createItem = (itemData) =>{
+
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
+        'authorization':`Token ${Cookies.get('token')}`,
       },
     };
 
-    axios[httpVerb](`${baseUrl}tasks/tasks`, taskData, config)
+    axios
+      .post(`${baseUrl}resources/item`, itemData, config)
       .then((response) => {
         onClose();
-        getTasks();
-        setAssignedTo([]);
-        setTaskData();
-        setTaskToEdit();
+        getItems();
         console.log("check our response:", response.data);
         toast.success(`${response.data.message}`);
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Not created!");
+        toast.error('Not created!');
       });
-  };
+  }
 
-  const deleteTask = (task_id) => {
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
-      },
-      data: { task_id: task_id },
-    };
-
-    axios
-      .delete(`${baseUrl}tasks/tasks`, config)
-      .then((response) => {
-        onCloseConfirm();
-        getTasks();
-        console.log("Successfully deleted task!", response.data);
-        toast.success(`Successfully deleted task!`);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Not deleted!");
-      });
-  };
-
-  const setEditTask = (taskData) => {
-    console.log("task data: ", taskData);
-    setTaskToEdit(taskData);
-    onOpen();
-  };
-  const setTaskForDelete = (taskData) => {
-    console.log("delete task data id: ", taskData.id);
-    setTaskToDelete(taskData.id);
-    onOpenConfirm();
-  };
   const onChange = (event) => {
-    console.log("see the event: ", event);
+    console.log('see the event: ', event);
     const { name, value } = event.target;
-    console.log("see the name, event : ", name, " ,", value);
-    const task = { ...taskData };
-    task[name] = value;
-    setTaskData(task);
+    console.log('see the name, event : ', name, ' ,',value);
+    const item = { ...itemData };
+    item[name] = value;
+    setItemData(item);
     setFormErrors(null);
   };
 
   const onOptionSelect = (event, action) => {
-    console.log("see the event: ", event, action);
+    console.log('see the event: ', event, action);
     const { label, value } = event;
-    console.log("see the name, event : ", label, " ,", value);
-    const task = { ...taskData };
-    task[action.name] = value;
-    setTaskData(task);
+    console.log('see the name, event : ', label, ' ,',value);
+    const item = { ...itemData };
+    item[action.name] = value;
+    setItemData(item);
   };
 
   const onSelect = (event) => {
-    console.log("see the event: ", event);
+    console.log('see the event: ', event);
     var newState;
     if (event.length > 0) {
-      event?.map((input) => {
-        newState = [
-          ...assignedTo,
-          {
-            id: input.value ? input.value : null,
-            name: input.label ? input.label : null,
-          },
-        ];
+      event?.map((input)=> {
+        newState = [...assignedTo, {id: input.value ? input.value : null, name: input.label ? input.label : null}];
       });
-    } else {
+    }else{
       newState = [];
     }
     setAssignedTo(newState);
   };
 
-  const formatData = (data) => {
-    console.log("formatting...");
-    console.log(data);
-    const keys = Object.keys(data);
-
-    keys.forEach((key) => {
-      if (key === "priority") {
-        data[key] = data[key].value;
-      }
-      if (key === "status") {
-        data[key] = data[key].value;
-      }
-    });
-
-    console.log(`our formatted data in formatData: \n ${data}`);
-    return data;
+  const onSubmit = () => {
+    
+    console.log("check our post:", itemData);
+    const item = { ...itemData };
+    createItem(item);
   };
 
-  const onSubmit = (httpVerb, taskData) => {
-    let unFormattedTask = { ...taskData };
-    let task = formatData(unFormattedTask);
-    task["assigned_to"] = [...assignedTo];
-    console.log("check our post:", taskData);
-    createTask(task, httpVerb);
-  };
 
   useEffect(() => {
-    getUsers();
+    getInventory();
   }, []);
   return (
     <Card
@@ -306,9 +212,9 @@ export default function ColumnsTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          My Tasks
+         Items
         </Text>
-        <Button onClick={onOpen}>Create Task</Button>
+        <Button onClick={onOpen}>Add Items</Button>
       </Flex>
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
         <Thead>
@@ -384,32 +290,21 @@ export default function ColumnsTable(props) {
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "ASSIGNED TO") {
+                  } else if (cell.column.Header === "INVENTORY") {
                     data = (
                       <Flex align="center">
                         <HStack spacing={4}>
-                          {cell.value?.map((user, index) => (
-                            <Tag
-                              size={"sm"}
-                              key={index}
-                              variant="solid"
-                              colorScheme="teal"
-                            >
-                              {user.name}
+                          {cell.value?.map((inventory, index) => (
+                            <Tag size={'sm'} key={index} variant='solid' colorScheme='teal'>
+                              {inventory.name}
                             </Tag>
                           ))}
                         </HStack>
                       </Flex>
                     );
-                  } else if (cell.column.Header === "ACTIONS") {
+                  }else if (cell.column.Header === "ACTIONS") {
                     data = (
-                      <Menu
-                        editData={cell.row.original}
-                        setTaskToEdit={setEditTask}
-                        setTaskForDelete={setTaskForDelete}
-                        onOpen={onOpen}
-                        onOpenConfirm={onOpenConfirm}
-                      />
+                      <Menu />
                     );
                   } else {
                     data = (
@@ -430,32 +325,117 @@ export default function ColumnsTable(props) {
                     </Td>
                   );
                 })}
+
               </Tr>
             );
           })}
         </Tbody>
       </Table>
-      <TaskModal
-        isOpen={isOpen}
-        onClose={onClose}
-        onOpen={onOpen}
-        onSelect={onSelect}
-        userList={userList}
-        assignedTo={assignedTo}
-        onChange={onChange}
-        onOptionSelect={onOptionSelect}
-        onSubmit={onSubmit}
-        editTask={taskToEdit}
-        setTaskToEdit={setEditTask}
-      />
-      <ConfirmationModal
-        taskId={taskToDelete}
-        deleteTask={deleteTask}
-        setTaskToDelete={setTaskToDelete}
-        onOpen={onOpenConfirm}
-        isOpen={isOpenConfirm}
-        onClose={onCloseConfirm}
-      />
+      <Modal
+      closeOnOverlayClick={false}
+      isOpen={isOpen}
+      size="xl"
+      onClose={onClose}
+    >
+    <ModalOverlay />
+    <ModalContent>
+      <ModalHeader>Add a new Item</ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>
+        <Stack spacing={4}>
+          <InputGroup>
+            <InputLeftAddon children="Name" borderRadius="16px" />
+            <Input
+              name="name"
+              placeholder="Name"
+              borderRadius="16px"
+              onChange={onChange}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon children="Description" borderRadius="16px" />
+            
+            <Textarea name="description" placeholder='Enter A Brief Or Detailed Description Of The Item' onChange={onChange} />
+            <InputRightElement
+              borderRadius="16px"
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon children="Serial Number" borderRadius="16px" />
+            <Input
+              name="serial_number"
+              placeholder="Serial Number"
+              borderRadius="16px"
+              onChange={onChange}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon children="Date of Purchase" borderRadius="16px" />
+            <Input name="date_of_purchase" placeholder="Date of Purchase" borderRadius="16px" type="date" onChange={onChange}/>
+            <InputRightElement
+              borderRadius="16px"
+              children={<CalendarIcon color="green.500" />}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon children="Cost" borderRadius="16px" />
+            <Input
+              name="cost"
+              placeholder="Cost"
+              borderRadius="16px"
+              onChange={onChange}
+            />
+          </InputGroup>
+          <InputGroup>
+              <InputLeftAddon children="Inventory" borderRadius="16px" />
+              <HStack spacing={4}>
+                {assignedTo?.map((inventory, index) => (
+                  <Tag
+                    size={"lg"}
+                    key={index}
+                    variant="solid"
+                    colorScheme="teal"
+                  >
+                    {inventory.name}
+                  </Tag>
+                ))}
+              </HStack>
+              <Select
+                options={inventoryList}
+                isMulti
+                onChange={onSelect}
+                className="basic-multi-select"
+                classNamePrefix="select"
+              />
+            </InputGroup>
+          <InputGroup>
+            <InputLeftAddon children="Purchase Quantity" borderRadius="16px" />
+            <Input
+              name="purchase_quantity"
+              placeholder="Purchase Quantity"
+              borderRadius="16px"
+              onChange={onChange}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLeftAddon children="Quantity" borderRadius="16px" />
+            <Input
+              name="quantity"
+              placeholder="Quantity"
+              borderRadius="16px"
+              onChange={onChange}
+            />
+          </InputGroup>
+        </Stack>
+      </ModalBody>
+      <ModalFooter>
+        <Button colorScheme="brand" mr={3} onClick={onClose}>
+          Close
+        </Button>
+        <Button variant="ghost" onClick={onSubmit}>Create</Button>
+      </ModalFooter>
+    </ModalContent>
+  </Modal>
     </Card>
   );
 }

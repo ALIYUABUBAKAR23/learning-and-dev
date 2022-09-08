@@ -37,31 +37,25 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import Select from "react-select";
+import Select from 'react-select';
 // Custom components
 import Card from "../../../../components/card/Card";
-import Menu from "./MainMenu";
+import Menu from "../../../../components/menu/MainMenu";
 
 // Assets
 import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
 import APIClient from "../../../../lib/APIClient";
-import {
-  CalendarIcon,
-  CheckIcon,
-  PhoneIcon,
-  PlusSquareIcon,
-} from "@chakra-ui/icons";
+import { CalendarIcon, CheckIcon, PhoneIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { PersonIcon } from "../../../../components/icons/Icons";
 import axios from "axios";
 axios.defaults.withCredentials = true;
-import { baseUrl } from "../../../../utility/index";
+import {baseUrl} from "../../../../utility/index";
 import Cookies from "js-cookie";
-import toast from "react-hot-toast";
-import TaskModal from "./TaskModal";
-import ConfirmationModal from "./ConfirmationModal";
+import toast from 'react-hot-toast';
+import InventoryModal from "./InventoryModal";
 
 export default function ColumnsTable(props) {
-  const { columnsData, tableData, setTaskList } = props;
+  const { columnsData, tableData, setInventoryList, setItemList } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -88,63 +82,43 @@ export default function ColumnsTable(props) {
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenConfirm,
-    onOpen: onOpenConfirm,
-    onClose: onCloseConfirm,
-  } = useDisclosure();
-  const [taskData, setTaskData] = useState({});
-  const [assignedTo, setAssignedTo] = useState([]);
+
+  const [inventoryData, setInventoryData] = useState({});
+  const [itemData, setItemData] = useState({});
+  const [assignedTo, setAssignedTo] = useState([])
   const [formErrors, setFormErrors] = useState(null);
-  const [userList, setUserList] = useState([]);
-  const [taskToEdit, setTaskToEdit] = useState();
-  const [taskToDelete, setTaskToDelete] = useState();
+  const [userList, setUserList] = useState([])
 
-  const taskStatusOptions = [
-    { label: "Open", value: "Open" },
-    { label: "Pending", value: "Pending" },
-    { label: "Suspended", value: "Suspended" },
-    { label: "Postponed", value: "Postponed" },
-    { label: "Completed", value: "Completed" },
-    { label: "Incomplete", value: "Incomplete" },
-    { label: "Cancelled", value: "Cancelled" },
-  ];
-
-  const taskPriorityOptions = [
-    { label: "High", value: "High" },
-    { label: "Medium", value: "Medium" },
-    { label: "Low", value: "Low" },
-  ];
-
-  const getTasks = () => {
+  const getInventory = () =>{
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
+        'authorization':`Token ${Cookies.get('token')}`,
       },
     };
 
     axios
-      .get(`${baseUrl}tasks/tasks`, config)
+      .get(`${baseUrl}resources/inventory`, config)
       .then((response) => {
-        console.log("check our tasks: ", response.data);
-        setTaskList(response.data);
+        console.log("check our inventory: ", response.data);
+        setInventoryList(response.data)
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
-  const getUsers = () => {
+  const getUsers = () =>{
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
+        'authorization':`Token ${Cookies.get('token')}`,
       },
     };
 
@@ -152,141 +126,75 @@ export default function ColumnsTable(props) {
       .get(`${baseUrl}users/`, config)
       .then((response) => {
         console.log("check our users: ", response.data);
-        setUserList(
-          response.data.map((option) => ({
-            label: `${option.first_name} ${option.middle_name} ${option.last_name}`,
-            value: option.id,
-          }))
-        );
+        setUserList(response.data.map(option => ({ label: `${option.first_name} ${option.middle_name} ${option.last_name}`, value: option.id })))
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
-  const createTask = (taskData, httpVerb) => {
+  const createInventory = (inventoryData) =>{
+
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
+        'authorization':`Token ${Cookies.get('token')}`,
       },
     };
 
-    axios[httpVerb](`${baseUrl}tasks/tasks`, taskData, config)
+    axios
+      .post(`${baseUrl}resources/inventory`, inventoryData, config)
       .then((response) => {
         onClose();
-        getTasks();
-        setAssignedTo([]);
-        setTaskData();
-        setTaskToEdit();
+        getInventory();
         console.log("check our response:", response.data);
         toast.success(`${response.data.message}`);
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Not created!");
+        toast.error('Not created!');
       });
-  };
+  }
 
-  const deleteTask = (task_id) => {
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
-      },
-      data: { task_id: task_id },
-    };
-
-    axios
-      .delete(`${baseUrl}tasks/tasks`, config)
-      .then((response) => {
-        onCloseConfirm();
-        getTasks();
-        console.log("Successfully deleted task!", response.data);
-        toast.success(`Successfully deleted task!`);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Not deleted!");
-      });
-  };
-
-  const setEditTask = (taskData) => {
-    console.log("task data: ", taskData);
-    setTaskToEdit(taskData);
-    onOpen();
-  };
-  const setTaskForDelete = (taskData) => {
-    console.log("delete task data id: ", taskData.id);
-    setTaskToDelete(taskData.id);
-    onOpenConfirm();
-  };
   const onChange = (event) => {
-    console.log("see the event: ", event);
+    console.log('see the event: ', event);
     const { name, value } = event.target;
-    console.log("see the name, event : ", name, " ,", value);
-    const task = { ...taskData };
-    task[name] = value;
-    setTaskData(task);
+    console.log('see the name, event : ', name, ' ,',value);
+    const inventory = { ...inventoryData };
+    inventory[name] = value;
+    setInventoryData(inventory);
     setFormErrors(null);
   };
 
   const onOptionSelect = (event, action) => {
-    console.log("see the event: ", event, action);
+    console.log('see the event: ', event, action);
     const { label, value } = event;
-    console.log("see the name, event : ", label, " ,", value);
-    const task = { ...taskData };
-    task[action.name] = value;
-    setTaskData(task);
+    console.log('see the name, event : ', label, ' ,',value);
+    const inventory = { ...inventoryData };
+    inventory[action.name] = value;
+    setInventoryData(inventory);
   };
 
   const onSelect = (event) => {
-    console.log("see the event: ", event);
+    console.log('see the event: ', event);
     var newState;
     if (event.length > 0) {
-      event?.map((input) => {
-        newState = [
-          ...assignedTo,
-          {
-            id: input.value ? input.value : null,
-            name: input.label ? input.label : null,
-          },
-        ];
+      event?.map((input)=> {
+        newState = [...assignedTo, {id: input.value ? input.value : null, name: input.label ? input.label : null}];
       });
-    } else {
+    }else{
       newState = [];
     }
     setAssignedTo(newState);
   };
 
-  const formatData = (data) => {
-    console.log("formatting...");
-    console.log(data);
-    const keys = Object.keys(data);
-
-    keys.forEach((key) => {
-      if (key === "priority") {
-        data[key] = data[key].value;
-      }
-      if (key === "status") {
-        data[key] = data[key].value;
-      }
-    });
-
-    console.log(`our formatted data in formatData: \n ${data}`);
-    return data;
-  };
-
-  const onSubmit = (httpVerb, taskData) => {
-    let unFormattedTask = { ...taskData };
-    let task = formatData(unFormattedTask);
-    task["assigned_to"] = [...assignedTo];
-    console.log("check our post:", taskData);
-    createTask(task, httpVerb);
+  const onSubmit = () => {
+    
+    console.log("check our post:", inventoryData);
+    const inventory = { ...inventoryData };
+    createInventory(inventory);
   };
 
   useEffect(() => {
@@ -306,9 +214,11 @@ export default function ColumnsTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          My Tasks
+          Inventory
         </Text>
-        <Button onClick={onOpen}>Create Task</Button>
+        <Flex px="25px" justify="flex-end" mb="20px" align="center">
+        <Button onClick={onOpen}>Create Inventory</Button>
+        </Flex>
       </Flex>
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
         <Thead>
@@ -346,6 +256,7 @@ export default function ColumnsTable(props) {
                       <Text color={textColor} fontSize="sm" fontWeight="700">
                         {cell.value}
                       </Text>
+                      
                     );
                   } else if (cell.column.Header === "STATUS") {
                     data = (
@@ -384,32 +295,9 @@ export default function ColumnsTable(props) {
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "ASSIGNED TO") {
-                    data = (
-                      <Flex align="center">
-                        <HStack spacing={4}>
-                          {cell.value?.map((user, index) => (
-                            <Tag
-                              size={"sm"}
-                              key={index}
-                              variant="solid"
-                              colorScheme="teal"
-                            >
-                              {user.name}
-                            </Tag>
-                          ))}
-                        </HStack>
-                      </Flex>
-                    );
                   } else if (cell.column.Header === "ACTIONS") {
                     data = (
-                      <Menu
-                        editData={cell.row.original}
-                        setTaskToEdit={setEditTask}
-                        setTaskForDelete={setTaskForDelete}
-                        onOpen={onOpen}
-                        onOpenConfirm={onOpenConfirm}
-                      />
+                      <Menu />
                     );
                   } else {
                     data = (
@@ -430,31 +318,21 @@ export default function ColumnsTable(props) {
                     </Td>
                   );
                 })}
+
               </Tr>
             );
           })}
         </Tbody>
       </Table>
-      <TaskModal
-        isOpen={isOpen}
+      <InventoryModal 
+        isOpen={isOpen} 
         onClose={onClose}
         onOpen={onOpen}
         onSelect={onSelect}
         userList={userList}
-        assignedTo={assignedTo}
         onChange={onChange}
         onOptionSelect={onOptionSelect}
         onSubmit={onSubmit}
-        editTask={taskToEdit}
-        setTaskToEdit={setEditTask}
-      />
-      <ConfirmationModal
-        taskId={taskToDelete}
-        deleteTask={deleteTask}
-        setTaskToDelete={setTaskToDelete}
-        onOpen={onOpenConfirm}
-        isOpen={isOpenConfirm}
-        onClose={onCloseConfirm}
       />
     </Card>
   );
