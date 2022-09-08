@@ -11,6 +11,7 @@ import RTLLayout from "./layouts/rtl";
 import SignIn from "./views/auth/signIn";
 import Cookies from "js-cookie";
 
+
 function App() {
   function getToken() {
     const userToken = Cookies.get("token");
