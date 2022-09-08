@@ -132,6 +132,7 @@ const routes = [
     icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
     path: "/departments",
     component: Departments,
+  }
 ];
 
 export default routes;
