@@ -9,6 +9,10 @@ export const columnsDataDepartment = [
     },
     {
       Header: "HEAD OF DEPARTMENT",
-      accessor: "head_of_department",
+      accessor: "head_of_department__first_name",
+    },
+    {
+      Header: "ACTIONS",
+      accessor: "actions",
     },
   ];
