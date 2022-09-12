@@ -23,5 +23,9 @@ export const contractDataContracts = [
     Header: "END DATE",
     accessor: "end_date",
   },
+  {
+    Header: "ACTIONS",
+    accessor: "actions",
+  }
 ];
 

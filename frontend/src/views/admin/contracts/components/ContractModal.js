@@ -18,13 +18,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 // Custom components
 
 // Assets
 import { CalendarIcon, CheckIcon } from "@chakra-ui/icons";
 import axios from "axios";
+import { handleWidgetChange2 } from "../../../../utility";
 axios.defaults.withCredentials = true;
 
 function ContractModal(props) {
@@ -33,6 +34,10 @@ function ContractModal(props) {
     { label: "Part-Time", value: "Part-Time" }, 
   ];
 
+  const TYPE = [
+    { label: "Full-Time", value: "Full-Time" },
+    { label: "Part-Time", value: "Part-Time" }, 
+  ];
   
   const {
     onChange,
@@ -42,20 +47,44 @@ function ContractModal(props) {
     onSelect,
     userList,
     onOptionSelect,
+    editContract,
+    setContractToEdit,
+    onOpen,
     } = props;
 
-  return (
-    <Modal
-      closeOnOverlayClick={false}
-      isOpen={isOpen}
-      size="xl"
-      onClose={onClose}
-    >
-      <ModalOverlay />
+    const [contractDetails, setContractDetails] = useState({});
+    const [updatedContractDetails, setUpdatedContractDetails] = useState({});
+ 
+    useEffect(() => {
+      setContractDetails(editContract || "");
+    }, [editContract]);
+  
+    useEffect(() => {
+      setUpdatedContractDetails(contractDetails || editContract);
+    }, [contractDetails]);
+  
+    const handleChange = handleWidgetChange2(
+      setContractDetails,
+      setUpdatedContractDetails,
+      contractDetails,
+      updatedContractDetails
+    );
+  
+    return (
+      <Modal
+        closeOnOverlayClick={false}
+        isOpen={isOpen}
+        size="xl"
+        onClose={() => {
+          setContractToEdit(null);
+          onClose();
+        }}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{editContract ? "Edit Contract" : "Create New Contract"}</ModalHeader>
+          <ModalCloseButton />
 
-      <ModalContent>
-        <ModalHeader>Create A New Contract</ModalHeader>
-        <ModalCloseButton />
         <ModalBody>
           <Stack spacing={4}>
 
@@ -63,8 +92,9 @@ function ContractModal(props) {
               <InputLeftAddon children="Contract Type" borderRadius="16px" />
               <Select
                 name="contract_type"
+                value={TYPE[contractDetails.contract_type]}
                 options={contractData}
-                onChange={onOptionSelect}
+                onChange={(option) => handleChange(option, "contract_type")}
               />
             </InputGroup>
 
@@ -74,7 +104,8 @@ function ContractModal(props) {
                 name="date_issued"
                 placeholder="Set the date this contract was issued"
                 type="date"
-                onChange={onChange}
+                onChange={handleChange}
+                value={contractDetails?.date_issued || ""}
               />
 
             </InputGroup>
@@ -86,7 +117,8 @@ function ContractModal(props) {
                 name="contract_length"
                 placeholder="Set the length of this contract in months"
                 type="number"
-                onChange={onChange}
+                onChange={handleChange}
+                value={contractDetails?.contract_length || ""}
               />
 
         
@@ -99,8 +131,8 @@ function ContractModal(props) {
                 placeholder="Set Contract Details"
                 borderRadius="16px"
                 size='lg'
-
-                onChange={onChange}
+        	      value={contractDetails?.contract_details || ""}
+                onChange={handleChange}
               />
             </InputGroup>
             <InputGroup>
@@ -109,7 +141,8 @@ function ContractModal(props) {
                 name="contract_document"
                 placeholder="Set Contract Document"
                 borderRadius="16px"
-                onChange={onChange}
+                onChange={handleChange}
+                value={contractDetails?.contract_document || ""}
               />
     
             </InputGroup>
@@ -119,7 +152,8 @@ function ContractModal(props) {
                 name="end_date"
                 placeholder="Set the end date of this contract"
                 type="date"
-                onChange={onChange}
+                onChange={handleChange}
+                value={contractDetails?.end_date || ""}
               />
     
             </InputGroup>
@@ -130,7 +164,8 @@ function ContractModal(props) {
                 options={userList}
                 placeholder="Set User"
                 borderRadius="16px"
-                // onChange={onOptionSelect}
+                value={contractDetails?.user || ""}
+                onChange={(option) => handleChange(option, "user")}
               />
           
             </InputGroup>
@@ -138,11 +173,23 @@ function ContractModal(props) {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="brand" mr={3} onClick={onClose}>
+        <Button
+            colorScheme="brand"
+            mr={3}
+            onClick={() => {
+              setContractToEdit(null);
+              onClose();
+            }}
+          >
             Close
           </Button>
-          <Button variant="ghost" onClick={onSubmit}>
-            Create
+          <Button
+            variant="ghost"
+            onClick={() => {
+              onSubmit(editContract ? "put" : "post", updatedContractDetails);
+            }}
+          >
+            {editContract ? "Edit" : "Create"}
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -11,7 +11,6 @@ import {
   MdShoppingBasket,
 
   MdReceipt,
-  MdLocalPostOffice,
   MdGroupWork,
 
 } from "react-icons/md";
@@ -24,17 +23,15 @@ import DataTables from "./views/admin/dataTables";
 import RTL from "./views/admin/rtl";
 import Projects from "./views/admin/projects";
 import Task from "./views/admin/tasks";
-import Inventory from "./views/admin/inventory"
-import Item from "./views/admin/items"
-import HumanResources from "./views/admin/hr"
+import Inventory from "./views/admin/inventory";
+import Item from "./views/admin/items";
+import HumanResources from "./views/admin/hr";
 import Departments from "./views/admin/departments";
 import Contract from "./views/admin/contracts";
 
 
 // Auth Imports
 import SignInCentered from "./views/auth/signIn";
-import Project from "./views/admin/profile/components/Project";
-import departments from "./views/admin/departments";
 
 const routes = [
   {
