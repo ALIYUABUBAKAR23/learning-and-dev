@@ -30,8 +30,7 @@ import {
 } from "./variables/columnsData";
 import tableDataStaff from "../hr/variables/tableDataStaff.json";
 import React, { useEffect, useState} from "react";
-import StaffModal from './components/CreateModal';
-import NewModal from './components/NewModal';
+import StaffModal from './components/StaffModal';
 import axios from "axios";
 import Cookies from "js-cookie";
 import { baseUrl } from "../../../utility";
