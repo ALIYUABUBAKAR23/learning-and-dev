@@ -104,12 +104,22 @@ class ContractAPI(APIView):
         return Response(data={"message":"Failed to update contract."}, status=status.HTTP_501_NOT_IMPLEMENTED)  
     
     def delete(self, request):
-        # contract_id = request.data.get("id", None)
-        # contract = contract.delete_contract(contract_id)
-        contract = Contract.delete_all_contracts()
+        contract_id = request.data["contract_id"]
+        if contract_id is None:
+            return Response(
+                data={"message": "Failed to delete contract. NO ID supplied."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        contract = Contract.delete_contract(contract_id)
         if contract is None:
-            return Response(data={"message":"Failed to delete contract."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(data={"message":"Successfully deleted contract."}, status=status.HTTP_201_CREATED)
+            return Response(
+                data={"message":"Failed to delete contract."}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+        return Response(
+            data={"message":"Successfully deleted contract."}, 
+            status=status.HTTP_201_CREATED
+            )
 
    
 class LocationAPI(APIView):

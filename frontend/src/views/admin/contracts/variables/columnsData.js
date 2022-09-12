@@ -24,8 +24,12 @@ export const contractDataContracts = [
     accessor: "end_date",
   },
   {
+    Header: "APPROVED BY",
+    accessor: "approved_by",
+  },
+  {
     Header: "ACTIONS",
     accessor: "actions",
-  }
+  },
 ];
 

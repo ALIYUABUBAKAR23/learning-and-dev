@@ -34,22 +34,23 @@ function ContractModal(props) {
     { label: "Part-Time", value: "Part-Time" }, 
   ];
 
-  const TYPE = [
-    { label: "Full-Time", value: "Full-Time" },
-    { label: "Part-Time", value: "Part-Time" }, 
-  ];
+  const TYPE = {
+    FullTime: { label: "Full-Time", value: "Full-Time" },
+    PartTime: { label: "Part-Time", value: "Part-Time" }, 
+  };
   
   const {
-    onChange,
-    onSubmit,
-    isOpen, 
-    onClose,
     onSelect,
     userList,
-    onOptionSelect,
     editContract,
+    assignedTo,
+    onChange,
+    onOptionSelect,
+    onSubmit,
     setContractToEdit,
     onOpen,
+    isOpen, 
+    onClose,
     } = props;
 
     const [contractDetails, setContractDetails] = useState({});
@@ -158,14 +159,13 @@ function ContractModal(props) {
     
             </InputGroup>
             <InputGroup>
-              <InputLeftAddon children="User" borderRadius="16px" />
+              <InputLeftAddon children="Approved By" borderRadius="16px" />
               <Select
-                name="user"
                 options={userList}
-                placeholder="Set User"
-                borderRadius="16px"
-                value={contractDetails?.user || ""}
-                onChange={(option) => handleChange(option, "user")}
+                isMulti
+                onChange={onSelect}
+                className="basic-multi-select"
+                classNamePrefix="select"
               />
           
             </InputGroup>

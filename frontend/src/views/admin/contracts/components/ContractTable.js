@@ -163,7 +163,7 @@ export default function ContractTable(props) {
         onClose();
         getContracts();
         setAssignedTo([]);
-        setContractData();
+        setContractDataList();
         setContractToEdit();
         console.log("check our response:", response.data);
         toast.success(`${response.data.message}`);
@@ -213,9 +213,9 @@ export default function ContractTable(props) {
     console.log("see the event: ", event);
     const { name, value } = event.target;
     console.log("see the name, event : ", name, " ,", value);
-    const contract = { ...contractData };
+    const contract = { ...contractDataList };
     contract[name] = value;
-    setContractData(contract);
+    setContractDataList(contract);
     setFormErrors(null);
   };
 
@@ -223,9 +223,9 @@ export default function ContractTable(props) {
     console.log("see the event: ", event, action);
     const { label, value } = event;
     console.log("see the name, event : ", label, " ,", value);
-    const contract = { ...contractData };
+    const contract = { ...contractDataList };
     contract[action.name] = value;
-    setContractData(contract);
+    setContractDataList(contract);
   };
 
   const onSelect = (event) => {
@@ -268,7 +268,6 @@ export default function ContractTable(props) {
   const onSubmit = (httpVerb, contractData) => {
     let unFormattedContract = { ...contractData };
     let contract = formatData(unFormattedContract);
-    contract["assigned_to"] = [...assignedTo];
     console.log("check our post:", contractData);
     createContract(contract, httpVerb);
   };
@@ -318,74 +317,70 @@ export default function ContractTable(props) {
             </Tr>
           ))}
         </Thead>
-        <Tbody {...getTableBodyProps()}>
-          {page.map((row, index) => {
-            prepareRow(row);
-            return (
-              <Tr {...row.getRowProps()} key={index}>
-                {row.cells.map((cell, index) => {
-                  let data = "";
-                  if (cell.column.Header === "NAME") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
+              <Tbody {...getTableBodyProps()}>
+        {page.map((row, index) => {
+          prepareRow(row);
+          return (
+            <Tr {...row.getRowProps()} key={index}>
+              {row.cells.map((cell, index) => {
+                let data = "";
+                if (cell.column.Header === "CONTRACT TYPE") {
+                  data = (
+                    <Flex align='center'>
+                      <Text color={textColor} fontSize='sm' fontWeight='700'>
                         {cell.value}
                       </Text>
-                    );
-                  } else if (cell.column.Header === "STATUS") {
-                    data = (
-                      <Flex align="center">
-                        <Icon
-                          w="24px"
-                          h="24px"
-                          me="5px"
-                          color={
-                            cell.value === "Approved"
-                              ? "green.500"
-                              : cell.value === "Disable"
-                              ? "red.500"
-                              : cell.value === "Error"
-                              ? "orange.500"
-                              : null
-                          }
-                          as={
-                            cell.value === "Approved"
-                              ? MdCheckCircle
-                              : cell.value === "Disable"
-                              ? MdCancel
-                              : cell.value === "Error"
-                              ? MdOutlineError
-                              : null
-                          }
-                        />
-                        <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell.value}
-                        </Text>
-                      </Flex>
-                    );
-                  } else if (cell.column.Header === "DATE") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
+                    </Flex>
+                  );
+                } else if (cell.column.Header === "DATE ISSUED") {
+                  data = (
+                    <Flex align='center'>
+                      <Text
+                        me='10px'
+                        color={textColor}
+                        fontSize='sm'
+                        fontWeight='700'>
                         {cell.value}
                       </Text>
-                    );
-                  } else if (cell.column.Header === "ASSIGNED TO") {
-                    data = (
-                      <Flex align="center">
-                        <HStack spacing={4}>
-                          {cell.value?.map((user, index) => (
-                            <Tag
-                              size={"sm"}
-                              key={index}
-                              variant="solid"
-                              colorScheme="teal"
-                            >
-                              {user.name}
-                            </Tag>
-                          ))}
-                        </HStack>
-                      </Flex>
-                    );
-                  } else if (cell.column.Header === "ACTIONS") {
+                    </Flex>
+                  );
+                } else if (cell.column.Header === "CONTRACT LENGTH") {
+                  data = (
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                      {cell.value} months 
+                    </Text>
+                  );
+                } else if (cell.column.Header === "CONTRACT DETAILS") {
+                  data = (
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                      {cell.value}
+                    </Text>
+                  );
+                } else if (cell.column.Header === "CONTRACT DOCUMENT") {
+                  data = (
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                      {cell.value}
+                    </Text>
+                  );
+                } else if (cell.column.Header === "END DATE") {
+                  data = (
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                      {cell.value}
+                    </Text>
+                  );
+                } else if (cell.column.Header === "USER ID") {
+                  data = (
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                      {cell.value}
+                    </Text>
+                  );
+                } else if (cell.column.Header === "APPROVED BY ID") {
+                  data = (
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                      {cell.value}
+                    </Text>
+                  );
+              } else if (cell.column.Header === "ACTIONS") {
                     data = (
                       <Menu
                         editData={cell.row.original}
@@ -417,7 +412,10 @@ export default function ContractTable(props) {
               </Tr>
             );
           })}
-        </Tbody>
+          </Tbody>
+          
+           
+            
       </Table>
       <ContractModal
         isOpen={isOpen}
