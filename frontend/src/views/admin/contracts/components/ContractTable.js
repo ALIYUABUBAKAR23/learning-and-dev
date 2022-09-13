@@ -103,14 +103,13 @@ export default function ContractTable(props) {
     {label:"Part-Time", value:"Part-Time"},
   ]
 
-  
-  const getUsers = () =>{
+  const getUsers = () => {
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
+        authorization: `Token ${Cookies.get("token")}`,
       },
     };
 
@@ -118,13 +117,17 @@ export default function ContractTable(props) {
       .get(`${baseUrl}users/`, config)
       .then((response) => {
         console.log("check our users: ", response.data);
-        setUserList(response.data.map(option => ({ label: `${option.first_name} ${option.middle_name} ${option.last_name}`, value: option.id })))
+        setUserList(
+          response.data.map((option) => ({
+            label: `${option.first_name} ${option.middle_name} ${option.last_name}`,
+            value: option.id,
+          }))
+        );
       })
       .catch((error) => {
         console.log(error);
       });
-  }
-
+  };
 
   const getContracts = () =>{
     const config = {
@@ -145,10 +148,9 @@ export default function ContractTable(props) {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
-  
-   const createContract = (contractData, httpVerb) => {
+  const createContract = (contractData) => {
     const config = {
       headers: {
         Accept: "application/json",
@@ -158,11 +160,11 @@ export default function ContractTable(props) {
       },
     };
 
-    axios[httpVerb](`${baseUrl}hr/contracts`, contractData, config)
+    axios
+      .post(`${baseUrl}hr/contracts`, contractData, config)
       .then((response) => {
         onClose();
         getContracts();
-        setAssignedTo([]);
         setContractDataList();
         setContractToEdit();
         console.log("check our response:", response.data);
@@ -332,55 +334,19 @@ export default function ContractTable(props) {
                       </Text>
                     </Flex>
                   );
-                } else if (cell.column.Header === "DATE ISSUED") {
+                } else if (cell.column.Header === "APPROVED BY") {
                   data = (
-                    <Flex align='center'>
-                      <Text
-                        me='10px'
-                        color={textColor}
-                        fontSize='sm'
-                        fontWeight='700'>
-                        {cell.value}
-                      </Text>
-                    </Flex>
+                      <Flex align="center">
+                        <HStack spacing={4}>
+                          {cell.value?.map((user, index) => (
+                            <Tag size={'sm'} key={index} variant='solid' colorScheme='teal'>
+                              {user.name}
+                            </Tag>
+                          ))}
+                        </HStack>
+                      </Flex>
                   );
-                } else if (cell.column.Header === "CONTRACT LENGTH") {
-                  data = (
-                    <Text color={textColor} fontSize='sm' fontWeight='700'>
-                      {cell.value} months 
-                    </Text>
-                  );
-                } else if (cell.column.Header === "CONTRACT DETAILS") {
-                  data = (
-                    <Text color={textColor} fontSize='sm' fontWeight='700'>
-                      {cell.value}
-                    </Text>
-                  );
-                } else if (cell.column.Header === "CONTRACT DOCUMENT") {
-                  data = (
-                    <Text color={textColor} fontSize='sm' fontWeight='700'>
-                      {cell.value}
-                    </Text>
-                  );
-                } else if (cell.column.Header === "END DATE") {
-                  data = (
-                    <Text color={textColor} fontSize='sm' fontWeight='700'>
-                      {cell.value}
-                    </Text>
-                  );
-                } else if (cell.column.Header === "USER ID") {
-                  data = (
-                    <Text color={textColor} fontSize='sm' fontWeight='700'>
-                      {cell.value}
-                    </Text>
-                  );
-                } else if (cell.column.Header === "APPROVED BY ID") {
-                  data = (
-                    <Text color={textColor} fontSize='sm' fontWeight='700'>
-                      {cell.value}
-                    </Text>
-                  );
-              } else if (cell.column.Header === "ACTIONS") {
+                } else if (cell.column.Header === "ACTIONS") {
                     data = (
                       <Menu
                         editData={cell.row.original}

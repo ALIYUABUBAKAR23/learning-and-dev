@@ -94,6 +94,7 @@ function ContractModal(props) {
               <Select
                 name="contract_type"
                 value={TYPE[contractDetails.contract_type]}
+                placeholder="Contract Type"
                 options={contractData}
                 onChange={(option) => handleChange(option, "contract_type")}
               />
@@ -166,10 +167,10 @@ function ContractModal(props) {
                 onChange={onSelect}
                 className="basic-multi-select"
                 classNamePrefix="select"
-              />
-          
+              />      
+
             </InputGroup>
-          
+
           </Stack>
         </ModalBody>
         <ModalFooter>
