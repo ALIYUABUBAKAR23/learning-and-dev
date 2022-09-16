@@ -82,11 +82,18 @@ class DepartmentAPI(APIView):
 
 class ContractAPI(APIView):
     def get(self, request):
-        contract = Contract.get_contracts()
+        
+        user = request.user
+        print(f"user = {user}")
+        print(f"user.id = {user.id}")
+        contract = Contract.get_contracts(approved_by=user.id)
         return Response(data=contract, status=status.HTTP_200_OK)
     
     def post(self, request):
         contract = request.data
+        contract["approved_by_id"] = request.user.id
+        print(contract)
+        
         contract = Contract.create_contract(**contract) 
         if contract: 
             return Response(data={"message":"Successfully created contract."}, status=status.HTTP_201_CREATED)
@@ -96,8 +103,13 @@ class ContractAPI(APIView):
         contract_id = request.data.get("id", None)
         if not contract_id:
             return Response(data={"message":"No ID Supplied."}, status=status.HTTP_501_NOT_IMPLEMENTED)
+        
         contract_data = request.data 
         contract_data.pop("id")
+        
+        if "approved_by" in contract_data:
+            contract_data.pop("approved_by")
+        
         contract = Contract.update_contract(contract_id, **contract_data)
         if contract:
             return Response(data={"message":"Successfully updated contract."}, status=status.HTTP_201_CREATED)

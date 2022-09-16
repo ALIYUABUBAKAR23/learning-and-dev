@@ -91,7 +91,7 @@ export default function ContractTable(props) {
     onClose: onCloseConfirm,
   } = useDisclosure();
 
-  const [assignedTo, setAssignedTo] = useState([])
+  const [approvedBy, setApprovedBy] = useState([])
   const [formErrors, setFormErrors] = useState(null);
   const [contractDataList, setContractDataList] = useState({});
   const [userList, setUserList] = useState([]);
@@ -150,7 +150,7 @@ export default function ContractTable(props) {
       });
   };
 
-  const createContract = (contractData) => {
+  const createContract = (contractData, httpVerb) => {
     const config = {
       headers: {
         Accept: "application/json",
@@ -160,8 +160,7 @@ export default function ContractTable(props) {
       },
     };
 
-    axios
-      .post(`${baseUrl}hr/contracts`, contractData, config)
+    axios[httpVerb](`${baseUrl}hr/contracts`, contractData, config)
       .then((response) => {
         onClose();
         getContracts();
@@ -206,11 +205,13 @@ export default function ContractTable(props) {
     setContractToEdit(contractData);
     onOpen();
   };
+
   const setContractForDelete = (contractData) => {
     console.log("delete contract data id: ", contractData.id);
     setContractToDelete(contractData.id);
     onOpenConfirm();
   };
+  
   const onChange = (event) => {
     console.log("see the event: ", event);
     const { name, value } = event.target;
@@ -236,7 +237,7 @@ export default function ContractTable(props) {
     if (event.length > 0) {
       event?.map((input) => {
         newState = [
-          ...assignedTo,
+          ...approvedBy,
           {
             id: input.value ? input.value : null,
             name: input.label ? input.label : null,
@@ -246,7 +247,7 @@ export default function ContractTable(props) {
     } else {
       newState = [];
     }
-    setAssignedTo(newState);
+    setApprovedBy(newState);
   };
 
   const formatData = (data) => {
@@ -255,10 +256,7 @@ export default function ContractTable(props) {
     const keys = Object.keys(data);
 
     keys.forEach((key) => {
-      if (key === "priority") {
-        data[key] = data[key].value;
-      }
-      if (key === "status") {
+      if (key === "approved_by") {
         data[key] = data[key].value;
       }
     });
@@ -270,6 +268,7 @@ export default function ContractTable(props) {
   const onSubmit = (httpVerb, contractData) => {
     let unFormattedContract = { ...contractData };
     let contract = formatData(unFormattedContract);
+    // contract["approved_by"] = [...approvedBy];
     console.log("check our post:", contractData);
     createContract(contract, httpVerb);
   };
@@ -389,7 +388,7 @@ export default function ContractTable(props) {
         onOpen={onOpen}
         onSelect={onSelect}
         userList={userList}
-        assignedTo={assignedTo}
+        // approvedBy={approvedBy}
         onChange={onChange}
         onOptionSelect={onOptionSelect}
         onSubmit={onSubmit}

@@ -43,7 +43,7 @@ function ContractModal(props) {
     onSelect,
     userList,
     editContract,
-    assignedTo,
+    approvedBy,
     onChange,
     onOptionSelect,
     onSubmit,
@@ -95,6 +95,7 @@ function ContractModal(props) {
                 name="contract_type"
                 value={TYPE[contractDetails.contract_type]}
                 placeholder="Contract Type"
+                
                 options={contractData}
                 onChange={(option) => handleChange(option, "contract_type")}
               />
@@ -162,9 +163,9 @@ function ContractModal(props) {
             <InputGroup>
               <InputLeftAddon children="Approved By" borderRadius="16px" />
               <Select
+                name="approved_by_id"
                 options={userList}
-                isMulti
-                onChange={onSelect}
+                onChange={onOptionSelect}
                 className="basic-multi-select"
                 classNamePrefix="select"
               />      
