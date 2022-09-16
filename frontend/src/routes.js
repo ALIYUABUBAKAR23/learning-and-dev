@@ -8,9 +8,12 @@ import {
   MdLock,
   MdWork,
   MdOutlineShoppingCart,
+  MdShoppingBasket,
+
   MdReceipt,
   MdLocalPostOffice,
   MdGroupWork,
+
 } from "react-icons/md";
 
 // Admin Imports
@@ -18,12 +21,15 @@ import MainDashboard from "./views/admin/default";
 import NFTMarketplace from "./views/admin/marketplace";
 import Profile from "./views/admin/profile";
 import DataTables from "./views/admin/dataTables";
-import Resources from "./views/admin/resources";
 import RTL from "./views/admin/rtl";
 import Projects from "./views/admin/projects";
-import Task from "./views/admin/tasks"
+import Task from "./views/admin/tasks";
+import Inventory from "./views/admin/inventory"
+import Item from "./views/admin/items"
 import HumanResources from "./views/admin/hr"
 import Departments from "./views/admin/departments";
+import Contract from "./views/admin/contracts";
+
 
 // Auth Imports
 import SignInCentered from "./views/auth/signIn";
@@ -89,18 +95,18 @@ const routes = [
     component: Task,
   },
   {
-    name: "Resources",
+    name: "Inventory",
     layout: "/admin",
-    path: "/resources",
-    icon: (
-      <Icon
-        as={MdOutlineShoppingCart}
-        width="20px"
-        height="20px"
-        color="inherit"
-      />
-    ),
-    component: Resources,
+    path: "/inventory",
+    icon: <Icon as={MdShoppingBasket} width="20px" height="20px" color="inherit" />,
+    component: Inventory,
+  },
+  {
+    name: "Items",
+    layout: "/admin",
+    path: "/items",
+    icon: <Icon as={MdShoppingBasket} width="20px" height="20px" color="inherit" />,
+    component: Item,
   },
   {
     name: "Projects",
@@ -110,7 +116,16 @@ const routes = [
     component: Projects,
   },
   {
+
+    name: "Contracts",
+    layout: "/admin",
+    icon: <Icon as={MdReceipt} width="20px" height="20px" color="inherit" />,
+    path: "/contracts",
+    component: Contract,
+  },
+  {
     name: "Human Resources",
+
     layout: "/admin",
     icon: <Icon as={MdReceipt} width="20px" height="20px" color="inherit" />,
     path: "/hr",
