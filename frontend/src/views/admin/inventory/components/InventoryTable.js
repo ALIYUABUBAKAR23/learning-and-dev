@@ -52,10 +52,9 @@ axios.defaults.withCredentials = true;
 import {baseUrl} from "../../../../utility/index";
 import Cookies from "js-cookie";
 import toast from 'react-hot-toast';
-import InventoryModal from "./InventoryModal";
 
 export default function ColumnsTable(props) {
-  const { columnsData, tableData, setInventoryList, setItemList } = props;
+  const { columnsData, tableData, setInventoryList } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -86,10 +85,16 @@ export default function ColumnsTable(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [inventoryData, setInventoryData] = useState({});
-  const [itemData, setItemData] = useState({});
   const [assignedTo, setAssignedTo] = useState([])
   const [formErrors, setFormErrors] = useState(null);
   const [userList, setUserList] = useState([])
+  const [projectList, setProjectList] = useState([])
+
+  const conditionOptions = [
+    { label: "Excellent", value: "Excellent" },
+    { label: "Good", value: "Good" },
+    { label: "Bad", value: "Bad" },
+  ];
 
   const getInventory = () =>{
     const config = {
@@ -127,6 +132,27 @@ export default function ColumnsTable(props) {
       .then((response) => {
         console.log("check our users: ", response.data);
         setUserList(response.data.map(option => ({ label: `${option.first_name} ${option.middle_name} ${option.last_name}`, value: option.id })))
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const getProjects = () =>{
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        'authorization':`Token ${Cookies.get('token')}`,
+      },
+    };
+
+    axios
+      .get(`${baseUrl}business_analysis/projects`, config)
+      .then((response) => {
+        console.log("check our projects: ", response.data);
+        setProjectList(response.data.map(option => ({ label: `${option.name}`, value: option.id})))
       })
       .catch((error) => {
         console.log(error);
@@ -198,7 +224,7 @@ export default function ColumnsTable(props) {
   };
 
   useEffect(() => {
-    getUsers();
+    getProjects();
   }, []);
   return (
     <Card
@@ -324,16 +350,131 @@ export default function ColumnsTable(props) {
           })}
         </Tbody>
       </Table>
-      <InventoryModal 
-        isOpen={isOpen} 
-        onClose={onClose}
-        onOpen={onOpen}
-        onSelect={onSelect}
-        userList={userList}
-        onChange={onChange}
-        onOptionSelect={onOptionSelect}
-        onSubmit={onSubmit}
-      />
+      <Modal
+      closeOnOverlayClick={false}
+      isOpen={isOpen}
+      size="xl"
+      onClose={onClose}
+    >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Create A New Inventory</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Stack spacing={4}>
+            <InputGroup>
+              <InputLeftAddon children="Name" borderRadius="16px" />
+              <Input
+                name="name"
+                placeholder="Name"
+                borderRadius="16px"
+                onChange={onChange}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon children="Type" borderRadius="16px" />
+              <Input
+                name="type"
+                placeholder="Type"
+                borderRadius="16px"
+                onChange={onChange}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon children="Date of Purchase" borderRadius="16px" />
+              <Input
+                name="date_of_purchase"
+                placeholder="Date of Purchase"
+                borderRadius="16px"
+                type="date"
+                onChange={onChange}
+              />
+              <InputRightElement borderRadius="16px" />
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon
+                children="Purchase Condition"
+                borderRadius="16px"
+              />
+              <Select
+                name="purchase_condition"
+                options={conditionOptions}
+                onChange={onOptionSelect}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon
+                children="Current Condition"
+                borderRadius="16px"
+              />
+              <Select
+                name="current_condition"
+                options={conditionOptions}
+                onChange={onOptionSelect}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon children="Current Location" borderRadius="16px" />
+              <Input
+                name="current_location"
+                placeholder="Current Location"
+                borderRadius="16px"
+                onChange={onChange}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon children="Model Number" borderRadius="16px" />
+              <Input
+                name="model_number"
+                placeholder="Model Number"
+                borderRadius="16px"
+                onChange={onChange}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon children="Serial Number" borderRadius="16px" />
+              <Input
+                name="serial_number"
+                placeholder="Serial Number"
+                borderRadius="16px"
+                onChange={onChange}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon children="Project" borderRadius="16px" />
+              <HStack spacing={4}>
+                {assignedTo?.map((project, index) => (
+                  <Tag
+                    size={"lg"}
+                    key={index}
+                    variant="solid"
+                    colorScheme="teal"
+                  >
+                    {project.name}
+                  </Tag>
+                ))}
+              </HStack>
+              <Select
+                options={projectList}
+                isMulti
+                onChange={onSelect}
+                className="basic-multi-select"
+                classNamePrefix="select"
+              />
+            </InputGroup>
+          </Stack>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="brand" mr={3} onClick={onClose}>
+            Close
+          </Button>
+          <Button variant="ghost" onClick={onSubmit}>
+            Create
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+     
     </Card>
   );
 }

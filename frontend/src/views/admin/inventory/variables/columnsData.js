@@ -70,6 +70,10 @@ export const columnsDataColumns = [
     accessor: "serial_number",
   },
   {
+    Header: "PROJECT",
+    accessor: "project",
+  },
+  {
     Header: "ACTIONS",
     accessor: "actions",
   },
