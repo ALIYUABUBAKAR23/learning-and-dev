@@ -42,10 +42,17 @@ class LedgerAPI(APIView):
             return Response(data={"message": "Successfully updated ledger."}, status=status.HTTP_201_CREATED)
         return Response(data={"message": "Failed to update ledger."}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
+    # def delete(self, request):
+    #     # profile_id = request.data.get("id", None)
+    #     # profile = Profile.delete_profile(profile_id)
+    #     ledger = Ledger.delete_all_ledgers()
+    #     if ledger is None:
+    #         return Response(data={"message": "Failed to delete ledger."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    #     return Response(data={"message": "Successfully deleted ledger."}, status=status.HTTP_201_CREATED)
+
     def delete(self, request):
-        # profile_id = request.data.get("id", None)
-        # profile = Profile.delete_profile(profile_id)
-        ledger = Ledger.delete_all_ledgers()
+        ledger_id = request.data.get("id", None)
+        ledger = Ledger.delete_all_ledger()
         if ledger is None:
             return Response(data={"message": "Failed to delete ledger."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message": "Successfully deleted ledger."}, status=status.HTTP_201_CREATED)

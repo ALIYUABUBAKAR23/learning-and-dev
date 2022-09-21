@@ -103,7 +103,7 @@ class Department(BaseModel):
         try:
             department = Department.objects.filter(id=department_id).delete()
         except Exception as e:
-            print(f"Failed to create department. Error below: \n {e}")
+            print(f"Failed to delete department. Error below: \n {e}")
         return department
     
     

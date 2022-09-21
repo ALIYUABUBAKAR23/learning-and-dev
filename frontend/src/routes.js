@@ -13,6 +13,7 @@ import {
   MdReceipt,
   MdLocalPostOffice,
   MdGroupWork,
+  MdMoney,
 
 } from "react-icons/md";
 
@@ -29,6 +30,7 @@ import Item from "./views/admin/items"
 import HumanResources from "./views/admin/hr"
 import Departments from "./views/admin/departments";
 import Contract from "./views/admin/contracts";
+import Ledger from "./views/admin/accounting"
 
 
 // Auth Imports
@@ -137,6 +139,13 @@ const routes = [
     icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
     path: "/departments",
     component: Departments,
+  },
+  {
+    name: "Ledger",
+    layout: "/admin",
+    icon: <Icon as={MdMoney} width="20px" height="20px" color="inherit" />,
+    path: "/Ledger",
+    component: Ledger,
   },
 ];
 
