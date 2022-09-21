@@ -58,6 +58,16 @@ class Account(BaseModel):
         return account
 
     @classmethod
+    def delete_account(cls, account_id, **account_data):
+        account = None
+        try:
+            account = Account.objects.filter(
+                id=account_id).delete(**account_data)
+        except Exception as e:
+            print(f"Failed to delete account. Error below: \n {e}")
+        return account
+
+    @classmethod
     def delete_all_account(cls):
         account = None
         try:

@@ -121,3 +121,26 @@ export const columnsDataProjects = [
     accessor: "actions",
   },
 ];
+
+export const columnsDataAccounts = [
+  {
+    Header: "CODE",
+    accessor: "code",
+  },
+  {
+    Header: "DESCRIPTION",
+    accessor: "description",
+  },
+  {
+    Header: "ACCOUNT CLASS",
+    accessor: "account_class",
+  },
+  {
+    Header: "TYPE",
+    accessor: "type",
+  },
+  {
+    Header: "ACTIONS",
+    accessor: "actions",
+  },
+];
