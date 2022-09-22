@@ -72,19 +72,34 @@ class AccountAPI(APIView):
 
     def put(self, request):
         account_id = request.data.get("id", None)
+        
         if not account_id:
             return Response(data={"message": "No ID Supplied."}, status=status.HTTP_501_NOT_IMPLEMENTED)
+        
         account_data = request.data
         account_data.pop("id")
         account = Account.update_account(account_id, **account_data)
+        
         if account:
             return Response(data={"message": "Successfully updated account."}, status=status.HTTP_201_CREATED)
+        
         return Response(data={"message": "Failed to update account."}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def delete(self, request):
+        account_id = request.data.get("account_id", None)
+        account = Account.delete_account(account_id)
+        print(request.data)
+
+        if account is None:
+            return Response(data={"message": "Failed to delete account."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+       
+        return Response(data={"message": "Successfully deleted account."}, status=status.HTTP_201_CREATED)
+
+
+    def delete_all(self, request):
         # account_id = request.data.get("id", None)
         # account = account.delete_account(account_id)
-        account = Account.delete_all_accounts()
+        account = Account.delete_all_account()
         if account is None:
             return Response(data={"message": "Failed to delete account."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message": "Successfully deleted account."}, status=status.HTTP_201_CREATED)
