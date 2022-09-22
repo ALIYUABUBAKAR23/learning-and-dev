@@ -25,7 +25,7 @@ import Select from "react-select";
 // Assets
 import { CalendarIcon, CheckIcon } from "@chakra-ui/icons";
 import axios from "axios";
-import { handleWidgetChange2 } from "../../../../utility";
+import { handleWidgetChange2 } from "../../../../../utility";
 axios.defaults.withCredentials = true;
 
 function ConfirmationModal(props) {

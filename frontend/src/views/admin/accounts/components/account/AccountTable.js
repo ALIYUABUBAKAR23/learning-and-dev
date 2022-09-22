@@ -22,7 +22,7 @@ import {
 } from "react-table";
 import Select from "react-select";
 // Custom components
-import Card from "../../../../components/card/Card";
+import Card from "../../../../../components/card/Card";
 import Menu from "./MainMenu";
 
 // Assets
@@ -30,7 +30,7 @@ import { RiLogoutBoxLine, RiLoginBoxLine } from "react-icons/ri";
 
 import axios from "axios";
 axios.defaults.withCredentials = true;
-import { baseUrl } from "../../../../utility/index";
+import { baseUrl } from "../../../../../utility/index";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 
@@ -96,7 +96,6 @@ export default function ColumnsTable(props) {
     axios
       .get(`${baseUrl}accounts/accounts`, config)
       .then((response) => {
-        console.log("check our accounts: ", response.data);
         setAccountList(response.data);
       })
       .catch((error) => {
@@ -117,7 +116,6 @@ export default function ColumnsTable(props) {
     axios
       .get(`${baseUrl}users/`, config)
       .then((response) => {
-        console.log("check our users: ", response.data);
         setUserList(
           response.data.map((option) => ({
             label: `${option.first_name} ${option.middle_name} ${option.last_name}`,
@@ -169,7 +167,6 @@ export default function ColumnsTable(props) {
       .then((response) => {
         onCloseConfirm();
         getAccounts();
-        console.log("Successfully deleted account!", response.data);
         toast.success(`Successfully deleted account!`);
       })
       .catch((error) => {
@@ -179,21 +176,17 @@ export default function ColumnsTable(props) {
   };
 
   const setEditAccount = (accountData) => {
-    console.log("account data: ", accountData);
     setAccountToEdit(accountData);
     onOpenCreate();
   };
 
   const setAccountForDelete = (accountData) => {
-    console.log("delete account data id: ", accountData.id);
     setAccountToDelete(accountData.id);
     onOpenConfirm();
   };
   
   const onChange = (event) => {
-    console.log("see the event: ", event);
     const { name, value } = event.target;
-    console.log("see the name, event : ", name, " ,", value);
     const account = { ...accountData };
     account[name] = value;
     setAccountData(account);

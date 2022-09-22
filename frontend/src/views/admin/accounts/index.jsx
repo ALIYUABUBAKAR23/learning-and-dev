@@ -38,7 +38,7 @@ import tableDataCheck from "../dataTables/variables/tableDataCheck.json";
 import tableDataColumns from "../dataTables/variables/tableDataColumns.json";
 import tableDataComplex from "../dataTables/variables/tableDataComplex.json";
 import React, { useEffect, useState } from "react";
-import AccountTable from "./components/AccountTable"
+import AccountTable from "./components/account/AccountTable"
 import axios from "axios";
 import Cookies from "js-cookie";
 import { baseUrl } from "../../../utility";
@@ -50,38 +50,11 @@ export default function Settings() {
   const setList = (data) => {
     setAccountList(data);
   };
-/* 
-  const getAccounts = () =>{
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
-      },
-    };
 
-    axios
-      .get(`${baseUrl}tasks/tasks`, config)
-      .then((response) => {
-        console.log("check our tasks: ", response.data);
-        setTaskList(response.data)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  useEffect(() => {
-    getAccounts();
-  }, [setAccountList]);
- */
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       <SimpleGrid
         mb='20px'
-        // columns={{ sm: 1, md: 2 }}
-        // spacing={{ base: "20px", xl: "20px" }}
         >
         <AccountTable
           columnsData={columnsDataAccounts}
