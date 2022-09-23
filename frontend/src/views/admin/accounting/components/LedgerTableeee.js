@@ -32,6 +32,9 @@ import {
 	InputLeftAddon,
 	HStack,
 	Tag,
+	SimpleGrid,
+	Box,
+	Grid
 } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
@@ -210,239 +213,283 @@ export default function ColumnsTable(props) {
 		getAccounts();
 	}, []);
 	return (
-		<Card
-			direction="column"
-			w="100%"
-			px="0px"
-			overflowX={{ sm: "scroll", lg: "scroll" }}
-		>
-			<Flex px="25px" justify="space-between" mb="20px" align="center">
-				<Text
-					color={textColor}
-					fontSize="22px"
-					fontWeight="700"
-					lineHeight="100%"
-				>
-					Ledger
-				</Text>
-			</Flex>
-			<Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-				<Thead>
-					{headerGroups.map((headerGroup, index) => (
-						<Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-							{headerGroup.headers.map((column, index) => (
-								<Th
-									{...column.getHeaderProps(column.getSortByToggleProps())}
-									pe="10px"
-									key={index}
-									borderColor={borderColor}
-								>
-									<Flex
-										justify="space-between"
-										align="center"
-										fontSize={{ sm: "10px", lg: "12px" }}
-										color="gray.400"
+		<Box pt={{ base: "10px"}}>
+			<Grid
+			mb='20px'
+			gridTemplateColumns={{ xl: "repeat(3, 1fr)", "2xl": "1fr 0.46fr" }}
+			gap={{ base: "20px", xl: "20px" }}
+			display={{ base: "block", xl: "grid" }}>
+			{/*Ledger Table */}			
+			<Flex
+			flexDirection='column'
+			gridArea={{ xl: "1 / 1 / 2 / 3", "2xl": "1 / 1 / 2 / 2" }}>
+						<Card
+				direction="column"
+				w="100%"
+				px="0px"
+				overflowX={{ sm: "scroll", lg: "scroll" }}
+			>
+				<Flex px="25px" justify="space-between" mb="20px" align="center">
+					<Text
+						color={textColor}
+						fontSize="22px"
+						fontWeight="700"
+						lineHeight="100%"
+					>
+						Ledger
+					</Text>
+				</Flex>
+				<Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
+					<Thead>
+						{headerGroups.map((headerGroup, index) => (
+							<Tr {...headerGroup.getHeaderGroupProps()} key={index}>
+								{headerGroup.headers.map((column, index) => (
+									<Th
+										{...column.getHeaderProps(column.getSortByToggleProps())}
+										pe="10px"
+										key={index}
+										borderColor={borderColor}
 									>
-										{column.render("Header")}
-									</Flex>
-								</Th>
-							))}
-						</Tr>
-					))}
-				</Thead>
-				<Tbody {...getTableBodyProps()}>
-						{page.map((row, index) => {
-							prepareRow(row);
-							return (
-								<Tr {...row.getRowProps()} key={index}>
-									{row.cells.map((cell, index) => {
-										let data = "";
-											if (cell.column.Header === "ACCOUNT") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-										} else if (cell.column.Header === "TRANSACTION DATE") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													$ {cell.value}
-												</Text>
-											);
-										} else if (cell.column.Header === "ACCOUNT CODE") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-											
-										} else if (cell.column.Header === "DESCRIPTION") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-										} else if (cell.column.Header === "DR") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-										} else if (cell.column.Header === "CR") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-										} else if (cell.column.Header === "AGENT ORGANIZATION") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-										} else if (cell.column.Header === "TYPE") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-										} else if (cell.column.Header === "REFERENCE NO") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-										} else if (cell.column.Header === "ACTION") {
-											data = (
-												<Text color={textColor} fontSize='sm' fontWeight='700'>
-													{cell.value}
-												</Text>
-											);
-										}
-										return (
-											<Td
-												{...cell.getCellProps()}
-												key={index}
-												fontSize={{ sm: "14px" }}
-												minW={{ sm: "150px", md: "200px", lg: "auto" }}
-												borderColor='transparent'>
-												{data}
-											</Td>
-										);
-									})}
-								</Tr>
-							);
-						})}
-						</Tbody>
-			</Table>
-				<InputGroup>
-					<InputLeftAddon children="Account" borderRadius="16px" />
-					<HStack spacing={4}>
-						{acct?.map((account, index) => (
-							<Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
-								{account.name}
-							</Tag>
+										<Flex
+											justify="space-between"
+											align="center"
+											fontSize={{ sm: "10px", lg: "12px" }}
+											color="gray.400"
+										>
+											{column.render("Header")}
+										</Flex>
+									</Th>
+								))}
+							</Tr>
 						))}
-					</HStack>
-					<Select
-						name="account_id"
-						options={accountList}
-						onChange={onOptionSelect}
-						className="basic-select"
-						classNamePrefix="select"
-					/>
-				</InputGroup>
-			<FormControl>
-				<InputGroup>
-					<InputLeftAddon children="Transaction Date" borderRadius="16px" />
-					<Input
-								type='date'
-								name="transaction_date"
-								placeholder="Transaction Date"
-								borderRadius="16px"
-								onChange={onChange}
+					</Thead>
+					<Tbody {...getTableBodyProps()}>
+							{page.map((row, index) => {
+								prepareRow(row);
+								return (
+									<Tr {...row.getRowProps()} key={index}>
+										{row.cells.map((cell, index) => {
+											let data = "";
+												if (cell.column.Header === "ACCOUNT") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+											} else if (cell.column.Header === "TRANSACTION DATE") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														$ {cell.value}
+													</Text>
+												);
+											} else if (cell.column.Header === "ACCOUNT CODE") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+												
+											} else if (cell.column.Header === "DESCRIPTION") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+											} else if (cell.column.Header === "DR") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+											} else if (cell.column.Header === "CR") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+											} else if (cell.column.Header === "AGENT ORGANIZATION") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+											} else if (cell.column.Header === "TYPE") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+											} else if (cell.column.Header === "REFERENCE NO") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+											} else if (cell.column.Header === "ACTION") {
+												data = (
+													<Text color={textColor} fontSize='sm' fontWeight='700'>
+														{cell.value}
+													</Text>
+												);
+											}
+											return (
+												<Td
+													{...cell.getCellProps()}
+													key={index}
+													fontSize={{ sm: "14px" }}
+													minW={{ sm: "150px", md: "200px", lg: "auto" }}
+													borderColor='transparent'>
+													{data}
+												</Td>
+											);
+										})}
+									</Tr>
+								);
+							})}
+							</Tbody>
+				</Table>
+			</Card>	
+			</Flex>
+			{/*Ledger Form */}
+			<Flex
+			flexDirection='column'
+			gridArea={{ xl: "1 / 3 / 2 / 4", "2xl": "1 / 2 / 2 / 3" }}>
+			<Card px='10px' mb='20px'>
+	     
+			<Flex px="25px" justify="space-between" mb="20px" align="center">
+					<Text
+						color={textColor}
+						fontSize="20px"
+						fontWeight="600"
+						lineHeight="90%"
+					>
+						Ledger Create Form
+					</Text>
+				</Flex>
+				<Stack spacing={4}>
+				<FormControl>
+			        <InputGroup>
+						<InputLeftAddon children="Account" borderRadius="16px" />
+						<HStack spacing={4}>
+							{acct?.map((account, index) => (
+								<Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
+									{account.name}
+								</Tag>
+							))}
+						</HStack>
+						<Select
+							name="account_id"
+							options={accountList}
+							onChange={onOptionSelect}
+							className="basic-select"
+							classNamePrefix="select"
 						/>
-				</InputGroup>
-			</FormControl>
-			<FormControl>
-				<InputGroup>
-					<InputLeftAddon children="Account Code" borderRadius="16px" />
-					<Input
-								name="account_code"
-								placeholder="Account Code"
-								borderRadius="16px"
-								onChange={onChange}
-						/>
-				</InputGroup>
-			</FormControl>
-			<FormControl>
-				<InputGroup>
-					<InputLeftAddon children="Description" borderRadius="16px" />
-					<Textarea
-                name="description"
-								borderRadius="16px"
-                placeholder="Enter A Brief Or Detailed Description Of The Ledger"
-                onChange={onChange}
-              />
-				</InputGroup>
-			</FormControl>
-			<FormControl>
-				<InputGroup>
-					<InputLeftAddon children="DR" borderRadius="16px" />
-					<Input
-								name="dr"
-								placeholder="DR"
-								borderRadius="16px"
-								onChange={onChange}
-						/>
-				</InputGroup>
-			</FormControl>
-			<FormControl>
-				<InputGroup>
-					<InputLeftAddon children="CR" borderRadius="16px" />
-					<Input
-								name="cr"
-								placeholder="CR"
-								borderRadius="16px"
-								onChange={onChange}
-						/>
-				</InputGroup>
-			</FormControl>
-			<FormControl>
-				<InputGroup>
-					<InputLeftAddon children="Agent Organization" borderRadius="16px" />
-					<Input
-								name="agent_organization"
-								placeholder="Agent Organization"
-								borderRadius="16px"
-								onChange={onChange}
-						/>
-				</InputGroup>
-			</FormControl>
-			<FormControl>
-				<InputGroup>
-					<InputLeftAddon children="Type" borderRadius="16px" />
-					<Input
-								name="type"
-								placeholder="Type"
-								borderRadius="16px"
-								onChange={onChange}
-						/>
-				</InputGroup>
-			</FormControl>
-			<FormControl>
-				<InputGroup>
-					<InputLeftAddon children="Reference No" borderRadius="16px" />
-					<Input
-								name="reference_number"
-								placeholder="Reference Number"
-								borderRadius="16px"
-								onChange={onChange}
-						/>
-				</InputGroup>
-			</FormControl>
-			<Button variant="ghost" onClick={onSubmit}>Create</Button>
-		</Card>
+					</InputGroup>
+				</FormControl>
+				<FormControl>
+					<InputGroup>
+						<InputLeftAddon children="Transaction Date" borderRadius="16px" />
+						<Input
+							type='date'
+							name="transaction_date"
+							placeholder="Transaction Date"
+							borderRadius="16px"
+							onChange={onChange}
+							/>
+					</InputGroup>
+				</FormControl>
+				<FormControl>
+					<InputGroup>
+						<InputLeftAddon children="Account Code" borderRadius="16px" />
+						<Input		
+							name="account_code"
+							placeholder="Account Code"
+							borderRadius="16px"
+							onChange={onChange}
+							/>
+					</InputGroup>
+				</FormControl>
+				<FormControl>
+					<InputGroup>
+						<InputLeftAddon children="Description" borderRadius="16px" />
+						<Textarea
+					name="description"
+					borderRadius="16px"
+					placeholder="Enter A Brief Or Detailed Description Of The Ledger"
+					onChange={onChange}
+				/>
+					</InputGroup>
+				</FormControl>
+				<FormControl>
+					<InputGroup>
+						<InputLeftAddon children="DR" borderRadius="16px" />
+						<Input
+									name="dr"
+									placeholder="DR"
+									type="number"
+									borderRadius="16px"
+									onChange={onChange}
+							/>
+					</InputGroup>
+				</FormControl>
+				<FormControl>
+					<InputGroup>
+						<InputLeftAddon children="CR" borderRadius="16px" />
+						<Input
+									name="cr"
+									placeholder="CR"
+									type="number"
+									borderRadius="16px"
+									onChange={onChange}
+							/>
+					</InputGroup>
+				</FormControl>
+				<FormControl>
+					<InputGroup>
+						<InputLeftAddon children="Agent Organization" borderRadius="16px" />
+						<Input
+									name="agent_organization"
+									placeholder="Agent Organization"
+									borderRadius="16px"
+									onChange={onChange}
+							/>
+					</InputGroup>
+				</FormControl>
+				<FormControl>
+					<InputGroup>
+						<InputLeftAddon children="Type" borderRadius="16px" />
+						<Input
+									name="type"
+									placeholder="Type"
+									borderRadius="16px"
+									onChange={onChange}
+							/>
+					</InputGroup>
+				</FormControl>
+				<FormControl>
+					<InputGroup>
+						<InputLeftAddon children="Reference No" borderRadius="16px" />
+						<Input
+									name="reference_number"
+									placeholder="Reference Number"
+									borderRadius="16px"
+									onChange={onChange}
+							/>
+					</InputGroup>
+				</FormControl>
+				<Button
+				variant="ghost"
+				onClick={() => {
+				onSubmit();
+				}}
+			>
+				Create
+			</Button>
+				</Stack>
+			</Card>
+			</Flex>
+		</Grid>
+	  </Box>
 	);
 }
 

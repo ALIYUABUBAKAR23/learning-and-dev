@@ -4,7 +4,7 @@ export const columnsDataLedger = [
       accessor: "account_id",
     },
     {
-      Header: "TRANSACTION DATE",
+      Header: "DATE",
       accessor: "transaction_date",
     },
     {
@@ -24,7 +24,7 @@ export const columnsDataLedger = [
       accessor: "cr",
     },
     {
-      Header: "AGENT ORGANIZATION",
+      Header: "AGENT",
       accessor: "agent_organization",
     },
     {
@@ -32,7 +32,7 @@ export const columnsDataLedger = [
       accessor: "type",
     },
     {
-      Header: "REFERENCE NO",
+      Header: "REF NO",
       accessor: "reference_number",
     },
     {
