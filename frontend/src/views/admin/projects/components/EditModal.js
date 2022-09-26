@@ -61,7 +61,8 @@ import {
     const [projectData, setProjectData] = useState({});
     const [projectLead, setProjectLead] = useState([])
     const [userList, setUserList] = useState([])
-    const [owner, setOwner] = useState([])    
+    const [owner, setOwner] = useState([])  
+    const [people, setPeople] = useState([])  
 
     var currentProject = targetProject
 
@@ -84,6 +85,7 @@ import {
       }
       setProjectLead(newState);
       setOwner(newState);
+      setPeople(newState);
     };
 
 
@@ -192,6 +194,26 @@ import {
                   defaultValue={targetProject.project_lead}
                 />
               </InputGroup>
+              {/* People field */}            
+              <InputGroup>
+                <InputLeftAddon children="People" borderRadius="16px" />
+                <HStack spacing={4}>
+                  {people?.map((user, index) => (
+                    <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
+                      {user.name}
+                    </Tag>
+                  ))}
+                </HStack>
+                <Select
+                  options={userList}
+                  isRequired
+                  isMulti
+                  onChange={onSelect}
+                  className="basic-multi-select"
+                  classNamePrefix="select"                  
+                  defaultValue={targetProject.people}
+                />
+              </InputGroup>
               {/* Expected Start Date field */}
               <InputGroup>
                 <InputLeftAddon children="Expected Start Date" borderRadius="16px" />
@@ -272,6 +294,16 @@ import {
                   name="current_budget" placeholder="Budget" borderRadius="16px" 
                   type="number" onChange={onChange} 
                   defaultValue ={targetProject.current_budget}
+                  />
+              </InputGroup>
+              {/* Income field */}
+              <InputGroup>
+                <InputLeftAddon children="Income" borderRadius="16px" />
+                <Input 
+                  isRequired
+                  name="income" placeholder="Income" borderRadius="16px" 
+                  type="number" onChange={onChange}
+                  defaultValue={targetProject.income}
                   />
               </InputGroup>
               {/* Owner field */}            
