@@ -56,7 +56,7 @@ export default function departments() {
     axios
       .get(`${baseUrl}hr/departments`, config)
       .then((response) => {
-        console.log("check our staff: ", response.data);
+        console.log("check our departments: ", response.data);
         setDepartmentList(response.data)
       })
       .catch((error) => {
