@@ -103,3 +103,23 @@ class Task(BaseModel):
         except Exception as e:
             print(f"Failed to create task. Error below: \n {e}")
         return task
+
+    @classmethod
+    def total_count_of_tasks_assigned_to_user(cls, id):
+        return Task.objects.filter(assigned_by_id=id).count()
+    
+    @classmethod
+    def total_count_of_tasks_assigned_to_user_completed(cls, id):
+        return Task.objects.filter(assigned_by_id=id, status="completed").count()
+    
+    @classmethod
+    def total_count_of_tasks_assigned_to_user_cancelled(cls, id):
+        return Task.objects.filter(assigned_by_id=id, status="cancelled").count()
+    
+    @classmethod
+    def total_count_of_tasks_assigned_to_user_pending(cls, id):
+        return Task.objects.filter(assigned_by_id=id, status="pending").count()
+    
+    @classmethod
+    def total_count_of_tasks_assigned_to_user_Postponed(cls, id):
+        return Task.objects.filter(assigned_by_id=id, status="Postponed").count()
