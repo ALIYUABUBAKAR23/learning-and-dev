@@ -35,8 +35,8 @@ class Account(BaseModel):
 
     @classmethod
     def get_accounts(cls, **kwargs):
-        account = Account.objects.all().values("code","description","account_class","type")
-        return account
+        accounts = Account.objects.all().values()
+        return accounts
 
     @classmethod
     def create_account(cls, **kwargs):
@@ -98,7 +98,7 @@ class Ledger(BaseModel):
 
     @classmethod
     def get_ledgers(cls, **kwargs):
-        ledger = Ledger.objects.all().values("account__account_class","account_id","transaction_date","account_code","description","dr","cr","agent_organization","type","reference_number")
+        ledger = Ledger.objects.all().values()
         return ledger
 
     @classmethod
@@ -113,13 +113,14 @@ class Ledger(BaseModel):
             return ledger
 
     @classmethod
-    def delete_ledger(cls, ledger_id):
+    def delete_ledger(cls, ledger_id, **ledger_data):
         ledger = None
-        try: 
-            ledger = Ledger.objects.filter(id=ledger_id).delete() 
+        try:
+            ledger = Ledger.objects.filter(
+                id=ledger_id).delete(**ledger_data)
         except Exception as e:
             print(f"Failed to delete ledger. Error below: \n {e}")
-        return ledger       
+        return ledger
 
     @classmethod
     def create_trial_balance(cls, accounts=None, **kwargs):
@@ -157,22 +158,21 @@ class Ledger(BaseModel):
     @classmethod
     def update_ledger(cls, ledger_id, **ledger_data):
         ledger = None
-        with transaction.atomic():
+        try:
             ledger = Ledger.objects.filter(
                 id=ledger_id).update(**ledger_data)
-            if not ledger:
-                transaction.set_rollback(True)
-                print(f"Failed to update ledger.")
+        except Exception as e:
+            print(f"Failed to update ledger. Error below: \n {e}")
         return ledger
 
-    @classmethod
+"""     @classmethod
     def delete_all_ledger(cls):
         ledger = None
         try:
             ledger = Ledger.objects.all().delete()
         except Exception as e:
             print(f"The ledger could not be deleted. Error below: /n {e}")
-        return ledger
+        return ledger """
 
 # class TrialBalance(BaseModel):
 #     account = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL)

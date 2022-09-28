@@ -30,8 +30,7 @@ import Item from "./views/admin/items"
 import HumanResources from "./views/admin/hr"
 import Departments from "./views/admin/departments";
 import Contract from "./views/admin/contracts";
-import Ledger from "./views/admin/accounting"
-import Accounts from "./views/admin/accounts";
+import Accounting from "./views/admin/accounting";
 
 
 // Auth Imports
@@ -41,11 +40,11 @@ import departments from "./views/admin/departments";
 
 const routes = [
   {
-    name: "Accounts",
+    name: "Accounting",
     layout: "/admin",
     icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
-    path: "/accounts",
-    component: Accounts,
+    path: "/accounting",
+    component: Accounting,
   },
   {
     name: "Main Dashboard",
@@ -148,14 +147,6 @@ const routes = [
     path: "/departments",
     component: Departments,
   },
-  {
-    name: "Ledger",
-    layout: "/admin",
-    icon: <Icon as={MdMoney} width="20px" height="20px" color="inherit" />,
-    path: "/Ledger",
-    component: Ledger,
-  },
-
 ];
 
 export default routes;
