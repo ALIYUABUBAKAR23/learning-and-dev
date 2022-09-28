@@ -38,6 +38,7 @@ import {
     useTable,
   } from "react-table";
   import Select from 'react-select';
+  
   // Custom components
   import Card from "../../../../components/card/Card";
   import Menu from "../../../../components/menu/MainMenu";
@@ -53,6 +54,9 @@ import {
   import {baseUserUrl} from "../../../../utility/index";
   import Cookies from "js-cookie";
   import toast from 'react-hot-toast';
+  import {AiFillDelete } from 'react-icons/ai';
+import {BiEditAlt} from 'react-icons/bi';
+import {MdAddCircleOutline} from 'react-icons/md';
   
   export default function ColumnsTable(props) {
     const { columnsData, tableData, setDepartmentList } = props;
@@ -268,6 +272,21 @@ import {
                             {cell.value}
                           </Text>
                         );
+                        } else if (cell.column.Header === "ACTIONS") {
+                          data = <Menu 
+                          w='30px'
+                          h='30px' />
+            
+                          // data = (
+                          //   <Flex align='center'>
+                          //     <button onClick={onOpen}>
+                          //       <Icon w='15px' h='15px' as={AiFillDelete} color='red.300' />
+                          //     </button>
+                          //     <button>
+                          //       <Icon w='15px' h='15px' as={BiEditAlt} color='blue.500' />
+                          //     </button>
+                          //   </Flex>
+                          // );
                         }
                       return (
                         <Td

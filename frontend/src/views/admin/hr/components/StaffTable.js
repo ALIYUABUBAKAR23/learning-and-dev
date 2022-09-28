@@ -24,11 +24,12 @@ import {
   InputLeftElement,
   InputRightElement,
   Textarea,
-  // Select,
+  Select as SelectUI,
   InputLeftAddon,
   HStack,
   Tag,
 } from "@chakra-ui/react";
+
 import { Input } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -255,6 +256,8 @@ export default function ColumnsTable(props) {
   return (
     <Card
       direction="column"
+      padding-bottom = "70px"
+      padding-top = "25px"
       w="100%"
       px="0px"
       overflowX={{ sm: "scroll", lg: "scroll" }}
@@ -309,14 +312,18 @@ export default function ColumnsTable(props) {
                           </Text>
                         </Flex>
                       );
+                    } else if (cell.column.Header === "MIDDLE NAME") {
+                      data = (
+                        <Flex align='center'>
+                          <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                            {cell.value} 
+                          </Text>
+                        </Flex>
+                      );
                     } else if (cell.column.Header === "LAST NAME") {
                       data = (
                         <Flex align='center'>
-                          <Text
-                            me='10px'
-                            color={textColor}
-                            fontSize='sm'
-                            fontWeight='700'>
+                          <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                             {cell.value} 
                           </Text>
                         </Flex>
@@ -324,112 +331,122 @@ export default function ColumnsTable(props) {
                     } else if (cell.column.Header === "SEX") {
                       data = (
                         <Flex align="center">
-                          <Icon
-                            w="24px"
-                            h="24px"
-                            me="5px"
-                            color={
-                              cell.value === "Approved"
-                                ? "green.500"
-                                : cell.value === "Disable"
-                                ? "red.500"
-                                : cell.value === "Error"
-                                ? "orange.500"
-                                : null
-                            }
-                            as={
-                              cell.value === "Approved"
-                                ? MdCheckCircle
-                                : cell.value === "Disable"
-                                ? MdCancel
-                                : cell.value === "Error"
-                                ? MdOutlineError
-                                : null
-                            }
-                          />
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
-                          {cell.value}
-                        </Text>
-                      </Flex>
+                          <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                            {cell.value} 
+                          </Text>
+                        </Flex>
                     );
                     } else if (cell.column.Header === "DATE OF BIRTH") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "STATE OF ORIGIN") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
-                          $ {cell.value}
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                          {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "ADDRESS") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "PHONE NO") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "EMAIL") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "TWITTER") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "INSTAGRAM") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "LINKEDIN") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "STAFF ID") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "COMMENCEMENT DATE") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "SALARY") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "ROLE") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
                     } else if (cell.column.Header === "DEPARTMENT") {
                       data = (
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                           {cell.value}
                         </Text>
                       );
+                    } else if (cell.column.Header === "BANK") {
+                      data = (
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                          {cell.value}
+                        </Text>
+                      );
+                    } else if (cell.column.Header === "ACCOUNT NUMBER") {
+                      data = (
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                          {cell.value}
+                        </Text>
+                      );
+                    } else if (cell.column.Header === "SPOUSE NAME") {
+                      data = (
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                          {cell.value}
+                        </Text>
+                      );
+                    } else if (cell.column.Header === "MARITAL STATUS") {
+                      data = (
+                        <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                          {cell.value}
+                        </Text>
+                      );
+                    } else if (cell.column.Header === "ACTIONS") {
+                      data = <Menu 
+                      w='30px'
+                      h='30px' />
+                      // (
+                      //   <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                      //     {cell.value}
+                      //   </Text>
+                      // );
                     }
                     return (
                       <Td
@@ -526,8 +543,8 @@ export default function ColumnsTable(props) {
                   ))}
                 </HStack>
                 <Select
+                  name = "department_id"
                   options={departmentList}
-                  isMulti
                   onChange={onOptionSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"
@@ -565,6 +582,15 @@ export default function ColumnsTable(props) {
                 />
               </InputGroup>
               <InputGroup>
+                <InputLeftAddon children="Address" borderRadius="16px" />
+                <Input 
+                name="address" 
+                placeholder="Address" 
+                borderRadius="16px" 
+                onChange={onChange}
+                />
+              </InputGroup>
+              <InputGroup>
                 <InputLeftAddon children="Twitter" borderRadius="16px" />
                 <Input 
                 name="twitter" 
@@ -576,7 +602,7 @@ export default function ColumnsTable(props) {
               <InputGroup>
                 <InputLeftAddon children="Instagram" borderRadius="16px" />
                 <Input 
-                name="tnstagran" 
+                name="tnstagram" 
                 placeholder="Instagram" 
                 borderRadius="16px" 
                 onChange={onChange}
@@ -585,7 +611,7 @@ export default function ColumnsTable(props) {
               <InputGroup>
                 <InputLeftAddon children="LinkedIn" borderRadius="16px" />
                 <Input 
-                name="linkedin" 
+                name="linkedIn" 
                 placeholder="LinkedIn" 
                 borderRadius="16px"
                 onChange={onChange}
@@ -603,10 +629,10 @@ export default function ColumnsTable(props) {
               <InputGroup>
                 <InputLeftAddon children="Commencement Date" borderRadius="16px" />
                 <Input 
-                name="commencement date" 
+                name="commencement_date" 
                 placeholder="Commencement Date" 
                 borderRadius="16px" 
-                type="datetime-local" 
+                type="date" 
                 onChange={onChange}
                 />
                 <InputRightElement

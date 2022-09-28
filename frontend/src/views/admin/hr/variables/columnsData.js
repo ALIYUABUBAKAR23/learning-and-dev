@@ -20,19 +20,15 @@ export const columnsDataStaff = [
       accessor: "state_of_origin",
     },
     {
-      Header: "ADDRESS",
-      accessor: "address",
-    },
-    {
-      Header: "PHONE NO",
-      accessor: "phone_number",
-    },
-    {
       Header: "EMAIL",
       accessor: "email",
     },
     {
       Header: "DEPARTMENT",
-      accessor: "department",
+      accessor: "department__name",
+    },
+    {
+      Header: "ACTIONS",
+      accessor: "actions",
     },
   ];
