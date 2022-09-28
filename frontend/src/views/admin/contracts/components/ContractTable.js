@@ -40,7 +40,7 @@ import {
 import Select from 'react-select';
 // Custom components
 import Card from "../../../../components/card/Card";
-import Menu from "../../../../components/menu/MainMenu";
+import Menu from "./MainMenu";
 
 // Assets
 import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
@@ -53,7 +53,7 @@ import {baseUrl} from "../../../../utility/index";
 import Cookies from "js-cookie";
 import toast from 'react-hot-toast';
 import ContractModal from "./ContractModal";
-
+import ConfirmationModal from "./ConfirmationModal";
 
 
 export default function ContractTable(props) {
@@ -85,24 +85,31 @@ export default function ContractTable(props) {
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [assignedTo, setAssignedTo] = useState([])
+  const {
+    isOpen: isOpenConfirm,
+    onOpen: onOpenConfirm,
+    onClose: onCloseConfirm,
+  } = useDisclosure();
+
+  const [approvedBy, setApprovedBy] = useState([])
   const [formErrors, setFormErrors] = useState(null);
   const [contractDataList, setContractDataList] = useState({});
-  const [userList, setUserList] = useState([])
+  const [userList, setUserList] = useState([]);
+  const [contractToEdit, setContractToEdit] = useState([]);
+  const [contractToDelete, setContractToDelete] = useState([]);
 
   const contractTypeData = [
     {label:"Full-Time", value:"Full-Time"},
     {label:"Part-Time", value:"Part-Time"},
   ]
 
-  
-  const getUsers = () =>{
+  const getUsers = () => {
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
+        authorization: `Token ${Cookies.get("token")}`,
       },
     };
 
@@ -110,13 +117,17 @@ export default function ContractTable(props) {
       .get(`${baseUrl}users/`, config)
       .then((response) => {
         console.log("check our users: ", response.data);
-        setUserList(response.data.map(option => ({ label: `${option.first_name} ${option.middle_name} ${option.last_name}`, value: option.id })))
+        setUserList(
+          response.data.map((option) => ({
+            label: `${option.first_name} ${option.middle_name} ${option.last_name}`,
+            value: option.id,
+          }))
+        );
       })
       .catch((error) => {
         console.log(error);
       });
-  }
-
+  };
 
   const getContracts = () =>{
     const config = {
@@ -137,38 +148,74 @@ export default function ContractTable(props) {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
-  
-  const createContract = (contractData) =>{
-
+  const createContract = (contractData, httpVerb) => {
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
+        authorization: `Token ${Cookies.get("token")}`,
       },
     };
 
-    axios
-      .post(`${baseUrl}hr/contracts`, contractData, config)
+    axios[httpVerb](`${baseUrl}hr/contracts`, contractData, config)
       .then((response) => {
         onClose();
         getContracts();
+        setContractDataList();
+        setContractToEdit();
         console.log("check our response:", response.data);
         toast.success(`${response.data.message}`);
       })
       .catch((error) => {
         console.log(error);
-        toast.error('Not created!');
+        toast.error("Not created!");
       });
-  }
+  };
 
+  const deleteContract = (contract_id) => {
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        authorization: `Token ${Cookies.get("token")}`,
+      },
+      data: { contract_id: contract_id },
+    };
+
+    axios
+      .delete(`${baseUrl}hr/contracts`, config)
+      .then((response) => {
+        onCloseConfirm();
+        getContracts();
+        console.log("Successfully deleted contract!", response.data);
+        toast.success(`Successfully deleted contract!`);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Not deleted!");
+      });
+  };
+
+  const setEditContract = (contractData) => {
+    console.log("contract data: ", contractData);
+    setContractToEdit(contractData);
+    onOpen();
+  };
+
+  const setContractForDelete = (contractData) => {
+    console.log("delete contract data id: ", contractData.id);
+    setContractToDelete(contractData.id);
+    onOpenConfirm();
+  };
+  
   const onChange = (event) => {
-    console.log('see the event: ', event);
+    console.log("see the event: ", event);
     const { name, value } = event.target;
-    console.log('see the name, event : ', name, ' ,',value);
+    console.log("see the name, event : ", name, " ,", value);
     const contract = { ...contractDataList };
     contract[name] = value;
     setContractDataList(contract);
@@ -176,35 +223,55 @@ export default function ContractTable(props) {
   };
 
   const onOptionSelect = (event, action) => {
-    console.log('see the event: ', event, action);
+    console.log("see the event: ", event, action);
     const { label, value } = event;
-    console.log('see the name, event : ', label, ' ,',value);
+    console.log("see the name, event : ", label, " ,", value);
     const contract = { ...contractDataList };
     contract[action.name] = value;
     setContractDataList(contract);
   };
 
-
   const onSelect = (event) => {
-    console.log('see the event: ', event);
+    console.log("see the event: ", event);
     var newState;
     if (event.length > 0) {
-      event?.map((input)=> {
-        newState = [...assignedTo, {id: input.value ? input.value : null, name: input.label ? input.label : null}];
+      event?.map((input) => {
+        newState = [
+          ...approvedBy,
+          {
+            id: input.value ? input.value : null,
+            name: input.label ? input.label : null,
+          },
+        ];
       });
-    }else{
+    } else {
       newState = [];
     }
-    setAssignedTo(newState);
+    setApprovedBy(newState);
   };
 
-  const onSubmit = () => {
-    
-    console.log("check our post:", contractDataList);
-    const contract = { ...contractDataList };
-    createContract(contract);
+  const formatData = (data) => {
+    console.log("formatting...");
+    console.log(data);
+    const keys = Object.keys(data);
+
+    keys.forEach((key) => {
+      if (key === "approved_by") {
+        data[key] = data[key].value;
+      }
+    });
+
+    console.log(`our formatted data in formatData: \n ${data}`);
+    return data;
   };
 
+  const onSubmit = (httpVerb, contractData) => {
+    let unFormattedContract = { ...contractData };
+    let contract = formatData(unFormattedContract);
+    // contract["approved_by"] = [...approvedBy];
+    console.log("check our post:", contractData);
+    createContract(contract, httpVerb);
+  };
 
   useEffect(() => {
     getUsers();
@@ -227,21 +294,23 @@ export default function ContractTable(props) {
         </Text>
         <Button onClick={onOpen}>Create Contract</Button>
       </Flex>
-      <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
+      <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
         <Thead>
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
               {headerGroup.headers.map((column, index) => (
                 <Th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  pe='10px'
+                  pe="10px"
                   key={index}
-                  borderColor={borderColor}>
+                  borderColor={borderColor}
+                >
                   <Flex
-                    justify='space-between'
-                    align='center'
+                    justify="space-between"
+                    align="center"
                     fontSize={{ sm: "10px", lg: "12px" }}
-                    color='gray.400'>
+                    color="gray.400"
+                  >
                     {column.render("Header")}
                   </Flex>
                 </Th>
@@ -249,77 +318,58 @@ export default function ContractTable(props) {
             </Tr>
           ))}
         </Thead>
-        <Tbody {...getTableBodyProps()}>
-          {page.map((row, index) => {
-            prepareRow(row);
-            return (
-              <Tr {...row.getRowProps()} key={index}>
-                {row.cells.map((cell, index) => {
-                  let data = "";
-                  if (cell.column.Header === "CONTRACT TYPE") {
-                    data = (
-                      <Flex align='center'>
-                        <Text color={textColor} fontSize='sm' fontWeight='700'>
-                          {cell.value}
-                        </Text>
+              <Tbody {...getTableBodyProps()}>
+        {page.map((row, index) => {
+          prepareRow(row);
+          return (
+            <Tr {...row.getRowProps()} key={index}>
+              {row.cells.map((cell, index) => {
+                let data = "";
+                if (cell.column.Header === "CONTRACT TYPE") {
+                  data = (
+                    <Flex align='center'>
+                      <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {cell.value}
+                      </Text>
+                    </Flex>
+                  );
+                } else if (cell.column.Header === "APPROVED BY") {
+                  data = (
+                      <Flex align="center">
+                        <HStack spacing={4}>
+                          {cell.value?.map((user, index) => (
+                            <Tag size={'sm'} key={index} variant='solid' colorScheme='teal'>
+                              {user.name}
+                            </Tag>
+                          ))}
+                        </HStack>
                       </Flex>
-                    );
-                  } else if (cell.column.Header === "DATE ISSUED") {
+                  );
+                } else if (cell.column.Header === "ACTIONS") {
                     data = (
-                      <Flex align='center'>
-                        <Text
-                          me='10px'
-                          color={textColor}
-                          fontSize='sm'
-                          fontWeight='700'>
-                          {cell.value}
-                        </Text>
-                      </Flex>
+                      <Menu
+                        editData={cell.row.original}
+                        setContractToEdit={setEditContract}
+                        setContractForDelete={setContractForDelete}
+                        onOpen={onOpen}
+                        onOpenConfirm={onOpenConfirm}
+                      />
                     );
-                  } else if (cell.column.Header === "CONTRACT LENGTH") {
+                  } else {
                     data = (
-                      <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {cell.value} months 
-                      </Text>
-                    );
-                  } else if (cell.column.Header === "CONTRACT DETAILS") {
-                    data = (
-                      <Text color={textColor} fontSize='sm' fontWeight='700'>
+                      <Text color={textColor} fontSize="sm" fontWeight="700">
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "CONTRACT DOCUMENT") {
-                    data = (
-                      <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {cell.value}
-                      </Text>
-                    );
-                  } else if (cell.column.Header === "END DATE") {
-                    data = (
-                      <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {cell.value}
-                      </Text>
-                    );
-                  } else if (cell.column.Header === "USER ID") {
-                    data = (
-                      <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {cell.value}
-                      </Text>
-                    );
-                  } else if (cell.column.Header === "APPROVED BY ID") {
-                    data = (
-                      <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {cell.value}
-                      </Text>
-                    );
-                  } 
+                  }
                   return (
                     <Td
                       {...cell.getCellProps()}
                       key={index}
                       fontSize={{ sm: "14px" }}
                       minW={{ sm: "150px", md: "200px", lg: "auto" }}
-                      borderColor='transparent'>
+                      borderColor="transparent"
+                    >
                       {data}
                     </Td>
                   );
@@ -327,18 +377,31 @@ export default function ContractTable(props) {
               </Tr>
             );
           })}
-        </Tbody>
+          </Tbody>
+          
+           
+            
       </Table>
-      <ContractModal 
-        isOpen={isOpen} 
+      <ContractModal
+        isOpen={isOpen}
         onClose={onClose}
         onOpen={onOpen}
         onSelect={onSelect}
         userList={userList}
-        assignedTo={assignedTo}
+        // approvedBy={approvedBy}
         onChange={onChange}
         onOptionSelect={onOptionSelect}
         onSubmit={onSubmit}
+        editContract={contractToEdit}
+        setContractToEdit={setEditContract}
+      />
+      <ConfirmationModal
+        contractId={contractToDelete}
+        deleteContract={deleteContract}
+        setContractToDelete={setContractToDelete}
+        onOpen={onOpenConfirm}
+        isOpen={isOpenConfirm}
+        onClose={onCloseConfirm}
       />
     </Card>
   );
