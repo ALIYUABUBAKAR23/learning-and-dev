@@ -313,7 +313,6 @@ import {
           data[key] = data[key].value;
         }
       });
-  
       console.log(`our formatted data in formatData: \n ${data}`);
       return data;
     };
@@ -394,8 +393,17 @@ import {
                           </Text>
                         
                       );
+                    } else if (cell.column.Header === "MIDDLE NAME") {
+                      data = (
+                        <Flex align='center'>
+                          <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                            {cell.value} 
+                          </Text>
+                        </Flex>
+                      );
                     } else if (cell.column.Header === "LAST NAME") {
                       data = (
+
                           <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
                             {cell.value} 
                           </Text>
@@ -542,6 +550,15 @@ import {
                           {cell.value}
                         </Text>
                       );
+                    } else if (cell.column.Header === "ACTIONS") {
+                      data = <Menu 
+                      w='30px'
+                      h='30px' />
+                      // (
+                      //   <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
+                      //     {cell.value}
+                      //   </Text>
+                      // );
                     }
                     return (
                       <Td
