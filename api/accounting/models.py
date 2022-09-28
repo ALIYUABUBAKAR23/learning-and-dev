@@ -35,7 +35,7 @@ class Account(BaseModel):
 
     @classmethod
     def get_accounts(cls, **kwargs):
-        account = Account.objects.all().values()
+        account = Account.objects.all().values("code","description","account_class","type")
         return account
 
     @classmethod
@@ -55,6 +55,16 @@ class Account(BaseModel):
                 id=account_id).update(**account_data)
         except Exception as e:
             print(f"Failed to update account. Error below: \n {e}")
+        return account
+
+    @classmethod
+    def delete_account(cls, account_id, **account_data):
+        account = None
+        try:
+            account = Account.objects.filter(
+                id=account_id).delete(**account_data)
+        except Exception as e:
+            print(f"Failed to delete account. Error below: \n {e}")
         return account
 
     @classmethod
@@ -88,7 +98,7 @@ class Ledger(BaseModel):
 
     @classmethod
     def get_ledgers(cls, **kwargs):
-        ledger = Ledger.objects.all().values()
+        ledger = Ledger.objects.all().values("account__account_class","account_id","transaction_date","account_code","description","dr","cr","agent_organization","type","reference_number")
         return ledger
 
     @classmethod
@@ -101,6 +111,15 @@ class Ledger(BaseModel):
                 transaction.set_rollback(True)
                 print(f"Failed to create ledger.")
             return ledger
+
+    @classmethod
+    def delete_ledger(cls, ledger_id):
+        ledger = None
+        try: 
+            ledger = Ledger.objects.filter(id=ledger_id).delete() 
+        except Exception as e:
+            print(f"Failed to delete ledger. Error below: \n {e}")
+        return ledger       
 
     @classmethod
     def create_trial_balance(cls, accounts=None, **kwargs):

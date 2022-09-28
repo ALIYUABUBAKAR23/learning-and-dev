@@ -12,6 +12,7 @@ import {
 
   MdReceipt,
   MdGroupWork,
+  MdMoney,
 
 } from "react-icons/md";
 
@@ -28,12 +29,21 @@ import Item from "./views/admin/items";
 import HumanResources from "./views/admin/hr";
 import Departments from "./views/admin/departments";
 import Contract from "./views/admin/contracts";
+import Ledger from "./views/admin/accounting"
+import Accounts from "./views/admin/accounts";
 
 
 // Auth Imports
 import SignInCentered from "./views/auth/signIn";
 
 const routes = [
+  {
+    name: "Accounts",
+    layout: "/admin",
+    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    path: "/accounts",
+    component: Accounts,
+  },
   {
     name: "Main Dashboard",
     layout: "/admin",
@@ -135,6 +145,14 @@ const routes = [
     path: "/departments",
     component: Departments,
   },
+  {
+    name: "Ledger",
+    layout: "/admin",
+    icon: <Icon as={MdMoney} width="20px" height="20px" color="inherit" />,
+    path: "/Ledger",
+    component: Ledger,
+  },
+
 ];
 
 export default routes;
