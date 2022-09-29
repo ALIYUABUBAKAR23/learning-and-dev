@@ -169,8 +169,6 @@ export default function ColumnsTable(props) {
 	
 		axios[httpVerb](`${baseUrl}accounts/ledgers/`, ledgerData, config)
 		  .then((response) => {
-			console.log(ledgerData)
-			//onCloseCreate();
 			getLedgers();
 			setLedgerData();
 			toast.success(`${response.data.message}`);
@@ -195,7 +193,7 @@ export default function ColumnsTable(props) {
 		axios
 		  .put(`${baseUrl}accounts/ledgers/`, ledgerData, config)
 		  .then((response) => {
-			onCloseCreate();
+			onCloseEdit();
 			getLedgers();
 			setLedgerData();
 			toast.success(`${response.data.message}`);
@@ -279,9 +277,8 @@ export default function ColumnsTable(props) {
 		createLedger(ledger, "post");
 	};
 
-	const onSubmitEdit = () => {
-		const ledger = { ...ledgerData };
-		console.log(ledger) //is empty object thus update ledger doesnt work 
+	const onSubmitEdit = (editedLedger) => {
+		const ledger = { ...editedLedger };
 		updateLedger(ledger);
 	};
 
