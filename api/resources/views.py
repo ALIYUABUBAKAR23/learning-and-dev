@@ -71,6 +71,7 @@ class AuditAPI(APIView):
     def get(self, request):
         item = AuditTrail.get_audit_list()
         item = AuditTrail.get_audit_time()
+        item = AuditTrail.get_audit_activity()
         return Response(data=item, status=status.HTTP_200_OK)
     def post(self, request):
         item = request.data
