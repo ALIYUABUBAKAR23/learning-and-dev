@@ -70,11 +70,16 @@ class ItemAPI(APIView):
 class AuditAPI(APIView):
     def get(self, request):
         item = AuditTrail.get_audit_list()
-        item = AuditTrail.get_audit_time()
-        item = AuditTrail.get_audit_activity()
         return Response(data=item, status=status.HTTP_200_OK)
     def post(self, request):
         item = request.data
         if item := AuditTrail.create_audit(**item):
             return Response(data={"message":"Successfully created audit."}, status=status.HTTP_201_CREATED)
         return Response(data={"message":"Failed to create audit."}, status=status.HTTP_501_NOT_IMPLEMENTED)    
+    def get(self, request):
+        item = AuditTrail.get_audit_time()
+        return Response(data=item, status=status.HTTP_200_OK)
+    
+    def get(self, request):
+        item = AuditTrail.get_audit_activity()
+        return Response(data=item, status=status.HTTP_200_OK)
