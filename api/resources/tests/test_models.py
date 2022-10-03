@@ -254,10 +254,10 @@ class AuditTrailModelTest(TestCase):
         )
 
     def test_audit_has_correct_fields(self):
-        item_field = Audit._meta.get_field("item")
-        user_field = Audit._meta.get_field("user")
-        action_type_field = Audit._meta.get_field("action_type")
-        event_field = Audit._meta.get_field("event")
+        item_field = AuditTrail._meta.get_field("item")
+        user_field = AuditTrail._meta.get_field("user")
+        action_type_field = AuditTrail._meta.get_field("action_type")
+        event_field = AuditTrail._meta.get_field("event")
         self.assertTrue(isinstance(item_field, models.ForeignKey))
         self.assertTrue(isinstance(user_field, models.ForeignKey))
         self.assertTrue(isinstance(action_type_field, models.CharField))
@@ -272,12 +272,12 @@ class AuditTrailModelTest(TestCase):
         self.assertIsInstance(self.audit.updated_at, datetime)
 
     def test_create_audit_method(self):
-        audit = Audit.objects.get(id=1)
+        audit = AuditTrail.objects.get(id=1)
         self.assertEqual(audit.item_id, 1)
         self.assertEqual(audit.action_type, 'move')
         self.assertEqual(audit.event, 'Item was moved')
         self.assertEqual(audit.user_id, 1)
-        audit = Audit.objects.get(id=2)
+        audit = AuditTrail.objects.get(id=2)
         self.assertEqual(audit.item_id, 1)
         self.assertEqual(audit.action_type, 'remove')
         self.assertEqual(audit.event, 'Item was removed')

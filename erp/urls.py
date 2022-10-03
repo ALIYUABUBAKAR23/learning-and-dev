@@ -22,7 +22,7 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hr/', include('hr.urls')),
+    # path('hr/', include('hr.urls')),
     path('api/', include('api.urls')),
     path("", include("frontend.urls")),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),

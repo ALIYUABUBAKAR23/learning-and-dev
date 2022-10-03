@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'api.business_analysis',
     'api.resources',
     'api.hr',
+    'drf_api_logger',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware', 
 ]
 
 ROOT_URLCONF = 'erp.urls'
@@ -193,3 +195,5 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'api.authentication.serializers.UserInfoSerializer',
     'TOKEN_SERIALIZER': 'api.authentication.serializers.TokenSerializer',
 }
+
+DRF_API_LOGGER_DATABASE = True 

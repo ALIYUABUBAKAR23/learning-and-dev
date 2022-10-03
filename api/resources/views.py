@@ -1,9 +1,10 @@
+from webbrowser import get
 from django.shortcuts import render
 from rest_framework import filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Inventory
+from .models import AuditTrail, Inventory
 from .models import Item
 
 class InventoryAPI(APIView):
@@ -64,3 +65,15 @@ class ItemAPI(APIView):
         if item is None:
             return Response(data={"message":"Failed to delete items."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(data={"message":"Successfully deleted items."}, status=status.HTTP_201_CREATED)  
+
+
+class AuditAPI(APIView):
+    def get(self, request):
+        item = AuditTrail.get_audit_list()
+        item = AuditTrail.get_audit_time()
+        return Response(data=item, status=status.HTTP_200_OK)
+    def post(self, request):
+        item = request.data
+        if item := AuditTrail.create_audit(**item):
+            return Response(data={"message":"Successfully created audit."}, status=status.HTTP_201_CREATED)
+        return Response(data={"message":"Failed to create audit."}, status=status.HTTP_501_NOT_IMPLEMENTED)    

@@ -1,5 +1,15 @@
+from datetime import timezone
+from sys import audit
 from django.db import models
 from erp.models import BaseModel
+from django.conf import settings
+
+ACTION_TYPE = (
+    ('Create', 'create'),
+    ('Update', 'update'),
+    ('Remove', 'remove'),
+    ('Move', 'move'),
+)
 
 
 class Inventory(BaseModel):
@@ -118,3 +128,32 @@ class Item(BaseModel):
         except Exception as e:
             print(f"Failed to delete all items. Error below: \n {e}")
         return item
+
+
+class AuditTrail(BaseModel):
+    item_id = models.ForeignKey(Item, null=True, on_delete=models.SET_NULL)
+    action_type = models.CharField(choices=ACTION_TYPE, max_length=50, blank=True)
+    event = models.CharField(max_length=200, blank=True)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             null=True, on_delete=models.SET_NULL)
+    
+    
+    @classmethod
+    def get_audit_list(cls, **kwargs):
+         return AuditTrail.objects.all().values()
+     
+    @classmethod
+    def create_audit(cls, **kwargs):
+        audit = None
+        try:             
+            audit = AuditTrail.objects.create(**kwargs)
+        except Exception as e:
+            print(f"Failed to create failed. Error below: \n {e}")
+        return audit
+    
+    @classmethod
+    def get_audit_time(cls):
+         now = timezone.now()
+         upcoming = AuditTrail.objects.filter(date__gte=now).order_by('date')
+         passed = AuditTrail.objects.filter(date__lt=now).order_by('-date')
+         return list(upcoming) + list(passed)
