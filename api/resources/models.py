@@ -157,3 +157,8 @@ class AuditTrail(BaseModel):
          upcoming = AuditTrail.objects.filter(date__gte=now).order_by('date')
          passed = AuditTrail.objects.filter(date__lt=now).order_by('-date')
          return list(upcoming) + list(passed)
+    
+    @classmethod
+    def get_audit_activity(cls, **kwargs):
+         return AuditTrail.user_id.filter(
+             created_on__date=timezone.now().date()).first()
