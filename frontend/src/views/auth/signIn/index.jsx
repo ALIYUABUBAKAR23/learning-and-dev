@@ -28,7 +28,7 @@ import Cookies from "js-cookie";
 import moment from "moment";
 import axios from "axios";
 
-function SignIn() {
+function SignIn(props) {
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
@@ -51,6 +51,12 @@ function SignIn() {
   const [userCredentials, setUserCredentials] = useState({});
   const [formErrors, setFormErrors] = useState(null);
 
+  //passed on function from parent
+  const {
+    setUser,
+    ...rest
+  } = props;
+
   const onSubmit = () => {
     const config = {
       headers: {
@@ -67,7 +73,9 @@ function SignIn() {
         const inHalfADay = 0.5;
         if (key) {
           Cookies.set("token", key, { expires: inHalfADay });
-          window.location.href = "/";
+          //console.log(user) works
+          setUser(...user)  //does not pass user
+          //window.location.href = "/";
         }
         // if (user.should_reset_pass) {
         //   history.push(`/reset-password/${user.id}`);
