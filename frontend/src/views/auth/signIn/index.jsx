@@ -51,12 +51,6 @@ function SignIn(props) {
   const [userCredentials, setUserCredentials] = useState({});
   const [formErrors, setFormErrors] = useState(null);
 
-  //passed on function from parent
-  const {
-    setUser,
-    ...rest
-  } = props;
-
   const onSubmit = () => {
     const config = {
       headers: {
@@ -71,11 +65,12 @@ function SignIn(props) {
         console.log("check our details:", response.data);
         const { key, user } = response.data;
         const inHalfADay = 0.5;
+
         if (key) {
           Cookies.set("token", key, { expires: inHalfADay });
-          //console.log(user) works
-          setUser(...user)  //does not pass user
-          //window.location.href = "/";
+          //saving loggedInUserDetails in local storage
+          localStorage.setItem("user", JSON.stringify(user));
+          window.location.href = "/";
         }
         // if (user.should_reset_pass) {
         //   history.push(`/reset-password/${user.id}`);

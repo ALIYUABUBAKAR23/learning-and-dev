@@ -12,10 +12,9 @@ import SignIn from "./views/auth/signIn";
 import Cookies from "js-cookie";
 import ResourcesLayout from "./layouts/resources";
 import {UserContextProvider} from "./contexts/UserContext"
+//import { useCookies } from "react-cookie";
 
 function App() {
-  
-  const [user, setUser] = useState({});
 
   function getToken() {
     const userToken = Cookies.get("token");
@@ -24,46 +23,20 @@ function App() {
 
   const token = getToken();
 
-  // const setUser= (user) => {
-  //   const loggedInUser = { ...user }
-  //   console.log("setting user for all...")
-  //   console.log(loggedInUser)
-    
-  //   return loggedInUser
-  // }
-    
-  // const loggedInUser = setUser();
-  const testUser = {"id": 3,
-                        "email": "b@gmail.com",
-                        "first_name": "Hafsah",
-                        "last_name": "Babyn",
-                        "middle_name": "B",
-                        "sex": "female",
-                        "state_of_origin": "Kaduna",
-                        "address": "Bakinzuwo Kano",
-                        "phone_number": "+2349039389643",
-                        "twitter": "jkjkjk.com",
-                        "tnstagram": "njnjn.com",
-                        "linkedIn": "njnjij.com",
-                        "staff_id": "1233",
-                        "commencement_date": "2022-09-21",
-                        "salary": 2,
-                        "role": "jjjjxhxjxjjxnx",
-                        "bank_name": "xhxxnxnhxnxh",
-                        "bank_account": "aaaa",
-                        "department": "The department",
-                        "spouse_name": "jsjjsjs",
-                        "date_of_birth": "2022-09-16",
-                        "is_married": true
-                    }
+  function getUser() {
+    const user = JSON.parse(localStorage.getItem("user"))
+    return user;
+  }
+
+  const loggedInUser = getUser();
 
   
   if (!token) {
-    return <SignIn setUser={setUser}/>;
+    return <SignIn />;
   }
 
   return (
-      <UserContextProvider value={user}> 
+      <UserContextProvider value={loggedInUser}> 
         <Switch>
           <Route path={`/auth`} component={AuthLayout} />
           <Route path={`/admin`} component={AdminLayout} />
