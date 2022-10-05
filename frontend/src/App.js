@@ -12,7 +12,6 @@ import SignIn from "./views/auth/signIn";
 import Cookies from "js-cookie";
 import ResourcesLayout from "./layouts/resources";
 import {UserContextProvider} from "./contexts/UserContext"
-//import { useCookies } from "react-cookie";
 
 function App() {
 
