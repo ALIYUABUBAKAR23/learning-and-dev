@@ -27,7 +27,7 @@ export default function Banner(props) {
   const {
     editData,
     setLedgerToEdit,
-    onOpen,
+    onOpenEdit,
     setLedgerForDelete,
     onOpenConfirm,
     ...rest
@@ -91,7 +91,10 @@ export default function Banner(props) {
         p="15px"
       >
         <MenuItem
-          onClick={() => setLedgerToEdit(editData)}
+          onClick={() => {
+            onOpenEdit();
+            setLedgerToEdit(editData);
+          }}
           transition="0.2s linear"
           color={textColor}
           _hover={textHover}

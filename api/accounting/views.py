@@ -51,11 +51,14 @@ class LedgerAPI(APIView):
     #     return Response(data={"message": "Successfully deleted ledger."}, status=status.HTTP_201_CREATED)
 
     def delete(self, request):
-        ledger_id = request.data.get("id", None)
-        ledger = Ledger.delete_all_ledger()
+        ledger_id = request.data.get("ledger_id", None)
+        ledger = Ledger.delete_ledger(ledger_id)
+        print(request.data)
+
         if ledger is None:
-            return Response(data={"message": "Failed to delete ledger."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(data={"message": "Successfully deleted ledger."}, status=status.HTTP_201_CREATED)
+            return Response(data={"message": "Failed to delete account."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+       
+        return Response(data={"message": "Successfully deleted account."}, status=status.HTTP_201_CREATED)
 
 
 class AccountAPI(APIView):

@@ -36,7 +36,6 @@ function ConfirmationModal(props) {
     isOpen,
     onClose,
     setLedgerToDelete,
-    setLedgerForDelete,
   } = props;
 
   return (
@@ -46,21 +45,20 @@ function ConfirmationModal(props) {
       size="sm"
       onClose={() => {
         onClose();
-        setLedgerToDelete();
+        //setLedgerToDelete();
       }}
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader> CONFIRM DELETE </ModalHeader>
+        <ModalHeader> Confirm Delete </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>ARE YOU SURE YOU WANT TO DELETE THIS TASK?</ModalBody>
+        <ModalBody>Are you sure you want to delete this ledger?</ModalBody>
         <ModalFooter>
           <Button
             colorScheme="brand"
             mr={3}
             onClick={() => {
               onClose();
-              setLedgerToDelete();
             }}
           >
             No, it was a mistake

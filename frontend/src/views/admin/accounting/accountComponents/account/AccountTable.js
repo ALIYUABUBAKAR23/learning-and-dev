@@ -96,6 +96,7 @@ export default function ColumnsTable(props) {
     axios
       .get(`${baseUrl}accounts/accounts`, config)
       .then((response) => {
+        console.log("check our accounts: ", response.data);
         setAccountList(response.data);
       })
       .catch((error) => {
