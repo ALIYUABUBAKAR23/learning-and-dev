@@ -28,7 +28,7 @@ import Cookies from "js-cookie";
 import moment from "moment";
 import axios from "axios";
 
-function SignIn() {
+function SignIn(props) {
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
@@ -65,8 +65,11 @@ function SignIn() {
         console.log("check our details:", response.data);
         const { key, user } = response.data;
         const inHalfADay = 0.5;
+
         if (key) {
           Cookies.set("token", key, { expires: inHalfADay });
+          //saving loggedInUserDetails in local storage
+          localStorage.setItem("user", JSON.stringify(user));
           window.location.href = "/";
         }
         // if (user.should_reset_pass) {

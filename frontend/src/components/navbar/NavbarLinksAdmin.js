@@ -19,7 +19,7 @@ import { ItemContent } from "../menu/ItemContent";
 import { SearchBar } from "../navbar/searchBar/SearchBar";
 import { SidebarResponsive } from "../sidebar/Sidebar";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useContext } from "react";
 // Assets
 import navImage from "../../assets/img/layout/Navbar.png";
 import { MdNotificationsNone, MdInfoOutline } from "react-icons/md";
@@ -27,6 +27,7 @@ import { IoMdMoon, IoMdSunny } from "react-icons/io";
 import { FaEthereum } from "react-icons/fa";
 import routes from "../../routes";
 import Logout from "../../views/auth/signIn/Logout";
+import UserContext from "../../contexts/UserContext";
 export default function HeaderLinks(props) {
   const { secondary } = props;
   const { colorMode, toggleColorMode } = useColorMode();
@@ -44,6 +45,10 @@ export default function HeaderLinks(props) {
     "14px 17px 40px 4px rgba(112, 144, 176, 0.06)"
   );
   const borderButton = useColorModeValue("secondaryGray.500", "whiteAlpha.200");
+
+  //user from context
+  const loggedInUser = useContext(UserContext) 
+
   return (
     <Flex
       w={{ sm: "100%", md: "auto" }}
@@ -252,8 +257,11 @@ export default function HeaderLinks(props) {
               borderColor={borderColor}
               fontSize='sm'
               fontWeight='700'
-              color={textColor}>
-              👋&nbsp; Hey, Adela
+              color={textColor}
+              onClick={() => {
+                console.log(typeof(loggedInUser));
+              }}>
+              👋&nbsp; Hey, {loggedInUser.first_name}!
             </Text>
           </Flex>
           <Flex flexDirection='column' p='10px'>
