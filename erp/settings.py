@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'api.business_analysis',
     'api.resources',
     'api.hr',
+    'drf_api_logger',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +80,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware', 
 ]
 
 ROOT_URLCONF = 'erp.urls'
@@ -216,3 +218,4 @@ if not DEBUG and SENTRY_DSN:
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True,
     )
+DRF_API_LOGGER_DATABASE = True 

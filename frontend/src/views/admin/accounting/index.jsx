@@ -23,58 +23,39 @@
 // Chakra imports
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import {
-    columnsDataLedger,
-  } from "./variables/columnsData";
+  columnsDataAccounts,
+  columnsDataLedger,
+} from "../dataTables/variables/columnsData";
 import React, { useEffect, useState } from "react";
-import LedgerTable from "./components/LedgerTableeee"
+import AccountTable from "./accountComponents/account/AccountTable"
+import LedgerTable from "./ledgerComponents/LedgerTable"
 import axios from "axios";
 import Cookies from "js-cookie";
 import { baseUrl } from "../../../utility";
 
-export default function Ledger() {
+export default function Settings() {
   // Chakra Color Mode
+  const [accountList, setAccountList] = useState([])
   const [ledgerList, setLedgerList] = useState([])
-
-  const setList = (data) => {
-    setLedgerList(data);
-  };
-
-  const getLedgers = () =>{
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
-      },
-    };
-
-    axios
-      .get(`${baseUrl}accounts/ledgers/`, config)
-      .then((response) => {
-        console.log("check our ledgers: ", response.data);
-        setLedgerList(response.data)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  useEffect(() => {
-    getLedgers();
-  }, [setLedgerList]);
 
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       <SimpleGrid
         mb='20px'
-        // columns={{ sm: 1, md: 2 }}
-        // spacing={{ base: "20px", xl: "20px" }}
+        >
+        <AccountTable
+          columnsData={columnsDataAccounts}
+          tableData={accountList}
+          setAccountList={setAccountList}
+        />
+      </SimpleGrid>
+      <SimpleGrid
+        mb='20px'
         >
         <LedgerTable
           columnsData={columnsDataLedger}
           tableData={ledgerList}
-          setLedgerList={setList}
+          setLedgerList={setLedgerList}
         />
       </SimpleGrid>
     </Box>
