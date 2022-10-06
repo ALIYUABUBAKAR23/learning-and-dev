@@ -18,13 +18,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 // Custom components
 
 // Assets
 import { CalendarIcon, CheckIcon } from "@chakra-ui/icons";
 import axios from "axios";
+import { handleWidgetChange2 } from "../../../../utility";
 axios.defaults.withCredentials = true;
 
 function TaskModal(props) {
@@ -44,29 +45,67 @@ function TaskModal(props) {
     { label: "Low", value: "Low" },
   ];
 
+  const STATUS = {
+    Open: { label: "Open", value: "Open" },
+    Pending: { label: "Pending", value: "Pending" },
+    Suspended: { label: "Suspended", value: "Suspended" },
+    Postponed: { label: "Postponed", value: "Postponed" },
+    Completed: { label: "Completed", value: "Completed" },
+    Incomplete: { label: "Incomplete", value: "Incomplete" },
+    Cancelled: { label: "Cancelled", value: "Cancelled" },
+  };
+
+  const PRIORITY = {
+    High: { label: "High", value: "High" },
+    Medium: { label: "Medium", value: "Medium" },
+    Low: { label: "Low", value: "Low" },
+  };
 
   const {
     onSelect,
     userList,
+    editTask,
     assignedTo,
     onChange,
     onOptionSelect,
     onSubmit,
+    setTaskToEdit,
     onOpen,
-    isOpen, 
-    onClose
+    isOpen,
+    onClose,
   } = props;
+
+  const [taskDetails, setTaskDetails] = useState({});
+  const [updatedTaskDetails, setUpdatedTaskDetails] = useState({});
+
+  useEffect(() => {
+    setTaskDetails(editTask || "");
+  }, [editTask]);
+
+  useEffect(() => {
+    setUpdatedTaskDetails(taskDetails || editTask);
+  }, [taskDetails]);
+
+  const handleChange = handleWidgetChange2(
+    setTaskDetails,
+    setUpdatedTaskDetails,
+    taskDetails,
+    updatedTaskDetails
+  );
 
   return (
     <Modal
       closeOnOverlayClick={false}
       isOpen={isOpen}
       size="xl"
-      onClose={onClose}
+      onClose={() => {
+        setTaskToEdit(null);
+        onClose();
+      }}
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create A New Task</ModalHeader>
+        <ModalHeader>{editTask ? "Edit Task" : "Create New Task"}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Stack spacing={4}>
@@ -75,8 +114,9 @@ function TaskModal(props) {
               <Input
                 name="name"
                 placeholder="Name"
+                value={taskDetails?.name || ""}
                 borderRadius="16px"
-                onChange={onChange}
+                onChange={handleChange}
               />
             </InputGroup>
             <InputGroup>
@@ -85,7 +125,8 @@ function TaskModal(props) {
               <Textarea
                 name="description"
                 placeholder="Enter A Brief Or Detailed Description Of The Task"
-                onChange={onChange}
+                value={taskDetails?.description || ""}
+                onChange={handleChange}
               />
               <InputRightElement
                 borderRadius="16px"
@@ -98,7 +139,8 @@ function TaskModal(props) {
               <Textarea
                 name="comment"
                 placeholder="Add A Comment About This Task"
-                onChange={onChange}
+                value={taskDetails?.comment || ""}
+                onChange={handleChange}
               />
               <InputRightElement
                 borderRadius="16px"
@@ -108,17 +150,31 @@ function TaskModal(props) {
             <InputGroup>
               <InputLeftAddon children="Task Assignee" borderRadius="16px" />
               <HStack spacing={4}>
-                {assignedTo?.map((user, index) => (
-                  <Tag
-                    size={"lg"}
-                    key={index}
-                    variant="solid"
-                    colorScheme="teal"
-                  >
-                    {user.name}
-                  </Tag>
-                ))}
+                {editTask?.assigned_to
+                  ? editTask?.assigned_to.map((user, index) => (
+                      <Tag
+                        size={"lg"}
+                        key={index}
+                        variant="solid"
+                        colorScheme="teal"
+                      >
+                        {user.name}
+                      </Tag>
+                    ))
+                  : assignedTo?.map((user, index) => (
+                      <Tag
+                        size={"lg"}
+                        key={index}
+                        variant="solid"
+                        colorScheme="teal"
+                      >
+                        {user.name}
+                      </Tag>
+                    ))}
               </HStack>
+            </InputGroup>
+            <InputGroup>
+              <InputLeftAddon children="Assign Task To" borderRadius="16px" />
               <Select
                 options={userList}
                 isMulti
@@ -132,9 +188,10 @@ function TaskModal(props) {
               <Input
                 name="start_date"
                 placeholder="Start Date"
+                value={taskDetails?.start_date || ""}
                 borderRadius="16px"
                 type="datetime-local"
-                onChange={onChange}
+                onChange={handleChange}
               />
               <InputRightElement
                 borderRadius="16px"
@@ -146,9 +203,10 @@ function TaskModal(props) {
               <Input
                 name="due_date"
                 placeholder="Due Date"
+                value={taskDetails?.due_date || ""}
                 borderRadius="16px"
                 type="datetime-local"
-                onChange={onChange}
+                onChange={handleChange}
               />
               <InputRightElement
                 borderRadius="16px"
@@ -159,26 +217,40 @@ function TaskModal(props) {
               <InputLeftAddon children="Status" borderRadius="16px" />
               <Select
                 name="status"
+                value={STATUS[taskDetails.status]}
                 options={taskStatusOptions}
-                onChange={onOptionSelect}
+                onChange={(option) => handleChange(option, "status")}
               />
             </InputGroup>
             <InputGroup>
               <InputLeftAddon children="Priority" borderRadius="16px" />
               <Select
                 name="priority"
+                value={PRIORITY[taskDetails.priority]}
                 options={taskPriorityOptions}
-                onChange={onOptionSelect}
+                onChange={(option) => handleChange(option, "priority")}
               />
             </InputGroup>
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="brand" mr={3} onClick={onClose}>
+          <Button
+            colorScheme="brand"
+            mr={3}
+            onClick={() => {
+              setTaskToEdit(null);
+              onClose();
+            }}
+          >
             Close
           </Button>
-          <Button variant="ghost" onClick={onSubmit}>
-            Create
+          <Button
+            variant="ghost"
+            onClick={() => {
+              onSubmit(editTask ? "put" : "post", updatedTaskDetails);
+            }}
+          >
+            {editTask ? "Edit" : "Create"}
           </Button>
         </ModalFooter>
       </ModalContent>

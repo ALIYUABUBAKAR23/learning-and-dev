@@ -93,5 +93,5 @@ class User(AbstractUser):
         """
         This method fetches a users list of tasks using key word arguments i.e kwargs
         """
-        users = User.objects.filter(**kwargs).values("first_name","last_name","middle_name","id",)
+        users = User.objects.filter(**kwargs).values("first_name","last_name","middle_name","id","sex","state_of_origin","address","date_of_birth","department_id","department__name","phone_number","email")
         return users

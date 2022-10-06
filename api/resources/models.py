@@ -11,6 +11,8 @@ ACTION_TYPE = (
     ('Move', 'move'),
 )
 
+from api.business_analysis.models import Project
+
 
 class Inventory(BaseModel):
      name = models.CharField(max_length=200, blank=True, null=True)
@@ -21,6 +23,7 @@ class Inventory(BaseModel):
      current_location = models.CharField(max_length=200, blank=True)
      model_number = models.CharField(max_length=200, blank=True)
      serial_number = models.CharField(max_length=200, blank=True)
+     project = models.ForeignKey(Project, null=True, on_delete=models.SET_NULL)
 
      class Meta:
         verbose_name =("inventory")
