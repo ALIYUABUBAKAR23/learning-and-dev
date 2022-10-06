@@ -1,8 +1,10 @@
 from datetime import datetime
 from django.test import TestCase
 from django.db import models
+from api.authentication.models import User
+from api.hr.models import Department
 
-from api.resources.models import Inventory, Item
+from api.resources.models import Inventory, Item, AuditTrail
 
 
 class InventoryModelTest(TestCase):
@@ -178,17 +180,108 @@ class ItemModelTest(TestCase):
         item = Item.delete_item(item_id)
         self.assertEqual(item, (1, {'resources.Item': 1}))
 
-    # def test_first_name_max_length(self):
-    #     item = Item.objects.get(id=1)
-    #     max_length = item._meta.get_field('first_name').max_length
-    #     self.assertEqual(max_length, 100)
 
-    # def test_object_name_is_last_name_comma_first_name(self):
-    #     item = Item.objects.get(id=1)
-    #     expected_object_name = f'{item.last_name}, {item.first_name}'
-    #     self.assertEqual(str(item), expected_object_name)
+class AuditTrailModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        Department.create_department(name="ICT", description="GOgo")
+        
+        User.objects.create(
+            email="lex@gmail.com",
+            password="lexxlexx",
+            middle_name="john",
+            first_name="lex",
+            last_name="lu",
+            sex="Male",
+            state_of_origin="Benue",
+            address="servent leader lane",
+            phone_number="09012345678",
+            twitter="@superlex",
+            tnstagram="@mrlex",
+            linkedIn="lexx",
+            staff_id="RC1007",
+            commencement_date="2022-01-01",
+            salary=500000,
+            role="Full Stack Developer",
+            bank_name="UBA",
+            bank_account="1234567890",
+            department_id="1",
+            spouse_name="Bestie",
+            date_of_birth="1991-01-01",
+            is_married=False    
+        )
 
-    # def test_get_absolute_url(self):
-    #     item = Item.objects.get(id=1)
-    #     # This will also fail if the urlconf is not defined.
-    #     self.assertEqual(author.get_absolute_url(), '/catalog/author/1')
+        Inventory.create_inventory(
+            name='Unit tests 2',
+            type='CRUD test 2',
+            date_of_purchase='2022-08-03',
+            purchase_condition='good',
+            current_condition="good",
+            current_location='kub',
+            model_number="2222",
+            serial_number='pending-1111',
+        )
+
+        Item.create_item(
+            name='Unit tests 2',
+            description='CRUD test 2',
+            serial_number='3232',
+            date_of_purchase='2022-08-03',
+            cost=20000.00,
+            inventory_id=1,
+            purchase_quantity=20,
+            quantity=10,
+        )
+        
+        cls.audit = Audit.create_audit_trail(
+            item_id =1,
+            action_type ="move",
+            event = f"Item was moved",
+            user_id = 1
+        )
+        Audit.create_audit_trail(
+            item_id =1,
+            action_type ="remove",
+            event = f"Item was removed",
+            user_id = 1
+        )
+        Audit.create_audit_trail(
+            item_id =1,
+            action_type ="create",
+            event = f"Item was created",
+            user_id = 1
+        )
+
+    def test_audit_has_correct_fields(self):
+        item_field = AuditTrail._meta.get_field("item")
+        user_field = AuditTrail._meta.get_field("user")
+        action_type_field = AuditTrail._meta.get_field("action_type")
+        event_field = AuditTrail._meta.get_field("event")
+        self.assertTrue(isinstance(item_field, models.ForeignKey))
+        self.assertTrue(isinstance(user_field, models.ForeignKey))
+        self.assertTrue(isinstance(action_type_field, models.CharField))
+        self.assertTrue(isinstance(event_field, models.CharField))
+        self.assertIsInstance(self.audit.item_id, int)
+        self.assertIsInstance(self.audit.action_type, str)
+        self.assertIsInstance(self.audit.event, str)
+        self.assertIsInstance(self.audit.user_id, int)
+
+    def test_it_has_timestamps(self):
+        self.assertIsInstance(self.audit.created_at, datetime)
+        self.assertIsInstance(self.audit.updated_at, datetime)
+
+    def test_create_audit_method(self):
+        audit = AuditTrail.objects.get(id=1)
+        self.assertEqual(audit.item_id, 1)
+        self.assertEqual(audit.action_type, 'move')
+        self.assertEqual(audit.event, 'Item was moved')
+        self.assertEqual(audit.user_id, 1)
+        audit = AuditTrail.objects.get(id=2)
+        self.assertEqual(audit.item_id, 1)
+        self.assertEqual(audit.action_type, 'remove')
+        self.assertEqual(audit.event, 'Item was removed')
+        self.assertEqual(audit.user_id, 1)
+
+
+

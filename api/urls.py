@@ -4,11 +4,11 @@ from . import views
 
 urlpatterns = [
     path('accounts/', include('api.accounting.urls')),
-    path('', ProjectAPI.as_view()), # new to test project model endpoints
-    path('projects/', include('api.business_analysis.urls')),
+    path('business_analysis/', include('api.business_analysis.urls')),
     path('messages/', include('api.broadcast.urls')),
     path('tasks/', include('api.tasks.urls')),
     path('customers/', include('api.crm.urls')),
     path('resources/', include('api.resources.urls')),
-    path('hr/', include('api.hr.urls')),
+    # path('hr/', include('api.hr.urls')),
+    path('users/', include('api.authentication.urls')),
 ]

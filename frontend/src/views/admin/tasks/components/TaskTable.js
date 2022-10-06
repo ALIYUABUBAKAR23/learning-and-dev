@@ -24,8 +24,10 @@ import {
   InputLeftElement,
   InputRightElement,
   Textarea,
-  Select,
+  // Select,
   InputLeftAddon,
+  HStack,
+  Tag,
 } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
@@ -35,18 +37,31 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-
+import Select from "react-select";
 // Custom components
 import Card from "../../../../components/card/Card";
-import Menu from "../../../../components/menu/MainMenu";
+import Menu from "./MainMenu";
 
 // Assets
 import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
 import APIClient from "../../../../lib/APIClient";
-import { CalendarIcon, CheckIcon, PhoneIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import {
+  CalendarIcon,
+  CheckIcon,
+  PhoneIcon,
+  PlusSquareIcon,
+} from "@chakra-ui/icons";
 import { PersonIcon } from "../../../../components/icons/Icons";
+import axios from "axios";
+axios.defaults.withCredentials = true;
+import { baseUrl } from "../../../../utility/index";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
+import TaskModal from "./TaskModal";
+import ConfirmationModal from "./ConfirmationModal";
+
 export default function ColumnsTable(props) {
-  const { columnsData, tableData } = props;
+  const { columnsData, tableData, setTaskList } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -69,51 +84,213 @@ export default function ColumnsTable(props) {
     prepareRow,
     initialState,
   } = tableInstance;
-  initialState.pageSize = 5;
+  initialState.pageSize = 10;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenConfirm,
+    onOpen: onOpenConfirm,
+    onClose: onCloseConfirm,
+  } = useDisclosure();
   const [taskData, setTaskData] = useState({});
+  const [assignedTo, setAssignedTo] = useState([]);
   const [formErrors, setFormErrors] = useState(null);
+  const [userList, setUserList] = useState([]);
+  const [taskToEdit, setTaskToEdit] = useState();
+  const [taskToDelete, setTaskToDelete] = useState();
 
+  const taskStatusOptions = [
+    { label: "Open", value: "Open" },
+    { label: "Pending", value: "Pending" },
+    { label: "Suspended", value: "Suspended" },
+    { label: "Postponed", value: "Postponed" },
+    { label: "Completed", value: "Completed" },
+    { label: "Incomplete", value: "Incomplete" },
+    { label: "Cancelled", value: "Cancelled" },
+  ];
+
+  const taskPriorityOptions = [
+    { label: "High", value: "High" },
+    { label: "Medium", value: "Medium" },
+    { label: "Low", value: "Low" },
+  ];
+
+  const getTasks = () => {
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        authorization: `Token ${Cookies.get("token")}`,
+      },
+    };
+
+    axios
+      .get(`${baseUrl}tasks/tasks`, config)
+      .then((response) => {
+        console.log("check our tasks: ", response.data);
+        setTaskList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getUsers = () => {
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        authorization: `Token ${Cookies.get("token")}`,
+      },
+    };
+
+    axios
+      .get(`${baseUrl}users/`, config)
+      .then((response) => {
+        console.log("check our users: ", response.data);
+        setUserList(
+          response.data.map((option) => ({
+            label: `${option.first_name} ${option.middle_name} ${option.last_name}`,
+            value: option.id,
+          }))
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const createTask = (taskData, httpVerb) => {
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        authorization: `Token ${Cookies.get("token")}`,
+      },
+    };
+
+    axios[httpVerb](`${baseUrl}tasks/tasks`, taskData, config)
+      .then((response) => {
+        onClose();
+        getTasks();
+        setAssignedTo([]);
+        setTaskData();
+        setTaskToEdit();
+        console.log("check our response:", response.data);
+        toast.success(`${response.data.message}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Not created!");
+      });
+  };
+
+  const deleteTask = (task_id) => {
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        authorization: `Token ${Cookies.get("token")}`,
+      },
+      data: { task_id: task_id },
+    };
+
+    axios
+      .delete(`${baseUrl}tasks/tasks`, config)
+      .then((response) => {
+        onCloseConfirm();
+        getTasks();
+        console.log("Successfully deleted task!", response.data);
+        toast.success(`Successfully deleted task!`);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Not deleted!");
+      });
+  };
+
+  const setEditTask = (taskData) => {
+    console.log("task data: ", taskData);
+    setTaskToEdit(taskData);
+    onOpen();
+  };
+  const setTaskForDelete = (taskData) => {
+    console.log("delete task data id: ", taskData.id);
+    setTaskToDelete(taskData.id);
+    onOpenConfirm();
+  };
   const onChange = (event) => {
+    console.log("see the event: ", event);
     const { name, value } = event.target;
+    console.log("see the name, event : ", name, " ,", value);
     const task = { ...taskData };
     task[name] = value;
     setTaskData(task);
     setFormErrors(null);
   };
 
-  const onSubmit = () => {
-    
-    console.log("check our details:", taskData);
-    // APIClient
-    //   .post("/tasks/tasks/", taskData)
-    //   .then((response) => {
-    //     const { key, user } = response.data;
-    //     const inHalfADay = 0.5;
-    //     if (key) {
-    //       Cookies.set("token", key, { expires: inHalfADay });
-    //       window.location.href = "/";
-    //     }
-    //     // if (user.should_reset_pass) {
-    //     //   history.push(`/reset-password/${user.id}`);
-    //     //   return;
-    //     //   "key": "adc9b440eb7660b61227943c8d6a8734f466bf22"
-    //     // }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     setFormErrors(error);
-    //   });
+  const onOptionSelect = (event, action) => {
+    console.log("see the event: ", event, action);
+    const { label, value } = event;
+    console.log("see the name, event : ", label, " ,", value);
+    const task = { ...taskData };
+    task[action.name] = value;
+    setTaskData(task);
   };
 
+  const onSelect = (event) => {
+    console.log("see the event: ", event);
+    var newState;
+    if (event.length > 0) {
+      event?.map((input) => {
+        newState = [
+          ...assignedTo,
+          {
+            id: input.value ? input.value : null,
+            name: input.label ? input.label : null,
+          },
+        ];
+      });
+    } else {
+      newState = [];
+    }
+    setAssignedTo(newState);
+  };
+
+  const formatData = (data) => {
+    console.log("formatting...");
+    console.log(data);
+    const keys = Object.keys(data);
+
+    keys.forEach((key) => {
+      if (key === "priority") {
+        data[key] = data[key].value;
+      }
+      if (key === "status") {
+        data[key] = data[key].value;
+      }
+    });
+
+    console.log(`our formatted data in formatData: \n ${data}`);
+    return data;
+  };
+
+  const onSubmit = (httpVerb, taskData) => {
+    let unFormattedTask = { ...taskData };
+    let task = formatData(unFormattedTask);
+    task["assigned_to"] = [...assignedTo];
+    console.log("check our post:", taskData);
+    createTask(task, httpVerb);
+  };
 
   useEffect(() => {
-    APIClient.get("api/tasks/tasks").then((response) =>
-      console.log(response.data)
-    );
+    getUsers();
   }, []);
   return (
     <Card
@@ -207,17 +384,32 @@ export default function ColumnsTable(props) {
                         {cell.value}
                       </Text>
                     );
-                  } else if (cell.column.Header === "PROGRESS") {
+                  } else if (cell.column.Header === "ASSIGNED TO") {
                     data = (
                       <Flex align="center">
-                        <Progress
-                          variant="table"
-                          colorScheme="brandScheme"
-                          h="8px"
-                          w="108px"
-                          value={cell.value}
-                        />
+                        <HStack spacing={4}>
+                          {cell.value?.map((user, index) => (
+                            <Tag
+                              size={"sm"}
+                              key={index}
+                              variant="solid"
+                              colorScheme="teal"
+                            >
+                              {user.name}
+                            </Tag>
+                          ))}
+                        </HStack>
                       </Flex>
+                    );
+                  } else if (cell.column.Header === "ACTIONS") {
+                    data = (
+                      <Menu
+                        editData={cell.row.original}
+                        setTaskToEdit={setEditTask}
+                        setTaskForDelete={setTaskForDelete}
+                        onOpen={onOpen}
+                        onOpenConfirm={onOpenConfirm}
+                      />
                     );
                   } else {
                     data = (
@@ -238,101 +430,32 @@ export default function ColumnsTable(props) {
                     </Td>
                   );
                 })}
-                <Menu />
               </Tr>
             );
           })}
         </Tbody>
       </Table>
-      <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xl" onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create A New Task</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Stack spacing={4}>
-              <InputGroup>
-                <InputLeftAddon children="Name" borderRadius="16px" />
-                <Input
-                  name="name"
-                  placeholder="Name"
-                  borderRadius="16px"
-                  onChange={onChange}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Description" borderRadius="16px" />
-                
-                <Textarea name="description" placeholder='Enter A Brief Or Detailed Description Of The Task' onChange={onChange} />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CheckIcon color="green.500" />}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Comment" borderRadius="16px" />
-                
-                <Textarea placeholder='Add A Comment About This Task' />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CheckIcon color="green.500" />}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Task Assignee" borderRadius="16px" />
-
-                <Select placeholder="Task Assignee">
-                  <option value="option1">User 1</option>
-                  <option value="option2">User 2</option>
-                  <option value="option3">User 3</option>
-                  <option value="option3">User 4</option>
-                </Select>
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Start Date" borderRadius="16px" />
-                <Input placeholder="Start Date" borderRadius="16px" type="datetime-local" />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CalendarIcon color="green.500" />}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Due Date" borderRadius="16px" />
-                <Input placeholder="Due Date" borderRadius="16px" type="datetime-local" />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CalendarIcon color="green.500" />}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Status" borderRadius="16px" />
-                <Select placeholder="Select Status">
-                  <option value="option1">Status 1</option>
-                  <option value="option2">Status 2</option>
-                  <option value="option3">Status 3</option>
-                  <option value="option3">Status 4</option>
-                </Select>
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Priority" borderRadius="16px" />
-
-                <Select placeholder="Select Priority">
-                  <option value="option1">Status 1</option>
-                  <option value="option2">Status 2</option>
-                  <option value="option3">Status 3</option>
-                  <option value="option3">Status 4</option>
-                </Select>
-              </InputGroup>
-            </Stack>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="brand" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost" onClick={onSubmit}>Create</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <TaskModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpen={onOpen}
+        onSelect={onSelect}
+        userList={userList}
+        assignedTo={assignedTo}
+        onChange={onChange}
+        onOptionSelect={onOptionSelect}
+        onSubmit={onSubmit}
+        editTask={taskToEdit}
+        setTaskToEdit={setEditTask}
+      />
+      <ConfirmationModal
+        taskId={taskToDelete}
+        deleteTask={deleteTask}
+        setTaskToDelete={setTaskToDelete}
+        onOpen={onOpenConfirm}
+        isOpen={isOpenConfirm}
+        onClose={onCloseConfirm}
+      />
     </Card>
   );
 }
