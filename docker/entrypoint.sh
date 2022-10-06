@@ -41,7 +41,7 @@ function setup_django {
 export STATIC_URL=${STATIC_URL:-/static/}
 export STATIC_ROOT=${STATIC_ROOT:-/var/www/static/}
 
-export DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-rigshare.settings}
+export DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-erp.settings}
 export DEBUG=${DEBUG:-false}
 
 case "$1" in

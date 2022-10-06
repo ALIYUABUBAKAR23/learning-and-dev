@@ -1,5 +1,0 @@
--r requirements.txt
-gunicorn
-uvicorn[standard]
-supervisor
-sentry-sdk==1.4.3

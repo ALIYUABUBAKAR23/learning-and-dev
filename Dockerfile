@@ -4,7 +4,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 WORKDIR /code
 COPY requirements.txt docker/requirements-prod.txt /code/
-# RUN sed -i "s/psycopg2-binary/psycopg2/" requirements.txt
 RUN pip install -r requirements-prod.txt
 COPY . /code/
 
@@ -13,7 +12,7 @@ RUN ln -sf /code/docker/supervisord.app.conf /etc/supervisor/conf.d/app.conf
 RUN ln -sf /code/docker/supervisord.conf /etc/supervisor/supervisord.conf
 
 RUN chmod +x /code/docker/*.sh
-# RUN /code/docker/pg-client-install.sh
+RUN /code/docker/pg-client-install.sh
 
 ENTRYPOINT ["/code/docker/entrypoint.sh"]
 CMD ["start"]
