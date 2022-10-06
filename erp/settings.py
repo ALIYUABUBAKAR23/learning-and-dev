@@ -24,16 +24,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-li16l$g5h&g+m9f2l$ifq&dkyu8rd1a8by&@a)51&is#(84i_c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "true").lower() == "true"
 
 # ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = [
-    "127.0.0.1", 
+    "127.0.0.1",
+    "localhost",
+    ".rightclicksolutions.com.ng",
+    ".napims360.com"
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1", 
+    "http://127.0.0.1",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -155,6 +158,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -193,3 +198,21 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'api.authentication.serializers.UserInfoSerializer',
     'TOKEN_SERIALIZER': 'api.authentication.serializers.TokenSerializer',
 }
+
+SENTRY_DSN = os.environ.get("SENTRY_DSN")
+
+if not DEBUG and SENTRY_DSN:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        # traces_sample_rate=1.0,
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+    )
