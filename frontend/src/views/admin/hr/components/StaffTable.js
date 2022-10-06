@@ -550,16 +550,7 @@ import {
                           {cell.value}
                         </Text>
                       );
-                    } else if (cell.column.Header === "ACTIONS") {
-                      data = <Menu 
-                      w='30px'
-                      h='30px' />
-                      // (
-                      //   <Text me='10px' color={textColor} fontSize='sm' fontWeight='700'>
-                      //     {cell.value}
-                      //   </Text>
-                      // );
-                    }
+                    } 
                     return (
                       <Td
                         {...cell.getCellProps()}
