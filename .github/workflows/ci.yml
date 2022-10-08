@@ -14,12 +14,6 @@ jobs:
         name: checkout repo
         uses: actions/checkout@v2.3.4
       -
-        name: install node packages and build frontend
-        run: |
-          cd frontend
-          yarn
-          yarn build
-      -
         name: Extract branch name
         shell: bash
         run: |
@@ -77,37 +71,12 @@ jobs:
           DOCKER_REPO=${{ secrets.DOCKERHUB_USERNAME }}
           
           ssh rc_server << HERE
-            export $BRANCH_NAME
-            export $GH_TOKEN
-            export $GH_USERNAME
-            export $GH_HANDLE
-            export $DOCKER_REPO
-            export DIR_NAME=erp
-          
-            installs=()
-            inst=""
-            if ! command -v git  &> /dev/null; then echo "git not installed"; installs+=("git"); fi
-            if ! command -v docker  &> /dev/null; then echo "docker not installed"; installs+=("docker.io"); fi
-          
-            total="${#installs[@]}"
-            if test $total -gt 0; then a=${installs[*]}; inst=${a// / }; fi
-          
-            if test $total -gt 0;
-              then 
-                if command -v apt-get >/dev/null; 
-                  then 
-                    sudo apt update && sudo apt install -y ${inst};
-                else
-                  sudo yum -y update && sudo yum install -y ${inst}
-                fi
-          
-              sudo service docker start
-              sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-              sudo chmod +x /usr/local/bin/docker-compose
-              sudo groupadd docker
-              sudo gpasswd -a $USER docker
-              newgrp docker
-            fi
+            export BRANCH_NAME=$BRANCH_NAME
+            export GH_TOKEN=$GH_TOKEN
+            export GH_USERNAME=$GH_USERNAME
+            export GH_HANDLE=$GH_HANDLE
+            export DOCKER_REPO=$DOCKER_REPO
+            export DIR_NAME=erp        
           
             if [ ! -f "fetch" ]
             then
@@ -115,10 +84,9 @@ jobs:
               sudo chmod +x fetch
             fi
 
-            ./fetch --repo="https://github.com/"${GH_HANDLE}"/devops" --branch="main" --source-path="/erp" \
-              --github-oauth-token="${GH_TOKEN}" ./erp || echo "failed to pull from devops"
+            ./fetch --repo="https://github.com/${GH_HANDLE}/devops" --branch="main" --source-path=/erp --github-oauth-token="${GH_TOKEN}" ./erp || echo "failed to pull from devops"
           
-            if [ -d "${DIR_NAME}" ]; then cp -f erp/* .; rm -fr erp; fi
+            if [ -d erp ]; then cp -f erp/* .; rm -fr erp; fi
             chmod +x redeploy.sh
             mkdir -p /tmp/data/nginx >/dev/null 2>&1
             mkdir -p /tmp/data/certbot/conf >/dev/null 2>&1
