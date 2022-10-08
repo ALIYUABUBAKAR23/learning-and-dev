@@ -7,29 +7,28 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Customer',
+            name="Customer",
             fields=[
-                ('id', models.IntegerField(db_index=True, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('first_name', models.CharField(blank=True, max_length=200, null=True)),
-                ('middle_name', models.CharField(blank=True, max_length=200, null=True)),
-                ('last_name', models.CharField(blank=True, max_length=200, null=True)),
-                ('date_of_birth', models.DateField(blank=True, max_length=200, null=True)),
-                ('address', models.CharField(blank=True, max_length=200, null=True)),
-                ('occupation', models.CharField(blank=True, max_length=200, null=True)),
-                ('company', models.CharField(blank=True, max_length=200, null=True)),
-                ('phone_number', models.CharField(blank=True, max_length=200, null=True)),
-                ('email', models.EmailField(blank=True, max_length=200, null=True)),
+                ("id", models.IntegerField(db_index=True, primary_key=True, serialize=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("first_name", models.CharField(blank=True, max_length=200, null=True)),
+                ("middle_name", models.CharField(blank=True, max_length=200, null=True)),
+                ("last_name", models.CharField(blank=True, max_length=200, null=True)),
+                ("date_of_birth", models.DateField(blank=True, max_length=200, null=True)),
+                ("address", models.CharField(blank=True, max_length=200, null=True)),
+                ("occupation", models.CharField(blank=True, max_length=200, null=True)),
+                ("company", models.CharField(blank=True, max_length=200, null=True)),
+                ("phone_number", models.CharField(blank=True, max_length=200, null=True)),
+                ("email", models.EmailField(blank=True, max_length=200, null=True)),
             ],
             options={
-                'verbose_name': 'customer',
-                'verbose_name_plural': 'customers',
+                "verbose_name": "customer",
+                "verbose_name_plural": "customers",
             },
         ),
     ]

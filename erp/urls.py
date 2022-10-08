@@ -21,14 +21,15 @@ from django.conf.urls import url
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
+    path("admin/", admin.site.urls),
+    path("api/", include("api.urls")),
     path("", include("frontend.urls")),
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
-    url(r'^account/', include('allauth.urls')),
-    url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$',
-        confirm_email, name='account_confirm_email'),
+    path("dj-rest-auth/", include("dj_rest_auth.urls")),
+    path("api-token-auth/", obtain_auth_token, name="api_token_auth"),
+    url(r"^rest-auth/", include("rest_auth.urls")),
+    url(r"^rest-auth/registration/", include("rest_auth.registration.urls")),
+    url(r"^account/", include("allauth.urls")),
+    url(
+        r"^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$", confirm_email, name="account_confirm_email"
+    ),
 ]

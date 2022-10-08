@@ -9,24 +9,39 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('resources', '0010_auto_20220824_1350'),
+        ("resources", "0010_auto_20220824_1350"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AuditTrail',
+            name="AuditTrail",
             fields=[
-                ('id', models.IntegerField(db_index=True, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('action_type', models.CharField(blank=True, choices=[('Create', 'create'), ('Update', 'update'), ('Remove', 'remove'), ('Move', 'move')], max_length=50)),
-                ('event', models.CharField(blank=True, max_length=200)),
-                ('item_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='resources.item')),
-                ('user_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ("id", models.IntegerField(db_index=True, primary_key=True, serialize=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "action_type",
+                    models.CharField(
+                        blank=True,
+                        choices=[("Create", "create"), ("Update", "update"), ("Remove", "remove"), ("Move", "move")],
+                        max_length=50,
+                    ),
+                ),
+                ("event", models.CharField(blank=True, max_length=200)),
+                (
+                    "item_id",
+                    models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to="resources.item"),
+                ),
+                (
+                    "user_id",
+                    models.ForeignKey(
+                        null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'audit',
-                'verbose_name_plural': 'audits',
+                "verbose_name": "audit",
+                "verbose_name_plural": "audits",
             },
         ),
     ]

@@ -7,39 +7,39 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crm', '0001_initial'),
-        ('business_analysis', '0001_initial'),
+        ("crm", "0001_initial"),
+        ("business_analysis", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='starting_budget',
+            model_name="project",
+            name="starting_budget",
             field=models.FloatField(blank=True, default=0),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='actual_cost',
+            model_name="project",
+            name="actual_cost",
             field=models.FloatField(blank=True),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='current_budget',
+            model_name="project",
+            name="current_budget",
             field=models.FloatField(blank=True),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='description',
+            model_name="project",
+            name="description",
             field=models.TextField(blank=True),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='estimated_cost',
+            model_name="project",
+            name="estimated_cost",
             field=models.FloatField(blank=True),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='owner',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='crm.customer'),
+            model_name="project",
+            name="owner",
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to="crm.customer"),
         ),
     ]

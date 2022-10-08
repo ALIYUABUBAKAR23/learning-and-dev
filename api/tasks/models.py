@@ -1,8 +1,6 @@
 # Create your models here.
 from django.conf import settings
 from django.db import models
-from django.urls import reverse
-from django.forms.models import model_to_dict
 
 from erp.models import BaseModel
 from api.authentication.models import User
@@ -34,18 +32,12 @@ class Task(BaseModel):
     name = models.CharField(max_length=200, null=False, blank=True)
     description = models.TextField(null=False, blank=True)
     comment = models.TextField(null=False, blank=True)
-    assigned_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL
-    )
+    assigned_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     assigned_to = models.JSONField(null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(
-        choices=TASK_STATUS, max_length=200, null=True, blank=True
-    )
-    priority = models.CharField(
-        choices=TASK_PRIORITY, max_length=200, null=True, blank=True
-    )
+    status = models.CharField(choices=TASK_STATUS, max_length=200, null=True, blank=True)
+    priority = models.CharField(choices=TASK_PRIORITY, max_length=200, null=True, blank=True)
 
     class Meta:
         verbose_name = "task"
@@ -63,9 +55,7 @@ class Task(BaseModel):
         # Compute the values list "manually".
         for task in tasks:
             user = User.objects.filter(id=task["assigned_by_id"]).get()
-            task[
-                "assigned_by"
-            ] = f"{user.first_name} {user.middle_name} {user.last_name}"
+            task["assigned_by"] = f"{user.first_name} {user.middle_name} {user.last_name}"
         return tasks
 
     @classmethod
@@ -107,19 +97,19 @@ class Task(BaseModel):
     @classmethod
     def total_count_of_tasks_assigned_to_user(cls, id):
         return Task.objects.filter(assigned_by_id=id).count()
-    
+
     @classmethod
     def total_count_of_tasks_assigned_to_user_completed(cls, id):
         return Task.objects.filter(assigned_by_id=id, status="completed").count()
-    
+
     @classmethod
     def total_count_of_tasks_assigned_to_user_cancelled(cls, id):
         return Task.objects.filter(assigned_by_id=id, status="cancelled").count()
-    
+
     @classmethod
     def total_count_of_tasks_assigned_to_user_pending(cls, id):
         return Task.objects.filter(assigned_by_id=id, status="pending").count()
-    
+
     @classmethod
     def total_count_of_tasks_assigned_to_user_Postponed(cls, id):
         return Task.objects.filter(assigned_by_id=id, status="Postponed").count()

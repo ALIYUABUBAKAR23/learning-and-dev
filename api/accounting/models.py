@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.db import models, transaction
 from django.db.models import Sum
 
@@ -6,29 +5,27 @@ from erp.models import BaseModel
 
 
 ACCOUNT_CLASS = (
-    ('revenue', 'Revenue'),
-    ('equity', 'Equity'),
-    ('other income', 'Other Income'),
-    ('other expense', 'Other Expense'),
+    ("revenue", "Revenue"),
+    ("equity", "Equity"),
+    ("other income", "Other Income"),
+    ("other expense", "Other Expense"),
 )
 
 ACCOUNT_TYPE = (
-    ('cr', 'CR'),
-    ('dr', 'DR'),
+    ("cr", "CR"),
+    ("dr", "DR"),
 )
 
 
 class Account(BaseModel):
     code = models.IntegerField(null=True, blank=True)
     description = models.TextField(null=False, blank=True)
-    account_class = models.CharField(
-        choices=ACCOUNT_CLASS, max_length=20, blank=True)
-    type = models.CharField(
-        choices=ACCOUNT_TYPE, max_length=20, null=True, blank=True)
+    account_class = models.CharField(choices=ACCOUNT_CLASS, max_length=20, blank=True)
+    type = models.CharField(choices=ACCOUNT_TYPE, max_length=20, null=True, blank=True)
 
     class Meta:
-        verbose_name = ("Account")
-        verbose_name_plural = ("Accounts")
+        verbose_name = "Account"
+        verbose_name_plural = "Accounts"
 
     def __str__(self):
         return self.code
@@ -51,8 +48,7 @@ class Account(BaseModel):
     def update_account(cls, account_id, **account_data):
         account = None
         try:
-            account = Account.objects.filter(
-                id=account_id).update(**account_data)
+            account = Account.objects.filter(id=account_id).update(**account_data)
         except Exception as e:
             print(f"Failed to update account. Error below: \n {e}")
         return account
@@ -61,8 +57,7 @@ class Account(BaseModel):
     def delete_account(cls, account_id, **account_data):
         account = None
         try:
-            account = Account.objects.filter(
-                id=account_id).delete(**account_data)
+            account = Account.objects.filter(id=account_id).delete(**account_data)
         except Exception as e:
             print(f"Failed to delete account. Error below: \n {e}")
         return account
@@ -84,14 +79,13 @@ class Ledger(BaseModel):
     description = models.TextField(null=False, blank=True)
     dr = models.FloatField(max_length=12, null=True, blank=True)
     cr = models.FloatField(max_length=12, null=True, blank=True)
-    agent_organization = models.CharField(
-        max_length=200, null=True, blank=True)
+    agent_organization = models.CharField(max_length=200, null=True, blank=True)
     type = models.CharField(max_length=200, null=True, blank=True)
     reference_number = models.CharField(max_length=20, null=False, blank=True)
 
     class Meta:
-        verbose_name = ("Ledger")
-        verbose_name_plural = ("Ledgers")
+        verbose_name = "Ledger"
+        verbose_name_plural = "Ledgers"
 
     def __str__(self):
         return self.account
@@ -104,7 +98,7 @@ class Ledger(BaseModel):
     @classmethod
     def create_ledger(cls, **kwargs):
         ledger = None
-        print(type(kwargs['cr']))
+        print(type(kwargs["cr"]))
         with transaction.atomic():
             ledger = Ledger.objects.create(**kwargs)
             if not ledger:
@@ -116,8 +110,7 @@ class Ledger(BaseModel):
     def delete_ledger(cls, ledger_id, **ledger_data):
         ledger = None
         try:
-            ledger = Ledger.objects.filter(
-                id=ledger_id).delete(**ledger_data)
+            ledger = Ledger.objects.filter(id=ledger_id).delete(**ledger_data)
         except Exception as e:
             print(f"Failed to delete ledger. Error below: \n {e}")
         return ledger
@@ -135,23 +128,31 @@ class Ledger(BaseModel):
             return
         trial_balance = []
         for account in accounts:
-            if account['account_type'] == 'cr':
-                entry = Ledger.objects.filter(account_code=account['account_code']).aggregate(
-                    cr=Sum(account['account_type']))
+            if account["account_type"] == "cr":
+                entry = Ledger.objects.filter(account_code=account["account_code"]).aggregate(
+                    cr=Sum(account["account_type"])
+                )
                 if entry:
-                    associated_account = Ledger.objects.filter(account_code=account['account_code']).values(
-                        'account__code', 'account__type', 'account__description', 'account__account_class').first()
+                    associated_account = (
+                        Ledger.objects.filter(account_code=account["account_code"])
+                        .values("account__code", "account__type", "account__description", "account__account_class")
+                        .first()
+                    )
                     balance = associated_account
-                    balance['cr'] = entry['cr']
+                    balance["cr"] = entry["cr"]
                     trial_balance.append(balance)
-            if account['account_type'] == 'dr':
-                entry = Ledger.objects.filter(account_code=account['account_code']).aggregate(
-                    dr=Sum(account['account_type']))
+            if account["account_type"] == "dr":
+                entry = Ledger.objects.filter(account_code=account["account_code"]).aggregate(
+                    dr=Sum(account["account_type"])
+                )
                 if entry:
-                    associated_account = Ledger.objects.filter(account_code=account['account_code']).values(
-                        'account__code', 'account__type', 'account__description', 'account__account_class').first()
+                    associated_account = (
+                        Ledger.objects.filter(account_code=account["account_code"])
+                        .values("account__code", "account__type", "account__description", "account__account_class")
+                        .first()
+                    )
                     balance = associated_account
-                    balance['dr'] = entry['dr']
+                    balance["dr"] = entry["dr"]
                     trial_balance.append(balance)
         return trial_balance
 
@@ -159,11 +160,11 @@ class Ledger(BaseModel):
     def update_ledger(cls, ledger_id, **ledger_data):
         ledger = None
         try:
-            ledger = Ledger.objects.filter(
-                id=ledger_id).update(**ledger_data)
+            ledger = Ledger.objects.filter(id=ledger_id).update(**ledger_data)
         except Exception as e:
             print(f"Failed to update ledger. Error below: \n {e}")
         return ledger
+
 
 """     @classmethod
     def delete_all_ledger(cls):

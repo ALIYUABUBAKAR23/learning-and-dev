@@ -3,8 +3,8 @@
 # # Create your models here.
 
 # class Status (models.Model):
-#     status = 
-    
+#     status =
+
 #     class Meta:
 #         verbose_name = _("")
 #         verbose_name_plural = _("s")

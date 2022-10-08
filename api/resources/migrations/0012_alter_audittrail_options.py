@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0011_audittrail'),
+        ("resources", "0011_audittrail"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='audittrail',
+            name="audittrail",
             options={},
         ),
     ]

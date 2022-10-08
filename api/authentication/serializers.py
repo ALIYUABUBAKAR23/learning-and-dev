@@ -2,13 +2,9 @@
 from django.db import transaction
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
-from django.conf import settings
 from rest_auth.models import TokenModel
-from rest_auth.utils import import_callable
-from rest_auth.serializers import UserDetailsSerializer as DefaultUserDetailsSerializer
 
 from .models import STATES, SEX, User
-from api.hr.models import Department
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -38,26 +34,26 @@ class CustomRegisterSerializer(RegisterSerializer):
     @transaction.atomic
     def save(self, request):
         user = super().save(request)
-        user.sex = self.data.get('sex')
-        user.middle_name = self.data.get('middle_name')
-        user.first_name = self.data.get('first_name')
-        user.last_name = self.data.get('last_name')
-        user.state_of_origin = self.data.get('state_of_origin')
-        user.address = self.data.get('address')
-        user.phone_number = self.data.get('phone_number')
-        user.twitter = self.data.get('twitter')
-        user.tnstagram = self.data.get('tnstagram')
-        user.linkedIn = self.data.get('linkedIn')
-        user.staff_id = self.data.get('staff_id')
-        user.commencement_date = self.data.get('commencement_date')
-        user.salary = self.data.get('salary')
-        user.role = self.data.get('role')
-        user.bank_name = self.data.get('bank_name')
-        user.bank_account = self.data.get('bank_account')
-        user.department_id = self.data.get('department_id')
-        user.spouse_name = self.data.get('spouse_name')
-        user.date_of_birth = self.data.get('date_of_birth')
-        user.is_married = self.data.get('is_married')
+        user.sex = self.data.get("sex")
+        user.middle_name = self.data.get("middle_name")
+        user.first_name = self.data.get("first_name")
+        user.last_name = self.data.get("last_name")
+        user.state_of_origin = self.data.get("state_of_origin")
+        user.address = self.data.get("address")
+        user.phone_number = self.data.get("phone_number")
+        user.twitter = self.data.get("twitter")
+        user.tnstagram = self.data.get("tnstagram")
+        user.linkedIn = self.data.get("linkedIn")
+        user.staff_id = self.data.get("staff_id")
+        user.commencement_date = self.data.get("commencement_date")
+        user.salary = self.data.get("salary")
+        user.role = self.data.get("role")
+        user.bank_name = self.data.get("bank_name")
+        user.bank_account = self.data.get("bank_account")
+        user.department_id = self.data.get("department_id")
+        user.spouse_name = self.data.get("spouse_name")
+        user.date_of_birth = self.data.get("date_of_birth")
+        user.is_married = self.data.get("is_married")
         user.save()
         return user
 
@@ -68,28 +64,28 @@ class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id',
-            'email',
-            'first_name',
-            'last_name',
-            'middle_name',
-            'sex',
-            'state_of_origin',
-            'address',
-            'phone_number',
-            'twitter',
-            'tnstagram',
-            'linkedIn',
-            'staff_id',
-            'commencement_date',
-            'salary',
-            'role',
-            'bank_name',
-            'bank_account',
-            'department',
-            'spouse_name',
-            'date_of_birth',
-            'is_married'
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "sex",
+            "state_of_origin",
+            "address",
+            "phone_number",
+            "twitter",
+            "tnstagram",
+            "linkedIn",
+            "staff_id",
+            "commencement_date",
+            "salary",
+            "role",
+            "bank_name",
+            "bank_account",
+            "department",
+            "spouse_name",
+            "date_of_birth",
+            "is_married",
         ]
 
 
@@ -100,12 +96,14 @@ class UserInfoSerializer(serializers.ModelSerializer):
 #     rest_auth_serializers.get('USER_DETAILS_SERIALIZER', DefaultUserDetailsSerializer)
 # )
 
+
 class TokenSerializer(serializers.ModelSerializer):
     user = UserInfoSerializer(read_only=True)
 
     class Meta:
         model = TokenModel
-        fields = ('key', 'user' )
+        fields = ("key", "user")
+
 
 """
 {

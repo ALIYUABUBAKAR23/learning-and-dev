@@ -1,6 +1,5 @@
 # Create your views here.
-from django.shortcuts import render
-from rest_framework import filters, status
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from datetime import datetime
@@ -50,9 +49,7 @@ class TasksAPI(APIView):
 
         if "start_date" in task_data:
             try:
-                task_data["start_date"] = datetime.fromisoformat(
-                    task_data["start_date"]
-                )
+                task_data["start_date"] = datetime.fromisoformat(task_data["start_date"])
             except ValueError:
                 print("Invalid isoformat string, but we are on it.")
                 pass

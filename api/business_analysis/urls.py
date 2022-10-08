@@ -4,5 +4,5 @@ from .views import ProjectAPI, SingleProjectAPI
 
 urlpatterns = [
     path("projects", ProjectAPI.as_view(), name="projects"),
-    path('projects/<int:pk>/', SingleProjectAPI),
+    path("projects/<int:pk>/", SingleProjectAPI),
 ]
