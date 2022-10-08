@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function prepare_db {
-    local MAX_RETRIES=15
+    local MAX_RETRIES=30
     local retries=1
     until pg_isready -q; do
         >&2 echo "Waiting for postgres... $retries host = $PGHOST"
