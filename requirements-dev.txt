@@ -1,0 +1,6 @@
+-r requirements.txt
+ipython==7.22.0
+coverage==5.5
+colorama==0.4.5
+flake8
+black
