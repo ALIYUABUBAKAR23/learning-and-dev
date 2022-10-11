@@ -61,7 +61,7 @@ function SignIn(props) {
       },
     };
     axios
-      .post("/rest-auth/login/", userCredentials, config)
+      .post("/dj-rest-auth/login/", userCredentials, config)
       .then((response) => {
         console.log("check our details:", response.data);
         const { key, user } = response.data;
@@ -73,11 +73,6 @@ function SignIn(props) {
           localStorage.setItem("user", JSON.stringify(user));
           window.location.href = "/";
         }
-        // if (user.should_reset_pass) {
-        //   history.push(`/reset-password/${user.id}`);
-        //   return;
-        //   "key": "adc9b440eb7660b61227943c8d6a8734f466bf22"
-        // }
       })
       .catch((error) => {
         console.log(error);
