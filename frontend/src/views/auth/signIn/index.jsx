@@ -28,7 +28,7 @@ import Cookies from "js-cookie";
 import moment from "moment";
 import axios from "axios";
 
-function SignIn() {
+function SignIn(props) {
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
@@ -52,28 +52,27 @@ function SignIn() {
   const [formErrors, setFormErrors] = useState(null);
 
   const onSubmit = () => {
+     const csrfToken = Cookies.get("csrftoken") || CSRF_TOKEN;
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
+        "X-CSRFToken": csrfToken,
       },
     };
     axios
-      .post("/rest-auth/login/", userCredentials, config)
+      .post("/dj-rest-auth/login/", userCredentials, config)
       .then((response) => {
         console.log("check our details:", response.data);
         const { key, user } = response.data;
         const inHalfADay = 0.5;
+
         if (key) {
           Cookies.set("token", key, { expires: inHalfADay });
+          //saving loggedInUserDetails in local storage
+          localStorage.setItem("user", JSON.stringify(user));
           window.location.href = "/";
         }
-        // if (user.should_reset_pass) {
-        //   history.push(`/reset-password/${user.id}`);
-        //   return;
-        //   "key": "adc9b440eb7660b61227943c8d6a8734f466bf22"
-        // }
       })
       .catch((error) => {
         console.log(error);

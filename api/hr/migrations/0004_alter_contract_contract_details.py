@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hr', '0003_alter_contract_contract_length'),
+        ("hr", "0003_alter_contract_contract_length"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='contract',
-            name='contract_details',
+            model_name="contract",
+            name="contract_details",
             field=models.TextField(blank=True, null=True),
         ),
     ]

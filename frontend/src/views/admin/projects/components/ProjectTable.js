@@ -90,6 +90,7 @@ export default function ColumnsTable(props) {
   const [projectData, setProjectData] = useState({});
   const [projectLead, setProjectLead] = useState([])
   const [owner, setOwner] = useState([])    
+  const [people, setPeople] = useState([]) 
 
   //delete to menu 
   const [value, setValue] = React.useState("");  
@@ -193,6 +194,7 @@ export default function ColumnsTable(props) {
     }
     setProjectLead(newState);
     setOwner(newState);
+    setPeople(newState);
   };
 
   const onSubmit = () => {
@@ -362,6 +364,24 @@ export default function ColumnsTable(props) {
                   classNamePrefix="select"
                 />
               </InputGroup>
+              {/* People field */}            
+              <InputGroup>
+                <InputLeftAddon children="People" borderRadius="16px" />
+                <HStack spacing={4}>
+                  {people?.map((user, index) => (
+                    <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
+                      {user.name}
+                    </Tag>
+                  ))}
+                </HStack>
+                <Select
+                  options={userList}
+                  isMulti
+                  onChange={onSelect}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                />
+              </InputGroup>
               {/* Expected Start Date field */}
               <InputGroup>
                 <InputLeftAddon children="Expected Start Date" borderRadius="16px" />
@@ -412,6 +432,11 @@ export default function ColumnsTable(props) {
               <InputGroup>
                 <InputLeftAddon children="Budget" borderRadius="16px" />
                 <Input name="current_budget" placeholder="Budget" borderRadius="16px" type="number" onChange={onChange}/>
+              </InputGroup>
+              {/* Income field */}
+              <InputGroup>
+                <InputLeftAddon children="Income" borderRadius="16px" />
+                <Input name="income" placeholder="Income" borderRadius="16px" type="number" onChange={onChange}/>
               </InputGroup>
               {/* Owner field */}            
               <InputGroup>

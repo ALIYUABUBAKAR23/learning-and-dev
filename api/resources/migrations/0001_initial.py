@@ -7,26 +7,39 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Inventory',
+            name="Inventory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=200, null=True)),
-                ('type', models.CharField(blank=True, max_length=200, null=True)),
-                ('date_of_purchase', models.DateField(blank=True)),
-                ('purchase_condition', models.CharField(blank=True, choices=[('Excellent', 'excellent'), ('Good', 'good'), ('Bad', 'bad')], max_length=10)),
-                ('current_condition', models.CharField(blank=True, choices=[('Excellent', 'excellent'), ('Good', 'good'), ('Bad', 'bad')], max_length=10)),
-                ('current_location', models.CharField(blank=True, max_length=200)),
-                ('model_number', models.CharField(blank=True, max_length=200)),
-                ('serial_number', models.CharField(blank=True, max_length=200)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(blank=True, max_length=200, null=True)),
+                ("type", models.CharField(blank=True, max_length=200, null=True)),
+                ("date_of_purchase", models.DateField(blank=True)),
+                (
+                    "purchase_condition",
+                    models.CharField(
+                        blank=True,
+                        choices=[("Excellent", "excellent"), ("Good", "good"), ("Bad", "bad")],
+                        max_length=10,
+                    ),
+                ),
+                (
+                    "current_condition",
+                    models.CharField(
+                        blank=True,
+                        choices=[("Excellent", "excellent"), ("Good", "good"), ("Bad", "bad")],
+                        max_length=10,
+                    ),
+                ),
+                ("current_location", models.CharField(blank=True, max_length=200)),
+                ("model_number", models.CharField(blank=True, max_length=200)),
+                ("serial_number", models.CharField(blank=True, max_length=200)),
             ],
             options={
-                'verbose_name': 'inventory',
-                'verbose_name_plural': 'inventory',
+                "verbose_name": "inventory",
+                "verbose_name_plural": "inventory",
             },
         ),
     ]

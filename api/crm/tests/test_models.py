@@ -34,27 +34,27 @@ class CustomerModelTest(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         cls.customer = Customer.create_customer(
-            first_name= first_name_1,
-            middle_name= middle_name_1,
-            last_name= last_name_1,
-            date_of_birth= date_of_birth_1,
-            address= address_1,
-            occupation= occupation_1,
-            company= company_1,
-            phone_number= phone_number_1,
-            email= email_1,
+            first_name=first_name_1,
+            middle_name=middle_name_1,
+            last_name=last_name_1,
+            date_of_birth=date_of_birth_1,
+            address=address_1,
+            occupation=occupation_1,
+            company=company_1,
+            phone_number=phone_number_1,
+            email=email_1,
         )
 
         Customer.create_customer(
-            first_name= first_name_2,
-            middle_name= middle_name_2,
-            last_name= last_name_2,
-            date_of_birth= date_of_birth_2,
-            address= address_2,
-            occupation= occupation_2,
-            company= company_2,
-            phone_number= phone_number_2,
-            email= email_2,
+            first_name=first_name_2,
+            middle_name=middle_name_2,
+            last_name=last_name_2,
+            date_of_birth=date_of_birth_2,
+            address=address_2,
+            occupation=occupation_2,
+            company=company_2,
+            phone_number=phone_number_2,
+            email=email_2,
         )
 
     def test_customer_has_correct_fields(self):
@@ -95,7 +95,7 @@ class CustomerModelTest(TestCase):
     def test_create_customer_method(self):
         # my_date_string = "Mar 11 2011 11:31AM"
 
-        # dob = datetime.strptime(date_of_birth_1, '%Y-%b-%d')        
+        # dob = datetime.strptime(date_of_birth_1, '%Y-%b-%d')
         customer = Customer.objects.get(id=1)
         dob = customer.date_of_birth.strftime("%Y-%m-%d")
         self.assertEqual(customer.first_name, first_name_1)
@@ -115,13 +115,13 @@ class CustomerModelTest(TestCase):
 
     def test_update_customer_method(self):
         customer_id = 1
-        customer = Customer.update_customer(customer_id, first_name='Kalalu')
+        customer = Customer.update_customer(customer_id, first_name="Kalalu")
         self.assertEqual(customer, 1)
 
     def test_delete_customer_method(self):
         customer_id = 1
         customer = Customer.delete_customer(customer_id)
-        self.assertEqual(customer, (1, {'crm.Customer': 1}))
+        self.assertEqual(customer, (1, {"crm.Customer": 1}))
 
     # def test_first_name_max_length(self):
     #     inventory = Inventory.objects.get(id=1)

@@ -7,57 +7,56 @@ from api.hr.models import Department
 from .managers import CustomUserManager
 
 STATES = (
-    ('Abia', 'abia'),
-    ('Adamawa', 'adamawa'),
-    ('Akwa Ibom', 'akwa Ibom'),
-    ('Anambra', 'anambra'),
-    ('Bauchi', 'bauchi'),
-    ('Bayelsa', 'bayelsa'),
-    ('Benue', 'benue'),
-    ('Borno', 'borno'),
-    ('Cross River', 'cross river'),
-    ('Delta', 'delta'),
-    ('Ebonyi', 'ebonyi'),
-    ('Edo', 'edo'),
-    ('Ekiti', 'ekiti'),
-    ('Enugu', 'enugu'),
-    ('Gombe', 'gombe'),
-    ('Imo', 'imo'),
-    ('Jigawa', 'jigawa'),
-    ('Kaduna', 'kaduna'),
-    ('Kano', 'kano'),
-    ('Katsina', 'katsina'),
-    ('Kebbi', 'kebbi'),
-    ('Kogi', 'kogi'),
-    ('Kwara', 'kwara'),
-    ('Lagos', 'lagos'),
-    ('Nasarawa', 'nasarawa'),
-    ('Niger', 'niger'),
-    ('Ogun', 'ogun'),
-    ('Ondo', 'ondo'),
-    ('Osun', 'osun'),
-    ('Oyo', 'oyo'),
-    ('Plateau', 'plateau'),
-    ('Rivers', 'rivers'),
-    ('Sokoto', 'sokoto'),
-    ('Taraba', 'taraba'),
-    ('Yobe', 'yobe'),
-    ('Zamfara', 'zamfara'),
+    ("Abia", "abia"),
+    ("Adamawa", "adamawa"),
+    ("Akwa Ibom", "akwa Ibom"),
+    ("Anambra", "anambra"),
+    ("Bauchi", "bauchi"),
+    ("Bayelsa", "bayelsa"),
+    ("Benue", "benue"),
+    ("Borno", "borno"),
+    ("Cross River", "cross river"),
+    ("Delta", "delta"),
+    ("Ebonyi", "ebonyi"),
+    ("Edo", "edo"),
+    ("Ekiti", "ekiti"),
+    ("Enugu", "enugu"),
+    ("Gombe", "gombe"),
+    ("Imo", "imo"),
+    ("Jigawa", "jigawa"),
+    ("Kaduna", "kaduna"),
+    ("Kano", "kano"),
+    ("Katsina", "katsina"),
+    ("Kebbi", "kebbi"),
+    ("Kogi", "kogi"),
+    ("Kwara", "kwara"),
+    ("Lagos", "lagos"),
+    ("Nasarawa", "nasarawa"),
+    ("Niger", "niger"),
+    ("Ogun", "ogun"),
+    ("Ondo", "ondo"),
+    ("Osun", "osun"),
+    ("Oyo", "oyo"),
+    ("Plateau", "plateau"),
+    ("Rivers", "rivers"),
+    ("Sokoto", "sokoto"),
+    ("Taraba", "taraba"),
+    ("Yobe", "yobe"),
+    ("Zamfara", "zamfara"),
 )
 
 SEX = (
-    ('Male', 'male'),
-    ('Female', 'female'),
+    ("Male", "male"),
+    ("Female", "female"),
 )
 
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_("email address"), unique=True)
     middle_name = models.CharField(max_length=200, null=True, blank=True)
     sex = models.CharField(choices=SEX, max_length=10, null=True, blank=True)
-    state_of_origin = models.CharField(
-        choices=STATES, max_length=20, null=True, blank=True)
+    state_of_origin = models.CharField(choices=STATES, max_length=20, null=True, blank=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     phone_number = models.CharField(max_length=14, null=True, blank=True)
     twitter = models.CharField(max_length=50, null=True, blank=True)
@@ -69,10 +68,9 @@ class User(AbstractUser):
     role = models.CharField(max_length=200, null=True, blank=True)
     bank_name = models.CharField(max_length=100, null=True, blank=True)
     bank_account = models.CharField(max_length=20, null=True, blank=True)
-    department = models.ForeignKey(
-        Department, null=True, on_delete=models.SET_NULL)
+    department = models.ForeignKey(Department, null=True, on_delete=models.SET_NULL)
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
@@ -80,9 +78,9 @@ class User(AbstractUser):
     spouse_name = models.CharField(blank=True, null=True, max_length=100)
     date_of_birth = models.DateField(blank=True, null=True)
     is_married = models.BooleanField(
-        _('marital status'),
+        _("marital status"),
         default=False,
-        help_text=_('Designates whether the user is married or not.'),
+        help_text=_("Designates whether the user is married or not."),
     )
 
     def __str__(self):
@@ -93,5 +91,18 @@ class User(AbstractUser):
         """
         This method fetches a users list of tasks using key word arguments i.e kwargs
         """
-        users = User.objects.filter(**kwargs).values("first_name","last_name","middle_name","id",)
+        users = User.objects.filter(**kwargs).values(
+            "first_name",
+            "last_name",
+            "middle_name",
+            "id",
+            "sex",
+            "state_of_origin",
+            "address",
+            "date_of_birth",
+            "department_id",
+            "department__name",
+            "phone_number",
+            "email",
+        )
         return users

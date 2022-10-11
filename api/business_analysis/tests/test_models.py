@@ -1,13 +1,11 @@
 from datetime import datetime
 from django.test import TestCase
-from django.db import models
-
-from django.db.models.deletion import SET_NULL
 
 from api.business_analysis.models import *
 from api.crm.models import Customer
 from api.authentication.models import User
 from api.hr.models import Department
+
 
 class ProjectModelTest(TestCase):
     @classmethod
@@ -47,53 +45,53 @@ class ProjectModelTest(TestCase):
             department_id="1",
             spouse_name="Bestie",
             date_of_birth="1991-01-01",
-            is_married=False    
+            is_married=False,
         )
 
         cls.project = Project.create_project(
-            name='Unit tests 1',
-            description='CRUD test 1',
+            name="Unit tests 1",
+            description="CRUD test 1",
             owner_id=1,
             actual_start_date="2022-08-03",
-            expected_start_date='2022-08-05',
+            expected_start_date="2022-08-05",
             actual_end_date="2022-08-05",
-            expected_end_date='2022-08-08',
+            expected_end_date="2022-08-08",
             estimated_cost=500000.00,
             actual_cost=450000.00,
             current_budget=300000.00,
             starting_budget=600000.00,
             project_lead_id=1,
-            location='Blessing Ville',
+            location="Blessing Ville",
         )
         Project.create_project(
-            name='Unit tests 2',
-            description='CRUD test 2',
+            name="Unit tests 2",
+            description="CRUD test 2",
             owner_id=1,
             actual_start_date="2022-08-03",
-            expected_start_date='2022-08-05',
+            expected_start_date="2022-08-05",
             actual_end_date="2022-08-05",
-            expected_end_date='2022-08-08',
+            expected_end_date="2022-08-08",
             estimated_cost=500000.00,
             actual_cost=450000.00,
             current_budget=300000.00,
             starting_budget=600000.00,
             project_lead_id=1,
-            location='Blessing Ville',
+            location="Blessing Ville",
         )
         Project.create_project(
-            name='Unit tests 3',
-            description='CRUD test 3',
+            name="Unit tests 3",
+            description="CRUD test 3",
             owner_id=1,
             actual_start_date="2022-08-03",
-            expected_start_date='2022-08-05',
+            expected_start_date="2022-08-05",
             actual_end_date="2022-08-05",
-            expected_end_date='2022-08-08',
+            expected_end_date="2022-08-08",
             estimated_cost=500000.00,
             actual_cost=450000.00,
             current_budget=300000.00,
             starting_budget=600000.00,
             project_lead_id=1,
-            location='Blessing Ville',
+            location="Blessing Ville",
         )
 
     def test_project_has_correct_fields(self):
@@ -142,7 +140,7 @@ class ProjectModelTest(TestCase):
 
     def test_create_project_method(self):
         project = Project.objects.get(id=1)
-        self.assertEqual(project.name, 'Unit tests 1')
+        self.assertEqual(project.name, "Unit tests 1")
 
     def test_get_project_list_method(self):
         # project_id=1
@@ -151,13 +149,13 @@ class ProjectModelTest(TestCase):
 
     def test_update_project_method(self):
         project_id = 1
-        project = Project.update_project(project_id, description='See hafa')
+        project = Project.update_project(project_id, description="See hafa")
         self.assertEqual(project, 1)
 
     def test_delete_project_method(self):
         project_id = 1
         project = Project.delete_project(project_id)
-        self.assertEqual(project, (1, {'business_analysis.Project': 1}))
+        self.assertEqual(project, (1, {"business_analysis.Project": 1}))
 
     # def test_first_name_max_length(self):
     #     inventory = Inventory.objects.get(id=1)
@@ -173,5 +171,3 @@ class ProjectModelTest(TestCase):
     #     inventory = Inventory.objects.get(id=1)
     #     # This will also fail if the urlconf is not defined.
     #     self.assertEqual(author.get_absolute_url(), '/catalog/author/1')
-
-

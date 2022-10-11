@@ -1,0 +1,102 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'chore/github-actions'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: checkout repo
+        uses: actions/checkout@v2.3.4
+      -
+        name: Extract branch name
+        shell: bash
+        run: |
+          BRANCH_NAME="##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+          echo ${BRANCH_NAME/\//-}
+        id: extract_branch
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/rc-erp:${{ steps.extract_branch.outputs.branch }}
+
+      # condition to create ssh configuration based on branch
+      -
+        name: Configuration for dev branch
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          echo "SSH_HOST=${{ secrets.SSH_HOST_DEV }}" >> $GITHUB_ENV
+          echo "SSH_KEY=${{ secrets.SSH_KEY_DEV }}" >> $GITHUB_ENV
+          echo "SSH_USER=${{ secrets.SSH_USER_DEV }}" >> $GITHUB_ENV
+
+      -
+        name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo ${{ env.SSH_KEY }} | base64 -d > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+          cat >> ~/.ssh/config <<END
+          Host rc_server
+            HostName ${{ env.SSH_HOST }}
+            User ${{ env.SSH_USER }}
+            IdentityFile ~/.ssh/id_rsa
+            StrictHostKeyChecking no
+          END
+      -
+        name: Redeploy app
+        run: |
+          BRANCH_NAME=${{ steps.extract_branch.outputs.branch }}
+          GH_TOKEN=${{ secrets.GH_TOKEN }}
+          GH_USERNAME=${{ secrets.GH_USERNAME }}
+          GH_HANDLE=${{ secrets.GH_HANDLE }}
+          DOCKER_REPO=${{ secrets.DOCKERHUB_USERNAME }}
+          
+          ssh rc_server << HERE
+            export BRANCH_NAME=$BRANCH_NAME
+            export GH_TOKEN=$GH_TOKEN
+            export GH_USERNAME=$GH_USERNAME
+            export GH_HANDLE=$GH_HANDLE
+            export DOCKER_REPO=$DOCKER_REPO
+            export DIR_NAME=erp        
+          
+            if [ ! -f "fetch" ]
+            then
+              curl -sSLfo ./fetch https://github.com/gruntwork-io/fetch/releases/download/v0.4.5/fetch_linux_amd64
+              sudo chmod +x fetch
+            fi
+
+            ./fetch --repo="https://github.com/${GH_HANDLE}/devops" --branch="main" --source-path=/erp --github-oauth-token="${GH_TOKEN}" ./erp || echo "failed to pull from devops"
+          
+            if [ -d erp ]; then cp -f erp/* .; rm -fr erp; fi
+            chmod +x redeploy.sh
+            mkdir -p /tmp/data/nginx >/dev/null 2>&1
+            mkdir -p /tmp/data/certbot/conf >/dev/null 2>&1
+            mkdir -p /tmp/data/certbot/www >/dev/null 2>&1
+            mkdir -p /tmp/data/db >/dev/null 2>&1
+            mkdir -p /tmp/app-static >/dev/null 2>&1
+          
+            if [ -f "nginx.conf" ]
+            then
+                mv nginx.conf /tmp/data/nginx/
+            fi
+            BRANCH_NAME=$BRANCH_NAME DOCKER_REPO=$DOCKER_REPO ./redeploy.sh
+          HERE

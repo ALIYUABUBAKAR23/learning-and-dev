@@ -15,24 +15,53 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Task',
+            name="Task",
             fields=[
-                ('id', models.IntegerField(db_index=True, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(blank=True, max_length=200)),
-                ('description', models.TextField(blank=True)),
-                ('comment', models.TextField(blank=True)),
-                ('assigned_to', models.JSONField(blank=True, null=True)),
-                ('start_date', models.DateTimeField(blank=True, null=True)),
-                ('due_date', models.DateTimeField(blank=True, null=True)),
-                ('status', models.CharField(blank=True, choices=[('Open', 'open'), ('Pending', 'pending'), ('Suspended', 'suspended'), ('Postponed', 'postponed'), ('Completed', 'completed'), ('Incomplete', 'incomplete'), ('Cancelled', 'cancelled')], max_length=200, null=True)),
-                ('priority', models.CharField(blank=True, choices=[('High', 'high'), ('Medium', 'medium'), ('Low', 'low')], max_length=200, null=True)),
-                ('assigned_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ("id", models.IntegerField(db_index=True, primary_key=True, serialize=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(blank=True, max_length=200)),
+                ("description", models.TextField(blank=True)),
+                ("comment", models.TextField(blank=True)),
+                ("assigned_to", models.JSONField(blank=True, null=True)),
+                ("start_date", models.DateTimeField(blank=True, null=True)),
+                ("due_date", models.DateTimeField(blank=True, null=True)),
+                (
+                    "status",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("Open", "open"),
+                            ("Pending", "pending"),
+                            ("Suspended", "suspended"),
+                            ("Postponed", "postponed"),
+                            ("Completed", "completed"),
+                            ("Incomplete", "incomplete"),
+                            ("Cancelled", "cancelled"),
+                        ],
+                        max_length=200,
+                        null=True,
+                    ),
+                ),
+                (
+                    "priority",
+                    models.CharField(
+                        blank=True,
+                        choices=[("High", "high"), ("Medium", "medium"), ("Low", "low")],
+                        max_length=200,
+                        null=True,
+                    ),
+                ),
+                (
+                    "assigned_by",
+                    models.ForeignKey(
+                        null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'task',
-                'verbose_name_plural': 'tasks',
+                "verbose_name": "task",
+                "verbose_name_plural": "tasks",
             },
         ),
     ]

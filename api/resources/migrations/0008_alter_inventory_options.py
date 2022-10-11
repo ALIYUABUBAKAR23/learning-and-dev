@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0007_merge_20220812_2225'),
+        ("resources", "0007_merge_20220812_2225"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='inventory',
-            options={'verbose_name': 'inventory', 'verbose_name_plural': 'inventories'},
+            name="inventory",
+            options={"verbose_name": "inventory", "verbose_name_plural": "inventories"},
         ),
     ]

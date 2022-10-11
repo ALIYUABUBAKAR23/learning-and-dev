@@ -6,6 +6,7 @@ Django==3.2.6
 django-cors-headers
 django-allauth==0.51.0
 djangorestframework
+drf-api-logger==1.1.11
 django-rest-auth
 django-webpack-dev-server==1.0.0
 Faker==14.1.0

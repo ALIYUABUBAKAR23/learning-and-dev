@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  db:
+    image: postgres:14-alpine
+    volumes:
+      - /tmp/data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME:-rc-erp}
+      - POSTGRES_USER=${PGUSER:-postgres}
+      - POSTGRES_PASSWORD=${PGPASSWORD:-postgres}
+  app:
+    build: .
+    image: ${DOCKER_REPO:-rightclicksolutions}/rc-erp:${BRANCH_NAME:-develop}
+    volumes:
+      - .:/code
+
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=${DB_NAME:-rc-erp}
+      - PGUSER=${PGUSER:-postgres}
+      - PGPASSWORD=${PGPASSWORD:-postgres}
+      - PGHOST=${PGHOST:-db}
+      - UMS_URL=${UMS_URL:-https://api-dev.emmsportal.com/ums}
+    depends_on:
+      - db

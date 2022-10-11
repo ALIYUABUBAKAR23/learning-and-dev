@@ -34,29 +34,26 @@ class BroadcastModelTest(TestCase):
             # department_id="1",
             spouse_name="Bestie",
             date_of_birth="1991-01-01",
-            is_married=False
+            is_married=False,
         )
-        Department.create_department(
-            name='Devs',
-            description='Dev team'
-        )
+        Department.create_department(name="Devs", description="Dev team")
         cls.broadcast = Broadcast.create_broadcast(
-            title='Unit tests 1',
-            message='CRUD test 1',
+            title="Unit tests 1",
+            message="CRUD test 1",
             sender_id=1,
             reciever_id=1,
             file="good",
         )
         Broadcast.create_broadcast(
-            title='Unit tests 2',
-            message='CRUD test 2',
+            title="Unit tests 2",
+            message="CRUD test 2",
             sender_id=1,
             reciever_id=1,
             file="good",
         )
         Broadcast.create_broadcast(
-            title='Unit tests 3',
-            message='CRUD test 3',
+            title="Unit tests 3",
+            message="CRUD test 3",
             sender_id=1,
             reciever_id=1,
             file="good",
@@ -85,11 +82,11 @@ class BroadcastModelTest(TestCase):
 
     def test_create_broadcast_method(self):
         broadcast = Broadcast.objects.get(id=1)
-        self.assertEqual(broadcast.title, 'Unit tests 1')
-        self.assertEqual(broadcast.message, 'CRUD test 1')
+        self.assertEqual(broadcast.title, "Unit tests 1")
+        self.assertEqual(broadcast.message, "CRUD test 1")
         self.assertEqual(broadcast.sender_id, 1)
         self.assertEqual(broadcast.reciever_id, 1)
-        self.assertEqual(broadcast.file, 'good')
+        self.assertEqual(broadcast.file, "good")
 
     def test_get_broadcast_list_method(self):
         # broadcast_id=1
@@ -98,13 +95,13 @@ class BroadcastModelTest(TestCase):
 
     def test_update_broadcast_method(self):
         broadcast_id = 1
-        broadcast = Broadcast.update_broadcast(broadcast_id, message='See hafa')
+        broadcast = Broadcast.update_broadcast(broadcast_id, message="See hafa")
         self.assertEqual(broadcast, 1)
 
     def test_delete_broadcast_method(self):
         broadcast_id = 1
         broadcast = Broadcast.delete_broadcast(broadcast_id)
-        self.assertEqual(broadcast, (1, {'broadcast.Broadcast': 1}))
+        self.assertEqual(broadcast, (1, {"broadcast.Broadcast": 1}))
 
     # def test_first_name_max_length(self):
     #     broadcast = Broadcast.objects.get(id=1)
