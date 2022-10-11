@@ -52,11 +52,12 @@ function SignIn(props) {
   const [formErrors, setFormErrors] = useState(null);
 
   const onSubmit = () => {
+     const csrfToken = Cookies.get("csrftoken") || CSRF_TOKEN;
     const config = {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
+        "X-CSRFToken": csrfToken,
       },
     };
     axios
