@@ -30,8 +30,14 @@ import toast from 'react-hot-toast';
 import {AiFillCaretDown} from "react-icons/ai";
 
 export default function Banner(props) {
-  const { onDelete, onEdit, ...rest } = props;
-  
+  const {
+    editData,
+    setProjectToEdit,
+    onEdit,
+    setProjectForDelete,
+    onDelete,
+    ...rest
+  } = props;  
   const textColor = useColorModeValue("secondaryGray.500", "white");
   const textHover = useColorModeValue(
     { color: "secondaryGray.900", bg: "unset" },
@@ -89,31 +95,36 @@ export default function Banner(props) {
         borderRadius='20px'
         p='15px'>
         <MenuItem
-          transition='0.2s linear'
+          onClick={() => setProjectToEdit(editData)}
+          transition="0.2s linear"
           color={textColor}
           _hover={textHover}
-          p='0px'
-          borderRadius='8px'
+          p="0px"
+          borderRadius="8px"
           _active={{
             bg: "transparent",
           }}
           _focus={{
             bg: "transparent",
           }}
-          mb='10px'
-          onClick={onEdit}
-          >
-          <Flex align='center'>
-            <Icon as={MdOutlinePerson} h='16px' w='16px' me='8px' />
-            <Text fontSize='sm' fontWeight='400'>
+          mb="10px"
+        >
+          <Flex align="center">
+            <Icon as={MdOutlinePerson} h="16px" w="16px" me="8px" />
+            <Text fontSize="sm" fontWeight="400">
               Edit
             </Text>
           </Flex>
         </MenuItem>
+        
         <MenuItem
-          transition='0.2s linear'
-          p='0px'
-          borderRadius='8px'
+          onClick={() => {
+            onDelete();
+            setProjectForDelete(editData);
+          }}
+          transition="0.2s linear"
+          p="0px"
+          borderRadius="8px"
           color={textColor}
           _hover={textHover}
           _active={{
@@ -122,12 +133,11 @@ export default function Banner(props) {
           _focus={{
             bg: "transparent",
           }}
-          mb='10px'
-          onClick={onDelete}         
-          >
-          <Flex align='center'>
-            <Icon as={MdOutlineCardTravel} h='16px' w='16px' me='8px' />
-            <Text fontSize='sm' fontWeight='400'>
+          mb="10px"
+        >
+          <Flex align="center">
+            <Icon as={MdOutlineCardTravel} h="16px" w="16px" me="8px" />
+            <Text fontSize="sm" fontWeight="400">
               Delete
             </Text>
           </Flex>
