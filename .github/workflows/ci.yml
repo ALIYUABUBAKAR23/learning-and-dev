@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'office_deploy'
       - 'chore/github-actions'
 
 jobs:
@@ -47,6 +48,14 @@ jobs:
           echo "SSH_HOST=${{ secrets.SSH_HOST_DEV }}" >> $GITHUB_ENV
           echo "SSH_KEY=${{ secrets.SSH_KEY_DEV }}" >> $GITHUB_ENV
           echo "SSH_USER=${{ secrets.SSH_USER_DEV }}" >> $GITHUB_ENV
+
+      -
+        name: Configuration for office_deploy branch
+        if: ${{ github.ref == 'refs/heads/office_deploy' }}
+        run: |
+          echo "SSH_HOST=${{ secrets.SSH_HOST_LEX }}" >> $GITHUB_ENV
+          echo "SSH_KEY=${{ secrets.SSH_KEY_LEX }}" >> $GITHUB_ENV
+          echo "SSH_USER=${{ secrets.SSH_USER_LEX }}" >> $GITHUB_ENV
 
       -
         name: Configure SSH
