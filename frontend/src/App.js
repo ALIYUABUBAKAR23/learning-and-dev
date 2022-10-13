@@ -30,9 +30,9 @@ function App() {
   const loggedInUser = getUser();
 
   
-  // if (!token) {
-  //   return <SignIn />;
-  // }
+   if (!token) {
+     return <SignIn />;
+   }
 
   return (
       <UserContextProvider value={loggedInUser}> 
