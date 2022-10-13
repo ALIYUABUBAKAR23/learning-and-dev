@@ -1,16 +1,4 @@
-//Issue: projectDetails is undefined. 
-
 import {
-    Flex,
-    Table,
-    Icon,
-    Tbody,
-    Td,
-    Text,
-    Th,
-    Thead,
-    Tr,
-    useColorModeValue,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -32,22 +20,11 @@ import {
   } from "@chakra-ui/react";
   import { Input } from "@chakra-ui/react";
   import React, { useEffect, useMemo, useState } from "react";
-  import {
-    useGlobalFilter,
-    usePagination,
-    useSortBy,
-    useTable,
-  } from "react-table";
+
   import Select from 'react-select';
-  // Custom components
-  import Card from "../../../../components/card/Card";
-  import Menu from "../../../../components/menu/ProjectTableMenu";
-  
+
   // Assets
-  import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
-  import APIClient from "../../../../lib/APIClient";
   import { CalendarIcon, CheckIcon, PhoneIcon, PlusSquareIcon } from "@chakra-ui/icons";
-  import { PersonIcon } from "../../../../components/icons/Icons";
   import axios from "axios";
   axios.defaults.withCredentials = true;
   import {baseUrl} from "../../../../utility/index";
@@ -60,41 +37,65 @@ import {
     const { 
       isOpen, 
       onClose, 
-      targetProject,
-      editProject,
+      projectToEdit,
       setProjectToEdit,
       onSelect,
       onChange,
       userList,
+      getProjects,
       onOptionSelect,
-      onSubmit
     } = props;
 
 
     const [formErrors, setFormErrors] = useState(null);
-    const [projectData, setProjectData] = useState({});
     const [projectLead, setProjectLead] = useState([])
     const [owner, setOwner] = useState([])  
     const [people, setPeople] = useState([])  
 
     const [projectDetails, setProjectDetails] = useState({});
     const [updatedProjectDetails, setUpdatedProjectDetails] = useState({});
+
+    const updateProject = (data) =>{
+      let projectData = { ...data};
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
+          'authorization':`Token ${Cookies.get('token')}`,
+        },
+      };
   
+      axios
+        .put(`${baseUrl}business_analysis/projects/${projectData.id}/`, projectData, {config})
+        .then(() => {
+          onClose();
+          getProjects();
+          toast.success(`Updated Successfully`);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error('Project Not Edited!');
+        });
+  }
+   
     useEffect(() => {
-      setProjectDetails(editProject);
-    }, [editProject]);
-  
+      setProjectDetails(projectToEdit || "");
+    }, [projectToEdit]);
+    
     useEffect(() => {
-      setUpdatedProjectDetails(projectDetails || editProject);
+      setUpdatedProjectDetails(projectDetails || projectToEdit);
     }, [projectDetails]);
   
   
+
     const handleChange = handleWidgetChange2(
       setProjectDetails,
       setUpdatedProjectDetails,
       projectDetails,
       updatedProjectDetails
     );
+
 /* 
     const onSelect = (event) => {
       console.log('see the event: ', event);
@@ -181,7 +182,7 @@ import {
                   placeholder="Name"
                   borderRadius="16px"
                   onChange={handleChange}
-                  //defaultValue ={projectDetails.name}
+                  defaultValue ={projectDetails.name}
                 />
               </InputGroup>
               {/* Description field */}
@@ -192,7 +193,7 @@ import {
                   isRequired
                   name="description" 
                   placeholder='Enter A Brief Or Detailed Description Of The Task' 
-                  //defaultValue ={projectDetails.description}
+                  defaultValue ={projectDetails.description}
                   onChange={handleChange}
                   />
                 <InputRightElement
@@ -217,7 +218,7 @@ import {
                   onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"                  
-                  //defaultValue={projectDetails.project_lead}
+                  defaultValue={projectDetails.project_lead}
                 />
               </InputGroup>
               {/* People field */}            
@@ -237,7 +238,7 @@ import {
                   onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"                  
-                  //defaultValue={projectDetails.people}
+                  defaultValue={projectDetails.people}
                 />
               </InputGroup>
               {/* Expected Start Date field */}
@@ -248,7 +249,7 @@ import {
                   name="actual_start_date" placeholder="Start Date" 
                   borderRadius="16px" type="date" 
                   onChange={handleChange}
-                  //defaultValue={projectDetails.expected_start_date}
+                  defaultValue={projectDetails.expected_start_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -263,7 +264,7 @@ import {
                   name="expected_start_date" placeholder="Start Date" 
                   borderRadius="16px" type="date"                 
                   onChange={handleChange}
-                  //defaultValue={projectDetails.actual_start_date}
+                  defaultValue={projectDetails.actual_start_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -276,7 +277,7 @@ import {
                 <Input isRequired name="expected_end_date" placeholder="Expected End Date" 
                   borderRadius="16px" type="date" 
                   onChange={handleChange}
-                  //defaultValue={projectDetails.expected_end_date}
+                  defaultValue={projectDetails.expected_end_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -289,7 +290,7 @@ import {
                 <Input isRequired name="actual_end_date" placeholder="Actual End Date" 
                   borderRadius="16px" type="date" 
                   onChange={handleChange}
-                  //defaultValue={projectDetails.actual_end_date}
+                  defaultValue={projectDetails.actual_end_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -304,7 +305,7 @@ import {
                   name="actual_cost" placeholder="Actual Cost" borderRadius="16px" 
                   type="number" 
                   onChange={handleChange}
-                  //defaultValue={projectDetails.actual_cost}
+                  defaultValue={projectDetails.actual_cost}
                   />
               </InputGroup>
               {/*Estimated Cost field */}
@@ -315,7 +316,7 @@ import {
                   name="estimated_cost" placeholder="Estimated Cost" borderRadius="16px" 
                   type="number" 
                   onChange={handleChange}
-                  //defaultValue={projectDetails.estimated_cost}
+                  defaultValue={projectDetails.estimated_cost}
                   />
               </InputGroup>              
               {/* Budget field */}
@@ -326,7 +327,7 @@ import {
                   name="current_budget" placeholder="Budget" borderRadius="16px" 
                   type="number" 
                   onChange={handleChange}
-                  //defaultValue ={projectDetails.current_budget}
+                  defaultValue ={projectDetails.current_budget}
                   />
               </InputGroup>
               {/* Income field */}
@@ -337,7 +338,7 @@ import {
                   name="income" placeholder="Income" borderRadius="16px" 
                   type="number" 
                   onChange={handleChange}
-                  //defaultValue={projectDetails.income}
+                  defaultValue={projectDetails.income}
                   />
               </InputGroup>
               {/* Owner field */}            
@@ -357,7 +358,7 @@ import {
                   onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"
-                  //defaultValue ={projectDetails.owner}
+                  defaultValue ={projectDetails.owner}
                 />
               </InputGroup>
               {/* Location field */}
@@ -367,7 +368,7 @@ import {
                   isRequired
                   name="location" placeholder='Enter Location of project' 
                   onChange={onChange}
-                  //defaultValue ={projectDetails.location}
+                  defaultValue ={projectDetails.location}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -377,12 +378,16 @@ import {
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="brand" mr={3} onClick={onClose}>
+            <Button colorScheme="brand" mr={3} 
+              onClick={() => {
+                setProjectToEdit(null);
+                onClose();
+              }}              >
               Close
             </Button>
             <Button variant="ghost" 
                     onClick={() => {
-                      onSubmit(projectDetails)
+                      updateProject(projectDetails)
                     }}                    
             >Update</Button>
           </ModalFooter>

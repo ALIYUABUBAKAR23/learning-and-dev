@@ -9,22 +9,8 @@ import {
   Thead,
   Tr,
   useColorModeValue,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Button,
-  Stack,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Textarea,
-  // Select,
-  InputLeftAddon,
   HStack,
   Tag,
   FormControl,
@@ -52,7 +38,7 @@ import toast from 'react-hot-toast';
 
 import DeleteModal from "../components/DeleteModal";
 import EditModal from "../components/EditModal";
-import CreateModal from "../components/ProjectModal";
+import CreateModal from "../components/CreateModal";
 
 export default function ColumnsTable(props) {
   const { columnsData, tableData, setProjectList } = props;
@@ -94,8 +80,6 @@ export default function ColumnsTable(props) {
   const [projectToDelete, setProjectToDelete] = useState();
 
 
-  //delete to menu 
-  const [value, setValue] = React.useState("");  
 
   const [formErrors, setFormErrors] = useState(null);
   const [userList, setUserList] = useState([])
@@ -142,54 +126,6 @@ export default function ColumnsTable(props) {
       });
   }
 
-  const createProject = (projectData)  =>{
-
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
-      },
-    };
-
-    axios
-      .post(`${baseUrl}business_analysis/projects`, projectData, config)
-      .then((response) => {
-        onCreateClose();
-        getProjects();
-        console.log("check our response:", response.data);
-        toast.success(`${response.data.message}`);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Project Not created!');
-      });
-  }
-    
-  const updateProject = (projectData) =>{
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
-      },
-    };
-
-    axios
-      .put(`${baseUrl}business_analysis/projects/${projectData.id}/`, projectData, {config})
-      .then(() => {
-        onEditClose();
-        getProjects();
-        toast.success(`Updated Successfully`);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Project Not Edited!');
-      });
-}
-
   const setEditProject = (projectData) => {
     console.log(projectData)
     setProjectToEdit(projectData);
@@ -231,16 +167,6 @@ export default function ColumnsTable(props) {
     setProjectLead(newState);
     setOwner(newState);
     setPeople(newState);
-  };
-
-  const onSubmitCreate = (projectData) => {
-    const project = { ...projectData };
-    createProject(project)
-  };
-
-  const onSubmitEdit = (projectData) => {
-    const project = { ...projectData };
-    updateProject(project)
   };
 
   useEffect(() => {
@@ -330,10 +256,6 @@ export default function ColumnsTable(props) {
                         onEdit={onEditOpen}
                         onDelete={onDeleteOpen}
                       />
-                      {/*   <Menu onDelete={onDeleteOpen} onEdit={onEditOpen}/>
-                       <DeleteModal isOpen={isDeleteOpen} onClose={onDeleteClose} targetProject={targetP}  setProjectList={setProjectList}/>                   
-                        <EditModal isOpen={isEditOpen} onClose={onEditClose} targetProject={targetP} setProjectList={setProjectList}/>
-                      */}
                       </Flex>
                     );                    
                   } else {
@@ -361,8 +283,6 @@ export default function ColumnsTable(props) {
           })}
         </Tbody>
       </Table>
-      {/* <CreateModal isOpen={isCreateOpen} onClose={onCreateClose} action={onSubmit}/>                   */}
-
 
       <DeleteModal
         projectId={projectToDelete}
@@ -375,13 +295,13 @@ export default function ColumnsTable(props) {
       <EditModal 
         isOpen={isEditOpen} 
         onClose={onEditClose} 
-        editProject={projectToEdit}
+        projectToEdit={projectToEdit}
         setProjectToEdit={setEditProject}
         onSelect={onSelect}
         userList={userList}
-        onSubmit={onSubmitEdit}
         onChange={onChange}
         onOptionSelect={onOptionSelect}
+        getProjects={getProjects}
       />
       <CreateModal
         isOpen={isCreateOpen}
@@ -391,11 +311,8 @@ export default function ColumnsTable(props) {
         userList={userList}
         onChange={onChange}
         onOptionSelect={onOptionSelect}
-        onSubmit={onSubmitCreate}
+        getProjects={getProjects}
       />
-      
-      {/* <DeleteModal isOpen={isDeleteOpen} onClose={onDeleteClose} targetProject={targetP}  setProjectList={setProjectList}/>                    */}
-
     </Card>
   );
 }

@@ -1,14 +1,4 @@
 import {
-    Flex,
-    Table,
-    Icon,
-    Tbody,
-    Td,
-    Text,
-    Th,
-    Thead,
-    Tr,
-    useColorModeValue,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -58,15 +48,13 @@ import {
 
     //const { isOpen, onClose, action} = props;
     const {
-      //onSelect,
+      onSelect,
       userList,
-      //onChange,
       onOptionSelect,
-      onSubmit,
-      setProjectToEdit,
       onOpen,
       isOpen,
       onClose,
+      getProjects
     } = props;
   
 
@@ -80,36 +68,39 @@ import {
     const [updatedProjectDetails, setUpdatedProjectDetails] = useState({});
   
 
-    const onChange = (event) => {
-      const { name, value } = event.target;
-      const project = { ...projectData };
-      project[name] = value;
-      setProjectData(project);
-      setFormErrors(null);
-    };
+    const onSubmit = (data)  =>{
+      let projectData = {...data}
 
-    const onSelect = (event) => {
-      console.log('see the event: ', event);
-      var newState;
-      if (event.length > 0) {
-        event?.map((input)=> {
-          newState = [...projectLead, {id: input.value ? input.value : null, name: input.label ? input.label : null}];
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
+          'authorization':`Token ${Cookies.get('token')}`,
+        },
+      };
+  
+      axios
+        .post(`${baseUrl}business_analysis/projects`, projectData, config)
+        .then((response) => {
+          onClose();
+          getProjects();
+          console.log("check our response:", response.data);
+          toast.success(`${response.data.message}`);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error('Project Not created!');
         });
-      }else{
-        newState = [];
-      }
-      setProjectLead(newState);
-      setOwner(newState);
-    };
+    }  
 
-/* 
-    const handleChange = handleWidgetChange2(
-      setProjectDetails,
+    const onChange = handleWidgetChange2(
+      setProjectData,
       setUpdatedProjectDetails,
-      projectDetails,
+      projectData,
       updatedProjectDetails
     );
- */
+
     return (
       <Modal
       closeOnOverlayClick={false}
