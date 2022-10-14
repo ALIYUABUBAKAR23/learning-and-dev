@@ -1,14 +1,4 @@
 import {
-    Flex,
-    Table,
-    Icon,
-    Tbody,
-    Td,
-    Text,
-    Th,
-    Thead,
-    Tr,
-    useColorModeValue,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -51,53 +41,97 @@ import {
   import {baseUrl} from "../../../../utility/index";
   import Cookies from "js-cookie";
   import toast from 'react-hot-toast';
+  import { handleWidgetChange2 } from "../../../../utility";
+
   
-  export default function CreateModal(props) {
+  function CreateModal(props) {
 
-    const { isOpen, onClose, action} = props;
-
+    //const { isOpen, onClose, action} = props;
+    const {
+      onSelect,
+      userList,
+      onOptionSelect,
+      onOpen,
+      isOpen,
+      onClose,
+      getProjects
+    } = props;
+  
 
     const [formErrors, setFormErrors] = useState(null);
     const [projectData, setProjectData] = useState({});
     const [projectLead, setProjectLead] = useState([])
-    const [userList, setUserList] = useState([])
-    const [owner, setOwner] = useState([])    
+    //const [userList, setUserList] = useState([])
+    const [owner, setOwner] = useState([])   
+    const [people, setPeople] = useState([]) 
+    const [projectDetails, setProjectDetails] = useState({});
+    const [updatedProjectDetails, setUpdatedProjectDetails] = useState({});
+  
 
-    const onChange = (event) => {
-      const { name, value } = event.target;
-      const project = { ...projectData };
-      project[name] = value;
-      setProjectData(project);
-      setFormErrors(null);
-    };
+    const onSubmit = (data)  =>{
+      let projectData = {...data}
 
-    const onSelect = (event) => {
-      console.log('see the event: ', event);
-      var newState;
-      if (event.length > 0) {
-        event?.map((input)=> {
-          newState = [...projectLead, {id: input.value ? input.value : null, name: input.label ? input.label : null}];
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
+          'authorization':`Token ${Cookies.get('token')}`,
+        },
+      };
+  
+      axios
+        .post(`${baseUrl}business_analysis/projects`, projectData, config)
+        .then((response) => {
+          onClose();
+          getProjects();
+          console.log("check our response:", response.data);
+          toast.success(`${response.data.message}`);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error('Project Not created!');
         });
-      }else{
-        newState = [];
-      }
-      setProjectLead(newState);
-      setOwner(newState);
-    };
+    }  
 
+    const onChange = handleWidgetChange2(
+      setProjectData,
+      setUpdatedProjectDetails,
+      projectData,
+      updatedProjectDetails
+    );
 
     return (
-      <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xl" onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
+      <Modal
+      closeOnOverlayClick={false}
+      isOpen={isOpen}
+      size="xl"
+      onClose={() => {
+        onClose();
+      }}
+    >
+      <ModalOverlay />
+      <ModalContent>
           <ModalHeader>Create A New Project</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={4}>
+                {/* Id field */}
+                <InputGroup>
+                <InputLeftAddon children="Id" borderRadius="16px" />
+                <Input
+                  name="id"
+                  type="number"
+                  placeholder="Id"
+                  borderRadius="16px"
+                  onChange={onChange}
+                />
+              </InputGroup>
               {/* Name field */}
               <InputGroup>
                 <InputLeftAddon children="Name" borderRadius="16px" />
                 <Input
+                  isRequired
                   name="name"
                   placeholder="Name"
                   borderRadius="16px"
@@ -119,6 +153,24 @@ import {
                 <InputLeftAddon children="Project Lead" borderRadius="16px" />
                 <HStack spacing={4}>
                   {projectLead?.map((user, index) => (
+                    <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
+                      {user.name}
+                    </Tag>
+                  ))}
+                </HStack>
+                <Select
+                  options={userList}
+                  isMulti
+                  onChange={onSelect}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                />
+              </InputGroup>
+              {/* People field */}            
+              <InputGroup>
+                <InputLeftAddon children="People" borderRadius="16px" />
+                <HStack spacing={4}>
+                  {people?.map((user, index) => (
                     <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
                       {user.name}
                     </Tag>
@@ -183,6 +235,11 @@ import {
                 <InputLeftAddon children="Budget" borderRadius="16px" />
                 <Input name="current_budget" placeholder="Budget" borderRadius="16px" type="number" onChange={onChange}/>
               </InputGroup>
+              {/* Income field */}
+              <InputGroup>
+                <InputLeftAddon children="Income" borderRadius="16px" />
+                <Input name="income" placeholder="Income" borderRadius="16px" type="number" onChange={onChange}/>
+              </InputGroup>
               {/* Owner field */}            
               <InputGroup>
                 <InputLeftAddon children="Owner" borderRadius="16px" />
@@ -216,7 +273,11 @@ import {
             <Button colorScheme="brand" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost" onClick={action}>Create</Button>
+            <Button variant="ghost" 
+                    onClick={() => {
+                      onSubmit(projectData)
+                    }}
+              >Create</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -224,3 +285,4 @@ import {
       );
   }
   
+  export default CreateModal;

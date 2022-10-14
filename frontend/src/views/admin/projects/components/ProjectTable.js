@@ -9,22 +9,8 @@ import {
   Thead,
   Tr,
   useColorModeValue,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Button,
-  Stack,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Textarea,
-  // Select,
-  InputLeftAddon,
   HStack,
   Tag,
   FormControl,
@@ -82,7 +68,6 @@ export default function ColumnsTable(props) {
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  const { isOpen, onOpen, onClose} = useDisclosure()
   const { isOpen: isCreateOpen , onOpen: onCreateOpen, onClose: onCreateClose } = useDisclosure()
   const { isOpen: isDeleteOpen , onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
   const { isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
@@ -91,9 +76,10 @@ export default function ColumnsTable(props) {
   const [projectLead, setProjectLead] = useState([])
   const [owner, setOwner] = useState([])    
   const [people, setPeople] = useState([]) 
+  const [projectToEdit, setProjectToEdit] = useState();
+  const [projectToDelete, setProjectToDelete] = useState();
 
-  //delete to menu 
-  const [value, setValue] = React.useState("");  
+
 
   const [formErrors, setFormErrors] = useState(null);
   const [userList, setUserList] = useState([])
@@ -140,31 +126,17 @@ export default function ColumnsTable(props) {
       });
   }
 
-  const createProject = (projectData) =>{
+  const setEditProject = (projectData) => {
+    console.log(projectData)
+    setProjectToEdit(projectData);
+    onEditOpen();
+  };
 
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        'authorization':`Token ${Cookies.get('token')}`,
-      },
-    };
-
-    axios
-      .post(`${baseUrl}business_analysis/projects`, projectData, config)
-      .then((response) => {
-        onClose();
-        getProjects();
-        console.log("check our response:", response.data);
-        toast.success(`${response.data.message}`);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('Project Not created!');
-      });
-  }
-
+  const setProjectForDelete = (projectData) => {
+    setProjectToDelete(projectData.id);
+    onDeleteOpen();
+  };
+  
   const onChange = (event) => {
     const { name, value } = event.target;
     const project = { ...projectData };
@@ -197,16 +169,9 @@ export default function ColumnsTable(props) {
     setPeople(newState);
   };
 
-  const onSubmit = () => {
-    //console.log("check our post:", projectData);
-    const project = { ...projectData };
-    //project['project_lead'] = [...projectLead];
-    createProject(project);
-  };
-
-
   useEffect(() => {
     getUsers();
+    getProjects();
   }, []);
   return (
     <Card
@@ -224,7 +189,7 @@ export default function ColumnsTable(props) {
         >
           My Projects
         </Text>
-        <Button onClick={onOpen}>Create Project</Button>
+        <Button onClick={onCreateOpen}>Create Project</Button>
       </Flex>
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
         <Thead>
@@ -257,8 +222,6 @@ export default function ColumnsTable(props) {
               <Tr {...row.getRowProps()} key={index}>
                 {row.cells.map((cell, index) => {
                   let data = "";
-                  let targetP = {};
-
                   if (cell.column.Header === "NAME") {
                     data = (
                       <Text color={textColor} fontSize="sm" fontWeight="700">
@@ -284,12 +247,15 @@ export default function ColumnsTable(props) {
                       </Flex>
                     );
                   }else if (cell.column.Header === "ACTIONS") {
-                    targetP = cell.row.original
                     data = (
                       <Flex >
-                        <Menu onDelete={onDeleteOpen} onEdit={onEditOpen}/>
-                        <DeleteModal isOpen={isDeleteOpen} onClose={onDeleteClose} targetProject={targetP}  setProjectList={setProjectList}/>                      
-                        <EditModal isOpen={isEditOpen} onClose={onEditClose} targetProject={targetP} setProjectList={setProjectList}/>                      
+                        <Menu
+                        editData={cell.row.original}
+                        setProjectToEdit={setEditProject}
+                        setProjectForDelete={setProjectForDelete}
+                        onEdit={onEditOpen}
+                        onDelete={onDeleteOpen}
+                      />
                       </Flex>
                     );                    
                   } else {
@@ -317,165 +283,36 @@ export default function ColumnsTable(props) {
           })}
         </Tbody>
       </Table>
-      {/* <CreateModal isOpen={isCreateOpen} onClose={onCreateClose} action={onSubmit}/>                   */}
-      <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xl" onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create A New Project</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Stack spacing={4}>
-              {/* Name field */}
-              <InputGroup>
-                <InputLeftAddon children="Name" borderRadius="16px" />
-                <Input
-                  isRequired
-                  name="name"
-                  placeholder="Name"
-                  borderRadius="16px"
-                  onChange={onChange}
-                />
-              </InputGroup>
-              {/* Description field */}
-              <InputGroup>
-                <InputLeftAddon children="Description" borderRadius="16px" />
-                
-                <Textarea name="description" placeholder='Enter A Brief Or Detailed Description Of The Task' onChange={onChange} />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CheckIcon color="green.500" />}
-                />
-              </InputGroup>
-              {/* Project Lead field */}            
-              <InputGroup>
-                <InputLeftAddon children="Project Lead" borderRadius="16px" />
-                <HStack spacing={4}>
-                  {projectLead?.map((user, index) => (
-                    <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
-                      {user.name}
-                    </Tag>
-                  ))}
-                </HStack>
-                <Select
-                  options={userList}
-                  isMulti
-                  onChange={onSelect}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                />
-              </InputGroup>
-              {/* People field */}            
-              <InputGroup>
-                <InputLeftAddon children="People" borderRadius="16px" />
-                <HStack spacing={4}>
-                  {people?.map((user, index) => (
-                    <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
-                      {user.name}
-                    </Tag>
-                  ))}
-                </HStack>
-                <Select
-                  options={userList}
-                  isMulti
-                  onChange={onSelect}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                />
-              </InputGroup>
-              {/* Expected Start Date field */}
-              <InputGroup>
-                <InputLeftAddon children="Expected Start Date" borderRadius="16px" />
-                <Input name="expected_start_date" placeholder="Start Date" borderRadius="16px" type="date" onChange={onChange}/>
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CalendarIcon color="green.500" />}
-                />
-              </InputGroup>
-              {/* Actual Start Date field */}
-              <InputGroup>
-                <InputLeftAddon children="Actual Start Date" borderRadius="16px" />
-                <Input name="actual_start_date" placeholder="Start Date" borderRadius="16px" type="date" onChange={onChange}/>
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CalendarIcon color="green.500" />}
-                />
-              </InputGroup>
-              {/* Expected End Date field */}
-              <InputGroup>
-                <InputLeftAddon children="Expected End Date" borderRadius="16px" />
-                <Input name="expected_end_date" placeholder="Expected End Date" borderRadius="16px" type="date" onChange={onChange}/>
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CalendarIcon color="green.500" />}
-                />
-              </InputGroup>
-              {/* Actual End Date field */}
-              <InputGroup>
-                <InputLeftAddon children="Actual End Date" borderRadius="16px" />
-                <Input name="actual_end_date" placeholder="Actual End Date" borderRadius="16px" type="date" onChange={onChange}/>
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CalendarIcon color="green.500" />}
-                />
-              </InputGroup>
-              {/* Actual Cost field */}
-              <InputGroup>
-                <InputLeftAddon children="Actual Cost" borderRadius="16px" />
-                <Input name="actual_cost" placeholder="Actual Cost" borderRadius="16px" type="number" onChange={onChange}/>
-              </InputGroup>
-              {/*Estimated Cost field */}
-              <InputGroup>
-                <InputLeftAddon children="Estimated Cost" borderRadius="16px" />
-                <Input name="estimated_cost" placeholder="Estimated Cost" borderRadius="16px" type="number" onChange={onChange}/>
-              </InputGroup>              
-              {/* Budget field */}
-              <InputGroup>
-                <InputLeftAddon children="Budget" borderRadius="16px" />
-                <Input name="current_budget" placeholder="Budget" borderRadius="16px" type="number" onChange={onChange}/>
-              </InputGroup>
-              {/* Income field */}
-              <InputGroup>
-                <InputLeftAddon children="Income" borderRadius="16px" />
-                <Input name="income" placeholder="Income" borderRadius="16px" type="number" onChange={onChange}/>
-              </InputGroup>
-              {/* Owner field */}            
-              <InputGroup>
-                <InputLeftAddon children="Owner" borderRadius="16px" />
-                <HStack spacing={4}>
-                  {owner?.map((user, index) => (
-                    <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
-                      {user.name}
-                    </Tag>
-                  ))}
-                </HStack>
-                <Select
-                  options={userList}
-                  isMulti
-                  onChange={onSelect}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                />
-              </InputGroup>
-              {/* Location field */}
-              <InputGroup>
-                <InputLeftAddon children="Location" borderRadius="16px" />
-                <Textarea name="location" placeholder='Enter Location of project' onChange={onChange} />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CheckIcon color="green.500" />}
-                />
-              </InputGroup>
-            </Stack>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="brand" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost" onClick={onSubmit}>Create</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
 
+      <DeleteModal
+        projectId={projectToDelete}
+        setProjectToDelete={setProjectToDelete}
+        onOpen={onDeleteOpen}
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
+        setProjectList={setProjectList}
+      />
+      <EditModal 
+        isOpen={isEditOpen} 
+        onClose={onEditClose} 
+        projectToEdit={projectToEdit}
+        setProjectToEdit={setEditProject}
+        onSelect={onSelect}
+        userList={userList}
+        onChange={onChange}
+        onOptionSelect={onOptionSelect}
+        getProjects={getProjects}
+      />
+      <CreateModal
+        isOpen={isCreateOpen}
+        onClose={onCreateClose}
+        onOpen={onCreateOpen}
+        onSelect={onSelect}
+        userList={userList}
+        onChange={onChange}
+        onOptionSelect={onOptionSelect}
+        getProjects={getProjects}
+      />
     </Card>
   );
 }

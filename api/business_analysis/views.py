@@ -62,14 +62,9 @@ class ProjectAPI(APIView):
         return Response(data={"message": "Failed to update project."}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def delete(self, request):
-        project_id = request.data.get("id", None)
-
-        if not project_id:
-            return Response(data={"message": "No ID Supplied."}, status=status.HTTP_501_NOT_IMPLEMENTED)
-
-        project_data = request.data
-        project_data.pop("id")
-        project = Project.delete_project(project_id, **project_data)
+        project_id = request.data.get("project_id", None)
+        project = Project.delete_project(project_id)
+        print(request.data)
 
         if project is None:
             return Response(

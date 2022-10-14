@@ -1,14 +1,4 @@
 import {
-    Flex,
-    Table,
-    Icon,
-    Tbody,
-    Td,
-    Text,
-    Th,
-    Thead,
-    Tr,
-    useColorModeValue,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -30,49 +20,83 @@ import {
   } from "@chakra-ui/react";
   import { Input } from "@chakra-ui/react";
   import React, { useEffect, useMemo, useState } from "react";
-  import {
-    useGlobalFilter,
-    usePagination,
-    useSortBy,
-    useTable,
-  } from "react-table";
+
   import Select from 'react-select';
-  // Custom components
-  import Card from "../../../../components/card/Card";
-  import Menu from "../../../../components/menu/ProjectTableMenu";
-  
+
   // Assets
-  import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
-  import APIClient from "../../../../lib/APIClient";
   import { CalendarIcon, CheckIcon, PhoneIcon, PlusSquareIcon } from "@chakra-ui/icons";
-  import { PersonIcon } from "../../../../components/icons/Icons";
   import axios from "axios";
   axios.defaults.withCredentials = true;
   import {baseUrl} from "../../../../utility/index";
   import Cookies from "js-cookie";
   import toast from 'react-hot-toast';
-  
+  import { handleWidgetChange2 } from "../../../../utility";
+
   export default function EditModal(props) {
 
-    const { isOpen, onClose, targetProject} = props;
+    const { 
+      isOpen, 
+      onClose, 
+      projectToEdit,
+      setProjectToEdit,
+      onSelect,
+      onChange,
+      userList,
+      getProjects,
+      onOptionSelect,
+    } = props;
 
 
     const [formErrors, setFormErrors] = useState(null);
-    const [projectData, setProjectData] = useState({});
     const [projectLead, setProjectLead] = useState([])
-    const [userList, setUserList] = useState([])
     const [owner, setOwner] = useState([])  
     const [people, setPeople] = useState([])  
 
-    var currentProject = targetProject
+    const [projectDetails, setProjectDetails] = useState({});
+    const [updatedProjectDetails, setUpdatedProjectDetails] = useState({});
 
-    const onChange = (event) => {
-      const { name, value } = event.target;
-      currentProject[name] = value;
-      setProjectData(currentProject);
-      setFormErrors(true);
-    };
+    const updateProject = (data) =>{
+      let projectData = { ...data};
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-CSRFToken": Cookies.get("csrftoken"),
+          'authorization':`Token ${Cookies.get('token')}`,
+        },
+      };
+  
+      axios
+        .put(`${baseUrl}business_analysis/projects/${projectData.id}/`, projectData, {config})
+        .then(() => {
+          onClose();
+          getProjects();
+          toast.success(`Updated Successfully`);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error('Project Not Edited!');
+        });
+  }
+   
+    useEffect(() => {
+      setProjectDetails(projectToEdit || "");
+    }, [projectToEdit]);
+    
+    useEffect(() => {
+      setUpdatedProjectDetails(projectDetails || projectToEdit);
+    }, [projectDetails]);
+  
+  
 
+    const handleChange = handleWidgetChange2(
+      setProjectDetails,
+      setUpdatedProjectDetails,
+      projectDetails,
+      updatedProjectDetails
+    );
+
+/* 
     const onSelect = (event) => {
       console.log('see the event: ', event);
       var newState;
@@ -132,21 +156,23 @@ import {
             toast.error('Project Not Edited!');
           });
   }
-
-    const onSubmit = () => {
-      updateProject(currentProject);
-    };
-  
-  
-
+ */
     return (
-      <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xl" onClose={onClose}>
+      <Modal 
+        closeOnOverlayClick={false} 
+        isOpen={isOpen} 
+        size="xl" 
+        onClose={() => {
+          setProjectToEdit(null);
+          onClose();
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit A Project</ModalHeader>
+          <ModalHeader>Edit Project</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <Stack spacing={4}>
+            <Stack spacing={4}>
               {/* Name field */}
               <InputGroup>
                 <InputLeftAddon children="Name" borderRadius="16px" />
@@ -155,8 +181,8 @@ import {
                   name="name"
                   placeholder="Name"
                   borderRadius="16px"
-                  onChange={onChange}
-                  defaultValue ={targetProject.name}
+                  onChange={handleChange}
+                  defaultValue ={projectDetails.name}
                 />
               </InputGroup>
               {/* Description field */}
@@ -167,8 +193,9 @@ import {
                   isRequired
                   name="description" 
                   placeholder='Enter A Brief Or Detailed Description Of The Task' 
-                  defaultValue ={targetProject.description}
-                  onChange={onChange} />
+                  defaultValue ={projectDetails.description}
+                  onChange={handleChange}
+                  />
                 <InputRightElement
                   borderRadius="16px"
                   children={<CheckIcon color="green.500" />}
@@ -191,7 +218,7 @@ import {
                   onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"                  
-                  defaultValue={targetProject.project_lead}
+                  defaultValue={projectDetails.project_lead}
                 />
               </InputGroup>
               {/* People field */}            
@@ -211,7 +238,7 @@ import {
                   onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"                  
-                  defaultValue={targetProject.people}
+                  defaultValue={projectDetails.people}
                 />
               </InputGroup>
               {/* Expected Start Date field */}
@@ -220,8 +247,9 @@ import {
                 <Input 
                   isRequired
                   name="actual_start_date" placeholder="Start Date" 
-                  borderRadius="16px" type="date" onChange={onChange}
-                  defaultValue={targetProject.expected_start_date}
+                  borderRadius="16px" type="date" 
+                  onChange={handleChange}
+                  defaultValue={projectDetails.expected_start_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -234,8 +262,9 @@ import {
                 <Input 
                   isRequired
                   name="expected_start_date" placeholder="Start Date" 
-                  borderRadius="16px" type="date" onChange={onChange}
-                  defaultValue={targetProject.actual_start_date}
+                  borderRadius="16px" type="date"                 
+                  onChange={handleChange}
+                  defaultValue={projectDetails.actual_start_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -246,8 +275,9 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Expected End Date" borderRadius="16px" />
                 <Input isRequired name="expected_end_date" placeholder="Expected End Date" 
-                  borderRadius="16px" type="date" onChange={onChange}
-                  defaultValue={targetProject.expected_end_date}
+                  borderRadius="16px" type="date" 
+                  onChange={handleChange}
+                  defaultValue={projectDetails.expected_end_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -258,8 +288,9 @@ import {
               <InputGroup>
                 <InputLeftAddon children="Actual End Date" borderRadius="16px" />
                 <Input isRequired name="actual_end_date" placeholder="Actual End Date" 
-                  borderRadius="16px" type="date" onChange={onChange}
-                  defaultValue={targetProject.actual_end_date}
+                  borderRadius="16px" type="date" 
+                  onChange={handleChange}
+                  defaultValue={projectDetails.actual_end_date}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -272,8 +303,9 @@ import {
                 <Input 
                   isRequired
                   name="actual_cost" placeholder="Actual Cost" borderRadius="16px" 
-                  type="number" onChange={onChange}
-                  defaultValue={targetProject.actual_cost}
+                  type="number" 
+                  onChange={handleChange}
+                  defaultValue={projectDetails.actual_cost}
                   />
               </InputGroup>
               {/*Estimated Cost field */}
@@ -282,8 +314,9 @@ import {
                 <Input 
                   isRequired
                   name="estimated_cost" placeholder="Estimated Cost" borderRadius="16px" 
-                  type="number" onChange={onChange}
-                  defaultValue={targetProject.estimated_cost}
+                  type="number" 
+                  onChange={handleChange}
+                  defaultValue={projectDetails.estimated_cost}
                   />
               </InputGroup>              
               {/* Budget field */}
@@ -292,8 +325,9 @@ import {
                 <Input 
                   isRequired
                   name="current_budget" placeholder="Budget" borderRadius="16px" 
-                  type="number" onChange={onChange} 
-                  defaultValue ={targetProject.current_budget}
+                  type="number" 
+                  onChange={handleChange}
+                  defaultValue ={projectDetails.current_budget}
                   />
               </InputGroup>
               {/* Income field */}
@@ -302,8 +336,9 @@ import {
                 <Input 
                   isRequired
                   name="income" placeholder="Income" borderRadius="16px" 
-                  type="number" onChange={onChange}
-                  defaultValue={targetProject.income}
+                  type="number" 
+                  onChange={handleChange}
+                  defaultValue={projectDetails.income}
                   />
               </InputGroup>
               {/* Owner field */}            
@@ -323,7 +358,7 @@ import {
                   onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"
-                  defaultValue ={targetProject.owner}
+                  defaultValue ={projectDetails.owner}
                 />
               </InputGroup>
               {/* Location field */}
@@ -333,7 +368,7 @@ import {
                   isRequired
                   name="location" placeholder='Enter Location of project' 
                   onChange={onChange}
-                  defaultValue ={targetProject.location}
+                  defaultValue ={projectDetails.location}
                   />
                 <InputRightElement
                   borderRadius="16px"
@@ -343,10 +378,18 @@ import {
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="brand" mr={3} onClick={onClose}>
+            <Button colorScheme="brand" mr={3} 
+              onClick={() => {
+                setProjectToEdit(null);
+                onClose();
+              }}              >
               Close
             </Button>
-            <Button variant="ghost" onClick={onSubmit}>Update</Button>
+            <Button variant="ghost" 
+                    onClick={() => {
+                      updateProject(projectDetails)
+                    }}                    
+            >Update</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
