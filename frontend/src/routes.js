@@ -37,13 +37,6 @@ import SignInCentered from "./views/auth/signIn";
 
 const routes = [
   {
-    name: "Accounting",
-    layout: "/admin",
-    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
-    path: "/accounting",
-    component: Accounting,
-  },
-  {
     name: "Main Dashboard",
     layout: "/admin",
     path: "/default",
@@ -120,6 +113,13 @@ const routes = [
     icon: <Icon as={MdWork} width="20px" height="20px" color="inherit" />,
     path: "/projects",
     component: Projects,
+  },
+  {
+    name: "Accounting",
+    layout: "/admin",
+    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    path: "/accounting",
+    component: Accounting,
   },
   {
 

@@ -1,92 +1,77 @@
 import {
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Modal,
+	Modal,
     ModalOverlay,
     ModalContent,
     ModalHeader,
     ModalFooter,
     ModalBody,
     ModalCloseButton,
+    FormControl,
     Button,
     Stack,
     InputGroup,
-    InputRightElement,
+    Text,
     Textarea,
-    // Select,
     InputLeftAddon,
-    HStack,
-    Tag,
-    useDisclosure,
+    Flex,
+    useColorModeValue,
   } from "@chakra-ui/react";
   import { Input } from "@chakra-ui/react";
   import React, { useEffect, useState } from "react";
   import Select from "react-select";
   // Custom components
-  
+  import Card from "../../../../components/card/Card";
+
   // Assets
   import { CalendarIcon, CheckIcon } from "@chakra-ui/icons";
   import axios from "axios";
-  import { handleWidgetChange2 } from "../../../../utility";
   axios.defaults.withCredentials = true;
   
-  function LedgerModal(props) {
+  function LedgerCreate(props) {
 
-  
+    const textColor = useColorModeValue("secondaryGray.900", "white");
+
     const {
-      //onSelect,
       accountList,
-      editLedger,
-      accounts,
       onChange,
       onOptionSelect,
       onSubmit,
-      setLedgerToEdit,
-      onOpen,
+	  ledgerData,
+	  setLedgerData,
+	  onOpen,
       isOpen,
       onClose,
     } = props;
   
-    const [ledgerDetails, setLedgerDetails] = useState({});
-    const [updatedLedgerDetails, setUpdatedLedgerDetails] = useState({});
-  
-    useEffect(() => {
-      setLedgerDetails(editLedger || "");
-    }, [editLedger]);
-  
-    useEffect(() => {
-      setUpdatedLedgerDetails(ledgerDetails || editLedger);
-    }, [ledgerDetails]);
-  
-    const handleChange = handleWidgetChange2(
-      setLedgerDetails,
-      setUpdatedLedgerDetails,
-      ledgerDetails,
-      updatedLedgerDetails
-    );
 
-  	useEffect(() => {
-      console.log(updatedLedgerDetails)
-    }, []);
-    
     return (
-      <Modal
+		<Modal
         closeOnOverlayClick={false}
         isOpen={isOpen}
         size="xl"
         onClose={() => {
-          setLedgerToEdit(null);
-          onClose();
+			setLedgerData(null)
+			onClose();
         }}
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{editLedger ? "Edit Ledger" : "Create New Ledger"}</ModalHeader>
+          <ModalHeader>Create New Ledger</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <Stack spacing={4}>
+          	<Stack spacing={4}>
+			  <FormControl>
+					<InputGroup>
+						<InputLeftAddon children="id" borderRadius="16px" />
+						<Input
+							type='number'
+							name="id"
+							placeholder="id"
+							borderRadius="16px"
+							onChange={onChange}
+							/>
+					</InputGroup>
+				</FormControl>
 				<FormControl>
 			        <InputGroup>
 						<InputLeftAddon children="Account" borderRadius="16px" />
@@ -94,10 +79,9 @@ import {
 							name="account_id"
                             isMulti
 							options={accountList}
-              onChange={handleChange}
+							onChange={onOptionSelect}
 							className="basic-select"
 							classNamePrefix="select"
-              defaultValue={ledgerDetails.account_id}
 						/>
 					</InputGroup>
 				</FormControl>
@@ -109,8 +93,7 @@ import {
 							name="transaction_date"
 							placeholder="Transaction Date"
 							borderRadius="16px"
-              defaultValue={ledgerDetails.transaction_date}
-              onChange={handleChange}
+							onChange={onChange}
 							/>
 					</InputGroup>
 				</FormControl>
@@ -122,9 +105,7 @@ import {
 							placeholder="Account Code"
 							type="number"
                             borderRadius="16px"
-              defaultValue={ledgerDetails.account_code}
-
-              onChange={handleChange}
+							onChange={onChange}
 							/>
 					</InputGroup>
 				</FormControl>
@@ -135,35 +116,32 @@ import {
 					name="description"
 					borderRadius="16px"
 					placeholder="Enter A Brief Or Detailed Description Of The Ledger"
-          defaultValue={ledgerDetails.description}
-          onChange={handleChange}
-          />
+					onChange={onChange}
+				/>
 					</InputGroup>
 				</FormControl>
 				<FormControl>
 					<InputGroup>
-						<InputLeftAddon children="Debit" borderRadius="16px" />
+						<InputLeftAddon children="DR" borderRadius="16px" />
 						<Input
 									name="dr"
 									placeholder="DR"
 									type="number"
 									borderRadius="16px"
-                  defaultValue={ledgerDetails.dr}
-                  onChange={handleChange}
-                  />
+									onChange={onChange}
+							/>
 					</InputGroup>
 				</FormControl>
 				<FormControl>
 					<InputGroup>
-						<InputLeftAddon children="Credit" borderRadius="16px" />
+						<InputLeftAddon children="CR" borderRadius="16px" />
 						<Input
 									name="cr"
 									placeholder="CR"
 									type="number"
 									borderRadius="16px"
-                  defaultValue={ledgerDetails.cr}
-                  onChange={handleChange}
-                  />
+									onChange={onChange}
+							/>
 					</InputGroup>
 				</FormControl>
 				<FormControl>
@@ -173,9 +151,8 @@ import {
 									name="agent_organization"
 									placeholder="Agent Organization"
 									borderRadius="16px"
-                  defaultValue={ledgerDetails.agent_organization}
-                  onChange={handleChange}
-                  />
+									onChange={onChange}
+							/>
 					</InputGroup>
 				</FormControl>
 				<FormControl>
@@ -185,32 +162,29 @@ import {
 									name="type"
 									placeholder="Type"
 									borderRadius="16px"
-                  defaultValue={ledgerDetails.type}
-                  onChange={handleChange}
-                  />
+									onChange={onChange}
+							/>
 					</InputGroup>
 				</FormControl>
 				<FormControl>
 					<InputGroup>
 						<InputLeftAddon children="Reference No" borderRadius="16px" />
 						<Input
-                  name="reference_number"
+                                    name="reference_number"
 									placeholder="Reference Number"
 									type="number"
-                  borderRadius="16px"
-                  defaultValue={ledgerDetails.reference_number}
-                  onChange={handleChange}
-                  />
+                                    borderRadius="16px"
+									onChange={onChange}
+							/>
 					</InputGroup>
 				</FormControl>
-				</Stack>
+			</Stack>
           </ModalBody>
           <ModalFooter>
             <Button
               colorScheme="brand"
               mr={3}
               onClick={() => {
-                setLedgerToEdit(null);
                 onClose();
               }}
             >
@@ -219,10 +193,11 @@ import {
             <Button
               variant="ghost"
               onClick={() => {
-                onSubmit(updatedLedgerDetails);
+				console.log(ledgerData)
+                onSubmit(ledgerData);
               }}
             >
-              Edit
+              Create
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -230,5 +205,5 @@ import {
     );
   }
   
-  export default LedgerModal;
+  export default LedgerCreate;
   

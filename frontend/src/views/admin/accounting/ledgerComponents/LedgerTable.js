@@ -55,10 +55,10 @@ import APIClient from "../../../../lib/APIClient";
 import { CalendarIcon, CheckIcon, PhoneIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { PersonIcon } from "../../../../components/icons/Icons";
 
-import LedgerForm from "./LedgerForm";
+import LedgerCreate from "./LedgerCreate";
 //Modals
 import ConfirmationModal from "./ConfirmationModal";
-import LedgerModal from "./LedgerModal";
+import LedgerEdit from "./LedgerEdit";
 
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -95,6 +95,11 @@ export default function ColumnsTable(props) {
 
 	const textColor = useColorModeValue("secondaryGray.900", "white");
 	const borderColor = useColorModeValue("gray.200", "whiteAlpha.100"); 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {
+		isOpen: isOpenCreate,
+		onOpen: onOpenCreate,
+		onClose: onCloseCreate,
+	  } = useDisclosure();
 	const {
 		isOpen: isOpenEdit,
 		onOpen: onOpenEdit,
@@ -241,9 +246,7 @@ export default function ColumnsTable(props) {
 	};
 	  
 	const onChange = (event) => {
-		console.log('see the event: ', event);
 		const { name, value } = event.target;
-		console.log('see the name, event : ', name, ' ,',value);
 		const ledger = { ...ledgerData };
 		ledger[name] = value;
 		setLedgerData(ledger);
@@ -288,12 +291,7 @@ export default function ColumnsTable(props) {
 	}, []);
 	return (
 		<Box pt={{ base: "10px"}}>
-			<Grid
-			mb='20px'
-			gridTemplateColumns={{ xl: "repeat(3, 1fr)", "2xl": "1fr 0.46fr" }}
-			gap={{ base: "20px", xl: "20px" }}
-			display={{ base: "block", xl: "grid" }}>
-			{/*Ledger Table */}			
+			{/* Ledger Table */}			
 			<Flex
 			flexDirection='column'
 			gridArea={{ xl: "1 / 1 / 2 / 3", "2xl": "1 / 1 / 2 / 2" }}>
@@ -312,6 +310,7 @@ export default function ColumnsTable(props) {
 					>
 						Ledger
 					</Text>
+					<Button onClick={onOpenCreate}>Create Ledger</Button>
 				</Flex>
 				<Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
 					<Thead>
@@ -379,16 +378,20 @@ export default function ColumnsTable(props) {
 				</Table>
 			</Card>	
 			</Flex>
-			<LedgerForm
+			{/* Modals */}
+ 			<LedgerCreate
+				isOpen={isOpenCreate}
+ 				onClose={onCloseCreate}
+				onOpen={onOpenCreate}
 				onSelect={onSelect}
 				accountList={accountList}
 				onChange={onChange}
 				onOptionSelect={onOptionSelect}
 				onSubmit={onSubmitCreate}
-				//editLedger={ledgerToEdit}
-				//setLedgerToEdit={setEditLedger}
-			></LedgerForm>
-			<LedgerModal
+				ledgerData={ledgerData}
+				setLedgerData={setLedgerData}
+			/> 		
+			<LedgerEdit
 				isOpen={isOpenEdit}
 				onClose={onCloseEdit}
 				onOpen={onOpenEdit}
@@ -408,7 +411,6 @@ export default function ColumnsTable(props) {
 				isOpen={isOpenConfirm}
 				onClose={onCloseConfirm}
 			/>
-		</Grid>
 	  </Box>
 	);
 }
