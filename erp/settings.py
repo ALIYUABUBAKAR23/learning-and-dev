@@ -118,7 +118,7 @@ WEBPACK_LOADER = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "erp"),
+        "NAME": os.environ.get("DB_NAME", "rc-erp"),
         "USER": os.environ.get("PGUSER", "postgres"),
         "PASSWORD": os.environ.get("PGPASSWORD", "postgres"),
         "HOST": os.environ.get("PGHOST", "127.0.0.1"),
