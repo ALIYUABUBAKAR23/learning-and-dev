@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(find_dotenv())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -28,7 +29,12 @@ DEBUG = os.environ.get("DEBUG", "true").lower() == "true"
 
 # ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".rightclicksolutions.com.ng", ".napims360.com"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    ".rightclicksolutions.com.ng",
+    ".napims360.com",
+]
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1",
@@ -99,7 +105,10 @@ TEMPLATES = [
 WSGI_APPLICATION = "erp.wsgi.application"
 
 WEBPACK_LOADER = {
-    "DEFAULT": {"BUNDLE_DIR_NAME": "frontend/", "STATS_FILE": os.path.join(BASE_DIR, "webpack-stats.json")}
+    "DEFAULT": {
+        "BUNDLE_DIR_NAME": "frontend/",
+        "STATS_FILE": os.path.join(BASE_DIR, "webpack-stats.json"),
+    }
 }
 
 
@@ -109,7 +118,7 @@ WEBPACK_LOADER = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "rc-erp"),
+        "NAME": os.environ.get("DB_NAME", "erp"),
         "USER": os.environ.get("PGUSER", "postgres"),
         "PASSWORD": os.environ.get("PGPASSWORD", "postgres"),
         "HOST": os.environ.get("PGHOST", "127.0.0.1"),
@@ -194,7 +203,16 @@ ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/?verification=1"
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/?verification=1"
 
 SITE_ID = 1
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django_smtp_ssl.SSLEmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtppro.zoho.com"
+EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
+EMAIL_PORT = (os.getenv('EMAIL_PORT'))
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = str(os.getenv('DEFAULT_FROM_EMAIL'))
+SERVER_EMAIL = str(os.getenv('SERVER_EMAIL'))
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "api.authentication.serializers.CustomRegisterSerializer",
