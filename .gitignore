@@ -31,3 +31,4 @@ apps/static/assets/yarn.lock
 apps/static/assets/.temp
 
 static
+.env

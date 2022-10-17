@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(find_dotenv())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -206,12 +207,12 @@ SITE_ID = 1
 # EMAIL_BACKEND = "django_smtp_ssl.SSLEmailBackend"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtppro.zoho.com"
-EMAIL_HOST_USER = "lutor.iyornumbe@rightclicksolutions.com.ng"
-EMAIL_HOST_PASSWORD = "Password@1234."
-EMAIL_PORT = 587
+EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
+EMAIL_PORT = (os.getenv('EMAIL_PORT'))
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'lutor.iyornumbe@rightclicksolutions.com.ng'
-SERVER_EMAIL = 'lutor.iyornumbe@rightclicksolutions.com.ng'
+DEFAULT_FROM_EMAIL = str(os.getenv('DEFAULT_FROM_EMAIL'))
+SERVER_EMAIL = str(os.getenv('SERVER_EMAIL'))
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "api.authentication.serializers.CustomRegisterSerializer",
