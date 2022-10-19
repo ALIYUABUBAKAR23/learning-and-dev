@@ -63,7 +63,7 @@ import {
                 setContractToDelete();
               }}
             >
-              No, it was a mistake
+              No
             </Button>
             <Button
               variant="ghost"
@@ -71,7 +71,7 @@ import {
                 deleteContract(contractId);
               }}
             >
-              Yes, of course
+              Yes
             </Button>
           </ModalFooter>
         </ModalContent>

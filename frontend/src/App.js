@@ -29,11 +29,6 @@ function App() {
 
   const loggedInUser = getUser();
 
-  
-
-   if (!token) {
-     return <SignIn />;
-   }
 
   // if (!token) {
   //   return <SignIn />;

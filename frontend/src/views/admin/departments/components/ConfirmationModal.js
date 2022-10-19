@@ -63,7 +63,7 @@ function ConfirmationModal(props) {
               setDepartmentToDelete();
             }}
           >
-            No, it was a mistake
+            No
           </Button>
           <Button
             variant="ghost"
@@ -71,7 +71,7 @@ function ConfirmationModal(props) {
               deleteDepartment(departmentId);
             }}
           >
-            Yes, of course
+            Yes
           </Button>
         </ModalFooter>
       </ModalContent>

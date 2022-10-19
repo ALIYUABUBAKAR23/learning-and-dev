@@ -60,18 +60,6 @@ import {
           <ModalCloseButton />
           <ModalBody>
           	<Stack spacing={4}>
-			  <FormControl>
-					<InputGroup>
-						<InputLeftAddon children="id" borderRadius="16px" />
-						<Input
-							type='number'
-							name="id"
-							placeholder="id"
-							borderRadius="16px"
-							onChange={onChange}
-							/>
-					</InputGroup>
-				</FormControl>
 				<FormControl>
 			        <InputGroup>
 						<InputLeftAddon children="Account" borderRadius="16px" />
