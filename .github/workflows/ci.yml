@@ -103,7 +103,7 @@ jobs:
             mkdir -p /tmp/data/db >/dev/null 2>&1
             mkdir -p /tmp/app-static >/dev/null 2>&1
           
-            if [ -f "nginx.conf" ]
+            if [ -f "nginx.conf" ] && [ ! -f "/tmp/data/nginx/nginx.conf" ]
             then
                 mv nginx.conf /tmp/data/nginx/
             fi
