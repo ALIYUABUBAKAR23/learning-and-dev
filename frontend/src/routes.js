@@ -30,12 +30,20 @@ import HumanResources from "./views/admin/hr";
 import Departments from "./views/admin/departments";
 import Contract from "./views/admin/contracts";
 import Accounting from "./views/admin/accounting";
+import crm from "./views/admin/crm";
 
 
 // Auth Imports
 import SignInCentered from "./views/auth/signIn";
 
 const routes = [
+  {
+    name: "Accounting",
+    layout: "/admin",
+    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    path: "/accounting",
+    component: Accounting,
+  },
   {
     name: "Main Dashboard",
     layout: "/admin",
@@ -115,13 +123,6 @@ const routes = [
     component: Projects,
   },
   {
-    name: "Accounting",
-    layout: "/admin",
-    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
-    path: "/accounting",
-    component: Accounting,
-  },
-  {
 
     name: "Contracts",
     layout: "/admin",
@@ -143,6 +144,13 @@ const routes = [
     icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
     path: "/departments",
     component: Departments,
+  },
+  {
+    name: "CRM",
+    layout: "/admin",
+    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    path: "/crm",
+    component: CRM,
   },
 ];
 
