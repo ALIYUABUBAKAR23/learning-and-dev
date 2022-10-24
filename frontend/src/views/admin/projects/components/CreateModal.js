@@ -116,17 +116,6 @@ import {
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={4}>
-                {/* Id field */}
-                <InputGroup>
-                <InputLeftAddon children="Id" borderRadius="16px" />
-                <Input
-                  name="id"
-                  type="number"
-                  placeholder="Id"
-                  borderRadius="16px"
-                  onChange={onChange}
-                />
-              </InputGroup>
               {/* Name field */}
               <InputGroup>
                 <InputLeftAddon children="Name" borderRadius="16px" />

@@ -61,7 +61,7 @@ function ConfirmationModal(props) {
               onClose();
             }}
           >
-            No, it was a mistake
+            No
           </Button>
           <Button
             variant="ghost"
@@ -69,7 +69,7 @@ function ConfirmationModal(props) {
               deleteLedger(ledgerId);
             }}
           >
-            Yes, of course
+            Yes
           </Button>
         </ModalFooter>
       </ModalContent>
