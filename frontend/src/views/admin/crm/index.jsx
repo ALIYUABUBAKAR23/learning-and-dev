@@ -1,10 +1,10 @@
 /*!
-  _   _  ___  ____  ___ ________  _   _   _   _ ___   
- | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _| 
- | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
+  _   _  ___  ____  ___ ________  _   _   _   _ ___
+ | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _|
+ | |_| | | | | |_) || |  / / | | |  \| | | | | || |
  |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
  |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-                                                                                                                                                                                                                                                                                                                                       
+
 =========================================================
 * Horizon UI - v1.1.0
 =========================================================
@@ -28,7 +28,6 @@ import CRMTable from "../crm/components/CRMTable";
 import {
   columnsDataCustomer,
 } from "./variables/columnsData";
-import tableDataCustomer from "../hr/variables/tableDataCustomer.json";
 import React, { useEffect, useState} from "react";
 import CRMModal from './components/CRMModal';
 import axios from "axios";
@@ -40,7 +39,7 @@ export default function HR() {
 // Chakra Color Mode
   // const [openModal, setOpenModal] = useState(false);
   const [customerList, setCustomerList] = useState([])
-  
+
   const setList = (data) => {
     setCustomerList(data);
   };

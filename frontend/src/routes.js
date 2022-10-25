@@ -30,7 +30,6 @@ import HumanResources from "./views/admin/hr";
 import Departments from "./views/admin/departments";
 import Contract from "./views/admin/contracts";
 import Accounting from "./views/admin/accounting";
-import crm from "./views/admin/crm";
 
 
 // Auth Imports
@@ -144,14 +143,7 @@ const routes = [
     icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
     path: "/departments",
     component: Departments,
-  },
-  {
-    name: "CRM",
-    layout: "/admin",
-    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
-    path: "/crm",
-    component: CRM,
-  },
+  }
 ];
 
 export default routes;

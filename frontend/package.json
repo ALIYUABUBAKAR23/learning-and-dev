@@ -58,8 +58,7 @@
     "stylis": "^4.1.1",
     "stylis-plugin-rtl": "2.0.2",
     "universal-cookie": "^4.0.4",
-    "web-vitals": "^1.1.2",
-    "yarn": "^1.22.19"
+    "web-vitals": "^1.1.2"
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"

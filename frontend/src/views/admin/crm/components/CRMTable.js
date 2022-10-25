@@ -40,7 +40,6 @@ import {
 import Select from "react-select";
 // Custom components
 import Card from "../../../../components/card/Card";
-import Menu from "./MainMenu";
 
 // Assets
 import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
@@ -57,7 +56,7 @@ axios.defaults.withCredentials = true;
 import { baseUrl } from "../../../../utility/index";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-import CustomerModal from "./CustomerModal";
+import CustomerModal from "./CRMModal";
 import ConfirmationModal from "./ConfirmationModal";
 
 export default function ColumnsTable(props) {
@@ -415,7 +414,7 @@ export default function ColumnsTable(props) {
       <CustomerModal
         isOpen={isOpen}
         onClose={onClose}
-        onOpen={onOpen}  
+        onOpen={onOpen}
         userList={userList}
         assignedTo={assignedTo}
         onChange={onChange}
