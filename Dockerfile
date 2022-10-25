@@ -20,7 +20,7 @@ COPY frontend /code/frontend
 
 
 RUN yarn config set "strict-ssl" false -g
-RUN cd frontend && yarn install && yarn build
+RUN cd frontend && yarn install --no-lockfile && yarn build
 
 
 ################################################################################
