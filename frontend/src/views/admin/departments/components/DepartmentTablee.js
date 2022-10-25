@@ -38,11 +38,11 @@ import {
     useTable,
   } from "react-table";
   import Select from 'react-select';
-  
+
   // Custom components
   import Card from "../../../../components/card/Card";
   import Menu from "../../../../components/menu/MainMenu";
-  
+
   // Assets
   import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
   import APIClient from "../../../../lib/APIClient";
@@ -57,13 +57,13 @@ import {
   import {AiFillDelete } from 'react-icons/ai';
 import {BiEditAlt} from 'react-icons/bi';
 import {MdAddCircleOutline} from 'react-icons/md';
-  
+
   export default function ColumnsTable(props) {
     const { columnsData, tableData, setDepartmentList } = props;
-  
+
     const columns = useMemo(() => columnsData, [columnsData]);
     const data = useMemo(() => tableData, [tableData]);
-  
+
     const tableInstance = useTable(
       {
         columns,
@@ -73,7 +73,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
       useSortBy,
       usePagination
     );
-  
+
     const {
       getTableProps,
       getTableBodyProps,
@@ -83,7 +83,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
       initialState,
     } = tableInstance;
     initialState.pageSize = 10;
-  
+
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -91,7 +91,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
     const [headOfDepartment, setHeadOfDepartment] = useState([])
     const [formErrors, setFormErrors] = useState(null);
     const [userList, setUserList] = useState([])
-    
+
     const getDepartment = () =>{
       const config = {
         headers: {
@@ -101,7 +101,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
           'authorization':`Token ${Cookies.get('token')}`,
         },
       };
-  
+
       axios
         .get(`${baseUrl}hr/departments`, config)
         .then((response) => {
@@ -112,7 +112,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
           console.log(error);
         });
     }
-  
+
     const getUsers = () =>{
       const config = {
         headers: {
@@ -122,18 +122,18 @@ import {MdAddCircleOutline} from 'react-icons/md';
           'authorization':`Token ${Cookies.get('token')}`,
         },
       };
-  
+
       axios
         .get(`${baseUrl}users/`, config)
         .then((response) => {
           console.log("check our users: ", response.data);
-          setUserList(response.data.map(option => ({ label: `${option.first_name} ${option.middle_name} ${option.last_name}`, value: option.id })));
+          setUserList(response.data.map(option => ({ label: `${option?.first_name} ${option.middle_name} ${option.last_name}`, value: option.id })));
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  
+
     const createDepartment = (departmentData) =>{
 
       const config = {
@@ -144,7 +144,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
           'authorization':`Token ${Cookies.get('token')}`,
         },
       };
-  
+
       axios
         .post(`${baseUrl}hr/departments`, departmentData, config)
         .then((response) => {
@@ -159,7 +159,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
         });
     }
 
-  
+
     const onChange = (event) => {
       console.log('see the event: ', event);
       const { name, value } = event.target;
@@ -169,7 +169,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
       setDepartmentData(department);
       setFormErrors(null);
     };
-  
+
     const onOptionSelect = (event, action) => {
       console.log('see the event: ', event, action);
       const { label, value } = event;
@@ -178,7 +178,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
       department[action.name] = value;
       setDepartmentData(department);
     };
-  
+
     // const onSelect = (event) => {
     //   console.log('see the event: ', event);
     //   var newState;
@@ -191,15 +191,15 @@ import {MdAddCircleOutline} from 'react-icons/md';
     //   }
     //   setHeadOfDepartment(newState);
     // };
-  
+
     const onSubmit = () => {
-    
+
       console.log("check our post:", departmentData);
       const department = { ...departmentData};
       createDepartment(department);
     };;
-  
-  
+
+
     useEffect(() => {
       getUsers();
     }, []);
@@ -273,10 +273,10 @@ import {MdAddCircleOutline} from 'react-icons/md';
                           </Text>
                         );
                         } else if (cell.column.Header === "ACTIONS") {
-                          data = <Menu 
+                          data = <Menu
                           w='30px'
                           h='30px' />
-            
+
                           // data = (
                           //   <Flex align='center'>
                           //     <button onClick={onOpen}>
@@ -322,7 +322,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
                 </InputGroup>
                 <InputGroup>
                   <InputLeftAddon children="Description" borderRadius="16px" />
-                
+
                   <Textarea name="description" placeholder='Enter A Brief Or Detailed Description Of The Department' onChange={onChange} />
                   <InputRightElement
                     borderRadius="16px"
@@ -359,4 +359,3 @@ import {MdAddCircleOutline} from 'react-icons/md';
       </Card>
     );
   }
-  

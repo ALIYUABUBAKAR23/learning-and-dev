@@ -32,3 +32,4 @@ apps/static/assets/.temp
 
 static
 .env
+.idea

@@ -47,7 +47,7 @@ export default function HeaderLinks(props) {
   const borderButton = useColorModeValue("secondaryGray.500", "whiteAlpha.200");
 
   //user from context
-  const loggedInUser = useContext(UserContext) 
+  const loggedInUser = useContext(UserContext)
 
   return (
     <Flex
@@ -261,7 +261,7 @@ export default function HeaderLinks(props) {
               onClick={() => {
                 console.log(typeof(loggedInUser));
               }}>
-              👋&nbsp; Hey, {loggedInUser.first_name}!
+              👋&nbsp; Hey, {loggedInUser?.first_name}!
             </Text>
           </Flex>
           <Flex flexDirection='column' p='10px'>

@@ -119,7 +119,7 @@ export default function ColumnsTable(props) {
       .then((response) => {
         setUserList(
           response.data.map((option) => ({
-            label: `${option.first_name} ${option.middle_name} ${option.last_name}`,
+            label: `${option?.first_name} ${option?.middle_name} ${option.last_name}`,
             value: option.id,
           }))
         );
@@ -185,7 +185,7 @@ export default function ColumnsTable(props) {
     setAccountToDelete(accountData.id);
     onOpenConfirm();
   };
-  
+
   const onChange = (event) => {
     const { name, value } = event.target;
     const account = { ...accountData };

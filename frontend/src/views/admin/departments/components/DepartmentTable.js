@@ -140,7 +140,7 @@ export default function ColumnsTable(props) {
         console.log("check our users: ", response.data);
         setUserList(
           response.data.map((option) => ({
-            label: `${option.first_name} ${option.middle_name} ${option.last_name}`,
+            label: `${option?.first_name} ${option?.middle_name} ${option.last_name}`,
             value: option.id
           }))
         );
