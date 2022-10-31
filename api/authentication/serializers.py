@@ -4,7 +4,7 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.models import TokenModel
 
-from .models import STATES, SEX, User
+from .models import STATES, SEX, User, UserResetDetails
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -88,6 +88,19 @@ class UserInfoSerializer(serializers.ModelSerializer):
             "is_married",
         ]
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserResetDetails
+        fields = [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "state_of_origin",
+            "address",
+            "date_of_birth",
+        ]
 
 # This is to allow you to override the UserDetailsSerializer at any time.
 # If you're sure you won't, you can skip this and use DefaultUserDetailsSerializer directly

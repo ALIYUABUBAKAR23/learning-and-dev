@@ -1,3 +1,5 @@
+from curses import meta
+from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
@@ -106,3 +108,11 @@ class User(AbstractUser):
             "email",
         )
         return users
+
+class UserResetDetails(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        default_permissions = ()
+
+
