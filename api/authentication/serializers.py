@@ -3,6 +3,8 @@ from django.db import transaction
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.models import TokenModel
+from django.contrib.auth.models import Permission, Group as PermissionGroup
+from django.contrib.contenttypes.models import ContentType
 
 from .models import STATES, SEX, User, UserResetDetails
 
@@ -116,6 +118,28 @@ class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = TokenModel
         fields = ("key", "user")
+        
+class ContentTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContentType
+        fields = '__all__'
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        response = super(PermissionSerializer, self).to_representation(instance)
+        response['content_type'] = ContentTypeSerializer(instance.content_type).data
+        response['model_name'] = instance.content_type.name
+        return response
+
+class PermissionGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PermissionGroup
+        fields = '__all__'
+
 
 
 """
