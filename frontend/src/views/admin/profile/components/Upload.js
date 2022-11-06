@@ -6,13 +6,22 @@ import {
   Icon,
   Text,
   useColorModeValue,
+  FormControl,
+  FormLabel,
+  Input,
+  
 } from "@chakra-ui/react";
 // Custom components
 import Card from "../../../../components/card/Card.js";
-import React from "react";
+import React, { useState } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
+
 // Assets
 import { MdUpload } from "react-icons/md";
 import Dropzone from "./Dropzone";
+
+
 
 export default function Upload(props) {
   const { used, total, ...rest } = props;
@@ -20,58 +29,165 @@ export default function Upload(props) {
   const textColorPrimary = useColorModeValue("secondaryGray.900", "white");
   const brandColor = useColorModeValue("brand.500", "white");
   const textColorSecondary = "gray.400";
+
+  const [userDetails, setUserDetails] = useState({});
+  const [formErrors, setFormErrors] = useState(null);
+
+  const updateUser = () => {
+    const csrfToken = Cookies.get("csrftoken") || CSRF_TOKEN;
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken,
+        
+      },
+    };
+    axios
+      .put("/rest-auth/user/", userDetails, config)
+      .then((response) => {
+        console.log("check user details:", response.data);
+        toast.success(`${response.data.message}`);
+        
+      })
+      .catch((error) => {
+        console.log(error);
+        setFormErrors(error);
+        // toast.error("Not updated!");
+      });
+  };
+
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    const credentials = { ...userDetails };
+    credentials[name] = value;
+    setUserDetails(credentials);
+    setFormErrors(null);
+  };
   return (
-    <Card {...rest} mb='20px' align='center' p='20px'>
+    <Card {...rest} mb='20px' align='center' p='20px' alignItems='center'>
       <Flex h='100%' direction={{ base: "column", "2xl": "row" }}>
-        <Dropzone
-          w={{ base: "100%", "2xl": "268px" }}
-          me='36px'
-          maxH={{ base: "60%", lg: "50%", "2xl": "100%" }}
-          minH={{ base: "60%", lg: "50%", "2xl": "100%" }}
-          content={
-            <Box>
-              <Icon as={MdUpload} w='80px' h='80px' color={brandColor} />
-              <Flex justify='center' mx='auto' mb='12px'>
-                <Text fontSize='xl' fontWeight='700' color={brandColor}>
-                  Upload Files
-                </Text>
-              </Flex>
-              <Text fontSize='sm' fontWeight='500' color='secondaryGray.500'>
-                PNG, JPG and GIF files are allowed
-              </Text>
-            </Box>
-          }
-        />
-        <Flex direction='column' pe='44px'>
+        <Flex direction='column' pe='44px' alignItems='center'>
           <Text
             color={textColorPrimary}
             fontWeight='bold'
-            textAlign='start'
+            textAlign='center'
             fontSize='2xl'
+            marginBottom='8'
             mt={{ base: "20px", "2xl": "50px" }}>
-            Complete your profile
+            User profile details
           </Text>
-          <Text
-            color={textColorSecondary}
-            fontSize='md'
-            my={{ base: "auto", "2xl": "10px" }}
-            mx='auto'
-            textAlign='start'>
-            Stay on the pulse of distributed projects with an anline whiteboard
-            to plan, coordinate and discuss
-          </Text>
-          <Flex w='100%'>
+          <FormControl>
+          <FormLabel>
+              First Name
+            </FormLabel>
+            <Input
+              isRequired={true}
+              variant="auth"
+              fontSize="sm"
+              ms={{ base: "0px", md: "0px" }}
+              type="text"
+              mb="24px"
+              fontWeight="500"
+              size="lg"
+              name="first_name"
+              onChange={onChange}
+              error={formErrors}
+            />
+            <FormLabel>
+              Last Name
+            </FormLabel>
+            <Input
+              isRequired={true}
+              variant="auth"
+              fontSize="sm"
+              ms={{ base: "0px", md: "0px" }}
+              type="text"
+              mb="24px"
+              fontWeight="500"
+              size="lg"
+              name="last_name"
+              onChange={onChange}
+              error={formErrors}
+            />
+            <FormLabel>
+              Middle Name
+            </FormLabel>
+            <Input
+              isRequired={true}
+              variant="auth"
+              fontSize="sm"
+              ms={{ base: "0px", md: "0px" }}
+              type="text"
+              mb="24px"
+              fontWeight="500"
+              size="lg"
+              name="middle_name"
+              onChange={onChange}
+              error={formErrors}
+            />
+            <FormLabel>
+              Address
+            </FormLabel>
+            
+            <Input
+              isRequired={true}
+              variant="auth"
+              fontSize="sm"
+              ms={{ base: "0px", md: "0px" }}
+              type="text"
+              mb="24px"
+              fontWeight="500"
+              size="lg"
+              name="address"
+              onChange={onChange}
+              error={formErrors}
+            />
+             <FormLabel>
+              Email
+            </FormLabel>
+            
+            <Input
+              isRequired={true}
+              variant="auth"
+              fontSize="sm"
+              ms={{ base: "0px", md: "0px" }}
+              type="email"
+              mb="24px"
+              fontWeight="500"
+              size="lg"
+              name="email"
+              onChange={onChange}
+              error={formErrors}
+            />
+             <FormLabel>
+              Date of Birth
+            </FormLabel>
+            <Input
+              isRequired={true}
+              variant="auth"
+              fontSize="sm"
+              ms={{ base: "0px", md: "0px" }}
+              type="date"
+              mb="24px"
+              fontWeight="500"
+              size="lg"
+              name="date_of_birth"
+              onChange={onChange}
+              error={formErrors}
+            />
             <Button
-              me='100%'
-              mb='50px'
-              w='140px'
-              minW='140px'
-              mt={{ base: "20px", "2xl": "auto" }}
-              variant='brand'
-              fontWeight='500'>
-              Publish now
+              fontSize="sm"
+              variant="brand"
+              fontWeight="500"
+              w="100%"
+              h="50"
+              mb="24px"
+              onClick={updateUser}
+              >
+                Edit your details
             </Button>
-          </Flex>
+          </FormControl>
         </Flex>
       </Flex>
     </Card>
