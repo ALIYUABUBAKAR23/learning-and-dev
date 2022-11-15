@@ -50,13 +50,9 @@ import {
     } = props;
   
     const [userDetails, setUserDetails] = useState({});
-    const [updatedTaskDetails, setUpdatedTaskDetails] = useState({});
- 
     const handleChange = handleWidgetChange2(
       setUserDetails,
-      setUpdatedTaskDetails,
       userDetails,
-      updatedTaskDetails
     );
   
     return (
