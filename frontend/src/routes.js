@@ -30,6 +30,9 @@ import HumanResources from "./views/admin/hr";
 import Departments from "./views/admin/departments";
 import Contract from "./views/admin/contracts";
 import Accounting from "./views/admin/accounting";
+import UserManagement from "./views/admin/usermanagement";
+
+
 
 
 // Auth Imports
@@ -143,7 +146,15 @@ const routes = [
     icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
     path: "/departments",
     component: Departments,
-  }
+  },
+  {
+    name: "User Management",
+    layout: "/admin",
+    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    path: "/usermanagement",
+    component: UserManagement,
+  },
+  
 ];
 
 export default routes;
