@@ -29,38 +29,12 @@ import {
   axios.defaults.withCredentials = true;
   
   function TaskModal(props) {
-    const taskStatusOptions = [
-      { label: "Open", value: "Open" },
-      { label: "Pending", value: "Pending" },
-      { label: "Suspended", value: "Suspended" },
-      { label: "Postponed", value: "Postponed" },
-      { label: "Completed", value: "Completed" },
-      { label: "Incomplete", value: "Incomplete" },
-      { label: "Cancelled", value: "Cancelled" },
+    const RolesOptions = [
+      { label: "HR", value: "HR" },
+      { label: "Accountant", value: "Accountant" },
+      { label: "Admin", value: "Admin" },
+      { label: "Senior Engineer", value: "Senior_Engineer" },
     ];
-  
-    const taskPriorityOptions = [
-      { label: "High", value: "High" },
-      { label: "Medium", value: "Medium" },
-      { label: "Low", value: "Low" },
-    ];
-  
-    const STATUS = {
-      Open: { label: "Open", value: "Open" },
-      Pending: { label: "Pending", value: "Pending" },
-      Suspended: { label: "Suspended", value: "Suspended" },
-      Postponed: { label: "Postponed", value: "Postponed" },
-      Completed: { label: "Completed", value: "Completed" },
-      Incomplete: { label: "Incomplete", value: "Incomplete" },
-      Cancelled: { label: "Cancelled", value: "Cancelled" },
-    };
-  
-    const PRIORITY = {
-      High: { label: "High", value: "High" },
-      Medium: { label: "Medium", value: "Medium" },
-      Low: { label: "Low", value: "Low" },
-    };
-  
     const {
       onSelect,
       userList,
@@ -75,21 +49,13 @@ import {
       onClose,
     } = props;
   
-    const [taskDetails, setTaskDetails] = useState({});
+    const [userDetails, setUserDetails] = useState({});
     const [updatedTaskDetails, setUpdatedTaskDetails] = useState({});
-  
-    useEffect(() => {
-      setTaskDetails(editTask || "");
-    }, [editTask]);
-  
-    useEffect(() => {
-      setUpdatedTaskDetails(taskDetails || editTask);
-    }, [taskDetails]);
-  
+ 
     const handleChange = handleWidgetChange2(
-      setTaskDetails,
+      setUserDetails,
       setUpdatedTaskDetails,
-      taskDetails,
+      userDetails,
       updatedTaskDetails
     );
   
@@ -99,136 +65,72 @@ import {
         isOpen={isOpen}
         size="xl"
         onClose={() => {
-          setTaskToEdit(null);
           onClose();
         }}
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{editTask ? "Edit Task" : "Create New Task"}</ModalHeader>
+          <ModalHeader>{"New User"} </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={4}>
               <InputGroup>
-                <InputLeftAddon children="Name" borderRadius="16px" />
+                <InputLeftAddon children="First Name" borderRadius="16px" />
                 <Input
-                  name="name"
-                  placeholder="Name"
-                  value={taskDetails?.name || ""}
+                  name="first_name"
+                  placeholder="First Name"
+                  value={userDetails?.first_name || ""}
                   borderRadius="16px"
                   onChange={handleChange}
                 />
               </InputGroup>
               <InputGroup>
-                <InputLeftAddon children="Description" borderRadius="16px" />
-  
-                <Textarea
-                  name="description"
-                  placeholder="Enter A Brief Or Detailed Description Of The Task"
-                  value={taskDetails?.description || ""}
-                  onChange={handleChange}
-                />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CheckIcon color="green.500" />}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Comment" borderRadius="16px" />
-  
-                <Textarea
-                  name="comment"
-                  placeholder="Add A Comment About This Task"
-                  value={taskDetails?.comment || ""}
-                  onChange={handleChange}
-                />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CheckIcon color="green.500" />}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Task Assignee" borderRadius="16px" />
-                <HStack spacing={4}>
-                  {editTask?.assigned_to
-                    ? editTask?.assigned_to.map((user, index) => (
-                        <Tag
-                          size={"lg"}
-                          key={index}
-                          variant="solid"
-                          colorScheme="teal"
-                        >
-                          {user.name}
-                        </Tag>
-                      ))
-                    : assignedTo?.map((user, index) => (
-                        <Tag
-                          size={"lg"}
-                          key={index}
-                          variant="solid"
-                          colorScheme="teal"
-                        >
-                          {user.name}
-                        </Tag>
-                      ))}
-                </HStack>
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Assign Task To" borderRadius="16px" />
-                <Select
-                  options={userList}
-                  isMulti
-                  onChange={onSelect}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLeftAddon children="Start Date" borderRadius="16px" />
+                <InputLeftAddon children="Last Name" borderRadius="16px" />
                 <Input
-                  name="start_date"
-                  placeholder="Start Date"
-                  value={taskDetails?.start_date || ""}
+                  name="last_name"
+                  placeholder="Last Name"
+                  value={userDetails?.last_name || ""}
                   borderRadius="16px"
-                  type="datetime-local"
                   onChange={handleChange}
-                />
-                <InputRightElement
-                  borderRadius="16px"
-                  children={<CalendarIcon color="green.500" />}
                 />
               </InputGroup>
               <InputGroup>
-                <InputLeftAddon children="Due Date" borderRadius="16px" />
+                <InputLeftAddon children="Middle Name" borderRadius="16px" />
                 <Input
-                  name="due_date"
-                  placeholder="Due Date"
-                  value={taskDetails?.due_date || ""}
+                  name="middle_name"
+                  placeholder="Middle Name"
+                  value={userDetails?.middle_name || ""}
                   borderRadius="16px"
-                  type="datetime-local"
                   onChange={handleChange}
                 />
-                <InputRightElement
+              </InputGroup>
+              <InputGroup>
+                <InputLeftAddon children="Email" borderRadius="16px" />
+                <Input
+                  name="email"
+                  placeholder="Email"
+                  value={userDetails?.email || ""}
                   borderRadius="16px"
-                  children={<CalendarIcon color="green.500" />}
+                  onChange={handleChange}
                 />
               </InputGroup>
               <InputGroup>
-                <InputLeftAddon children="Status" borderRadius="16px" />
-                <Select
-                  name="status"
-                  value={STATUS[taskDetails.status]}
-                  options={taskStatusOptions}
-                  onChange={(option) => handleChange(option, "status")}
+                <InputLeftAddon children="Phone" borderRadius="16px" />
+                <Input
+                  name="phone"
+                  placeholder="Phone"
+                  value={userDetails?.phone || ""}
+                  borderRadius="16px"
+                  onChange={handleChange}
                 />
               </InputGroup>
               <InputGroup>
-                <InputLeftAddon children="Priority" borderRadius="16px" />
+                <InputLeftAddon children="Roles" borderRadius="16px" />
                 <Select
-                  name="priority"
-                  value={PRIORITY[taskDetails.priority]}
-                  options={taskPriorityOptions}
-                  onChange={(option) => handleChange(option, "priority")}
+                  name="role"
+                  value={RolesOptions[userDetails.role]}
+                  options={RolesOptions}
+                  onChange={(option) => handleChange(option, "role")}
                 />
               </InputGroup>
             </Stack>
@@ -238,7 +140,6 @@ import {
               colorScheme="brand"
               mr={3}
               onClick={() => {
-                setTaskToEdit(null);
                 onClose();
               }}
             >
@@ -246,11 +147,9 @@ import {
             </Button>
             <Button
               variant="ghost"
-              onClick={() => {
-                onSubmit(editTask ? "put" : "post", updatedTaskDetails);
-              }}
+              onClick={() =>  console.log("Click")  }
             >
-              {editTask ? "Edit" : "Create"}
+                Add new user
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -38,6 +38,7 @@ import {
 } from "react-table";
 import Select from 'react-select';
 import Card from "../../../../components/card/Card";
+import UserModal from "./UserModal"
 import Menu from "../../../../components/menu/MainMenu";
 
 
@@ -102,6 +103,12 @@ export default function UserTable(props){
           </Text>
           <Button onClick={onOpen}>Add User</Button>
         </Flex>
+        <UserModal
+          isOpen={isOpen}
+          onClose={onClose}
+          onOpen={onOpen}
+        />
+
       </Card> 
       </>
     );
