@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from api.hr.models import Staff, Department, Contract, Location
+from api.hr.models import Staff, Department, Contract, Location, Leave
 
 
 class GetStaff(APIView):
@@ -164,3 +164,37 @@ class LocationAPI(APIView):
                 data={"message": "Failed to delete location."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         return Response(data={"message": "Successfully deleted location."}, status=status.HTTP_201_CREATED)
+
+class LeaveAPI(APIView):
+    def get(self, request):
+        leave = Leave.get_leaves_list()
+
+        return Response(data=leave, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        leave_data = request.data        
+        leave = Leave.create_leave(**leave_data)
+
+        if leave is None:
+            return Response(data={"message":"Leave failed to create."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return Response(data={"message":"Leave created successfully."}, status=status.HTTP_201_CREATED)
+    
+    def put(self, request):
+        leave_id = request.data.get("id", None)
+        if leave_id is None:
+            return Response(data={"message":"Failed to update Leave. No Leave ID was specified."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+   
+        leave_data = request.data
+        leave_data.pop("id")
+
+        leave = Leave.update_leave(leave_id, **leave_data)
+        if leave is None:
+            return Response(data={"message":"Failed to update leave."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={"message":"Successfully updated leave."}, status=status.HTTP_201_CREATED)
+    
+    def delete(self, request):
+        leaves = Leave.delete_all_leaves()
+        if leaves is None:
+            return Response(data={"message":"Failed to delete leave."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={"message":"Successfully deleted leave."}, status=status.HTTP_201_CREATED)
