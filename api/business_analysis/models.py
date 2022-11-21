@@ -27,6 +27,8 @@ class Project(BaseModel):
     class Meta:
         verbose_name = "Project"
         verbose_name_plural = "Projects"
+        ordering = ['-created_at']
+        permissions = []
 
     def __str__(self):
         return self.name

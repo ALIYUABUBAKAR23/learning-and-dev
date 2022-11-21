@@ -20,6 +20,8 @@ class Broadcast(BaseModel):
     class Meta:
         verbose_name = "Broadcast"
         verbose_name_plural = "Broadcasts"
+        ordering = ['-created_at']
+        permissions = []
 
     def __str__(self):
         return self.title
