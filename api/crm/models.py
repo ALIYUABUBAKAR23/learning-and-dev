@@ -19,6 +19,8 @@ class Customer(BaseModel):
     class Meta:
         verbose_name = "customer"
         verbose_name_plural = "customers"
+        ordering = ['-created_at']
+        permissions = []
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

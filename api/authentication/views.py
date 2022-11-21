@@ -2,6 +2,9 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from api.authentication.serializers import PermissionSerializer, PermissionGroupSerializer
+from django.contrib.auth.models import Permission, Group as PermissionGroup
+
 from .models import User, UserResetDetails
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -22,3 +25,15 @@ class ProfileUpdateAPI(APIView):
         else:
             profile = UserResetDetails(instance=self.user)
         return Response(data=profile, status=status.HTTP_200_OK)
+    
+class PermissionView(APIView):
+    serializer_class = PermissionSerializer
+    queryset = Permission.objects.all()
+    permission_classes = []
+
+
+class PermissionGroupView(APIView):
+    serializer_class = PermissionGroupSerializer
+    queryset = PermissionGroup.objects.all()
+    permission_classes = []
+

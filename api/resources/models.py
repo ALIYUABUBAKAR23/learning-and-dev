@@ -28,6 +28,8 @@ class Inventory(BaseModel):
     class Meta:
         verbose_name = "inventory"
         verbose_name_plural = "inventories"
+        ordering = ['-created_at']
+        permissions = []
 
     def __str__(self):
         return self.name
@@ -88,6 +90,8 @@ class Item(BaseModel):
     class Meta:
         verbose_name = "item"
         verbose_name_plural = "items"
+        ordering = ['-created_at']
+        permissions = []
 
     def __str__(self):
         return self.name
@@ -139,6 +143,10 @@ class AuditTrail(BaseModel):
     action_type = models.CharField(choices=ACTION_TYPE, max_length=50, blank=True)
     event = models.CharField(max_length=200, blank=True)
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    
+    class Meta:
+        ordering = ['-created_at']
+        permissions = []
 
     @classmethod
     def get_audit_list(cls, **kwargs):

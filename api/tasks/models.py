@@ -42,6 +42,8 @@ class Task(BaseModel):
     class Meta:
         verbose_name = "task"
         verbose_name_plural = "tasks"
+        ordering = ['-created_at']
+        permissions = []
 
     def __str__(self):
         return self.name
