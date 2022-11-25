@@ -31,6 +31,7 @@ import Departments from "./views/admin/departments";
 import Contract from "./views/admin/contracts";
 import Accounting from "./views/admin/accounting";
 import UserManagement from "./views/admin/usermanagement";
+import Leaves from "./views/admin/leaves";
 
 
 
@@ -117,6 +118,13 @@ const routes = [
     icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
     path: "/usermanagement",
     component: UserManagement,
+  },
+  {
+    name: "Leaves",
+    layout: "/admin",
+    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    path: "/leaves",
+    component: Leaves,
   },
   
 ];

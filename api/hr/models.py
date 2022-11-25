@@ -421,10 +421,10 @@ class Leave(BaseModel):
         return leave
 
     @classmethod
-    def delete_leave(cls, leave_id):
+    def delete_leave(cls, leave_id, **leave_data):
         leave = None
         try:
-            leave = Leave.objects.filter(id=leave_id).delete()
+            leave = Leave.objects.filter(id=leave_id).delete(**leave_data)
         except Exception as e:
             print(f"Failed to delete leave. Error below: \n {e}")
         return leave

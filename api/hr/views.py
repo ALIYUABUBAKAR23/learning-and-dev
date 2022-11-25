@@ -194,7 +194,13 @@ class LeaveAPI(APIView):
         return Response(data={"message":"Successfully updated leave."}, status=status.HTTP_201_CREATED)
     
     def delete(self, request):
-        leaves = Leave.delete_all_leaves()
-        if leaves is None:
-            return Response(data={"message":"Failed to delete leave."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response(data={"message":"Successfully deleted leave."}, status=status.HTTP_201_CREATED)
+        leave_id = request.data.get("leave_id", None)
+        leave = Leave.delete_leave(leave_id)
+        print(request.data)
+
+        if leave is None:
+            return Response(
+                data={"message": "Failed to delete leave."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        return Response(data={"message": "Successfully deleted leave."}, status=status.HTTP_201_CREATED)
