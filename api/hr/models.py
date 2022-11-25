@@ -67,10 +67,12 @@ class Department(BaseModel):
         settings.AUTH_USER_MODEL, related_name="head_of_department", on_delete=models.SET_NULL, null=True, blank=True
     )
 
+
     class Meta:
         verbose_name = "Department"
         verbose_name_plural = "Departments"
-
+        ordering = ['-created_at']
+        permissions = []
     def __str__(self):
         return self.name
 
@@ -169,7 +171,9 @@ class Staff(BaseModel):
     class Meta:
         verbose_name = "staff"
         verbose_name_plural = "staff"
-
+        ordering = ['-created_at']
+        permissions = []
+        
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
@@ -203,7 +207,8 @@ class Contract(BaseModel):
     class Meta:
         verbose_name = "Contract"
         verbose_name_plural = "Contracts"
-
+        ordering = ['-created_at']
+        permissions = []
     def __str__(self):
         return self.name
 
@@ -295,6 +300,8 @@ class Location(BaseModel):
     class Meta:
         verbose_name = "Location"
         verbose_name_plural = "Locations"
+        ordering = ['-created_at']
+        permissions = []
 
     def __str__(self):
         return self.name
