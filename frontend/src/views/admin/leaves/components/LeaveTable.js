@@ -27,6 +27,16 @@ import Menu from "./MainMenu";
 
 // Assets
 import { RiLogoutBoxLine, RiLoginBoxLine } from "react-icons/ri";
+import {
+  MdOutlineAssignmentLate,
+  MdOutlineAssignmentInd,
+  MdPendingActions,  
+  MdOutlineAssignment,
+  MdHourglassEmpty,
+  MdCheckCircleOutline,
+  MdBlock,
+  MdRemoveCircleOutline
+} from "react-icons/md";
 
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -119,8 +129,8 @@ export default function ColumnsTable(props) {
       .then((response) => {
         setUserList(
           response.data.map((option) => ({
-            label: `${option?.first_name} ${option?.middle_name} ${option.last_name}`,
-            value: option.id,
+            name: `${option?.first_name} ${option?.middle_name} ${option.last_name}`,
+            id: option.id,
           }))
         );
       })
@@ -145,10 +155,12 @@ export default function ColumnsTable(props) {
         getLeaves();
         setLeaveData();
         toast.success(`${response.data.message}`);
+        setEditLeave(null)
+        onCloseCreate();
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Not created!");
+        toast.error("Not successful!");
       });
   };
 
@@ -223,6 +235,12 @@ export default function ColumnsTable(props) {
     let leave = { ...leaveData };
     createLeave(leave, httpVerb);
   };
+  const approvalStatusOptions = [
+    "Waiting",
+    "Validated",
+    "Refused",
+    "Cancelled"
+  ];
 
   useEffect(() => {
     getLeaves();
@@ -278,7 +296,7 @@ export default function ColumnsTable(props) {
               <Tr {...row.getRowProps()} key={index}>
                 {row.cells.map((cell, index) => {
                   let data = "";
-                  if (cell.column.Header === "TYPE") {
+                  if (cell.column.Header === "APPROVAL STATUS") {
                     data = (
                       <Flex align="center">
                         <Icon
@@ -286,41 +304,53 @@ export default function ColumnsTable(props) {
                           h="24px"
                           me="5px"
                           color={
-                            cell.value === "Dr"
+                            cell.value == "1"
                               ? "red.500"
-                              : cell.value === "Cr"
+                              : cell.value == "2"
                               ? "green.500"
+                              : cell.value == "3"
+                              ? "red.300"
+                              : cell.value == "4"
+                              ? "green.200"
                               : null
                           }
                           as={
-                            cell.value === "Cr"
-                              ? RiLoginBoxLine
-                              : cell.value === "Dr"
-                              ? RiLogoutBoxLine
+                            cell.value == "1"
+                              ? MdHourglassEmpty
+                              : cell.value == "2"
+                              ? MdCheckCircleOutline
+                              : cell.value == "3"
+                              ? MdBlock
+                              : cell.value == "4"
+                              ? MdRemoveCircleOutline
                               : null
                           }
                         />
-                        <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell.value}
+                        <Text 
+                        color="gray.500"
+                        fontSize="xs" fontWeight="700">
+                          {approvalStatusOptions[cell.value - 1]}
                         </Text>
+
                       </Flex>
                     );
-                  } else if (cell.column.Header === "CODE") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {cell.value}
-                      </Text>
-                    );
+
+                  } else if (cell.column.Header === "REQUESTING STAFF") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {cell.value} yo
+                        </Text>
+                      );
                   } else if (cell.column.Header === "ACTIONS") {
-                    data = (
-                      <Menu
-                        editData={cell.row.original}
-                        setLeaveToEdit={setEditLeave}
-                        setLeaveForDelete={setLeaveForDelete}
-                        onOpen={onOpenCreate}
-                        onOpenConfirm={onOpenConfirm}
-                      />
-                    );
+                      data = (
+                        <Menu
+                          editData={cell.row.original}
+                          setLeaveToEdit={setEditLeave}
+                          setLeaveForDelete={setLeaveForDelete}
+                          onOpen={onOpenCreate}
+                          onOpenConfirm={onOpenConfirm}
+                        />
+                      );
                   } else {
                     data = (
                       <Text color={textColor} fontSize="sm" fontWeight="700">

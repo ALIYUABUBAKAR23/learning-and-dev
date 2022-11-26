@@ -40,13 +40,6 @@ function LeaveModal(props) {
     { label: "Cancelled", value: "4" },
   ];
 
-  const leaveClassOptions = [
-    { label: "Revenue", value: "Revenue" },
-    { label: "Equity", value: "Equity" },
-    { label: "Other Income", value: "Other Income" },
-    { label: "Other Expense", value: "Other Expense" },
-  ];
-
   const {
     onSelect,
     userList,
@@ -160,7 +153,8 @@ function LeaveModal(props) {
                 <Select
                   options={userList}
                   isMulti
-                  onChange={handleChange}
+                  defaultValue={approvalStatusOptions[leaveDetails?.requestingStaff] || ""}
+                  onChange={(option) => handleChange(option[0].id, "requesting_staff")}
                   className="basic-multi-select"
                   classNamePrefix="select"
                 />
@@ -171,6 +165,7 @@ function LeaveModal(props) {
               <Select
                 name="approval_status"
                 options={approvalStatusOptions}
+                defaultValue={approvalStatusOptions[leaveDetails?.approval_status] || ""}
                 onChange={(option) => handleChange(option.value, "approval_status")}
               />
             </InputGroup>
