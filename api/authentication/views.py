@@ -8,6 +8,7 @@ from django.contrib.auth.models import Permission, Group as PermissionGroup
 from .models import User, UserResetDetails
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.core.mail import send_mail
 
 class UsersAPI(APIView):
     def get(self, request):
@@ -19,6 +20,14 @@ class ProfileUpdateAPI(APIView):
         if self.method == 'POST':
             profile = UserResetDetails(self.POST, instance=self.user)
             if profile.is_valid():
+                email = UserResetDetails.cleaned_data[User]
+                send_mail(
+                    subject="Reseting details",
+                    message="details reset success",
+                    from_email="",
+                    recipient_list=""
+                )
+                
                 profile.save()
                 messages.success(self, 'Your profile is updated successfully')
                 return redirect(to='users-profile')
