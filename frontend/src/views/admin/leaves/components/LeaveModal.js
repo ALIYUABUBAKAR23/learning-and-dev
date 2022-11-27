@@ -44,7 +44,7 @@ function LeaveModal(props) {
     onSelect,
     userList,
     editLeave,
-    assignedTo,
+    requestingStaff,
     onChange,
     onOptionSelect,
     onSubmit,
@@ -56,7 +56,6 @@ function LeaveModal(props) {
 
   const [leaveDetails, setLeaveDetails] = useState({});
   const [updatedLeaveDetails, setUpdatedLeaveDetails] = useState({});
-  const [requestingStaff, setRequestingStaff] = useState([])   
 
   useEffect(() => {
     setLeaveDetails(editLeave || "");
@@ -143,7 +142,7 @@ function LeaveModal(props) {
             {/*Requesting Staff Field */}
             <InputGroup>
                 <InputLeftAddon children="Requesting_Staff" borderRadius="16px" />
-                <HStack spacing={4}>
+{/*                 <HStack spacing={4}>
                   {requestingStaff?.map((user, index) => (
                     <Tag size={'lg'} key={index} variant='solid' colorScheme='teal'>
                       {user.name}
@@ -157,8 +156,41 @@ function LeaveModal(props) {
                   onChange={(option) => handleChange(option[0].id, "requesting_staff")}
                   className="basic-multi-select"
                   classNamePrefix="select"
-                />
-              </InputGroup>
+                /> */}
+              <HStack spacing={4}>
+                {editLeave?.requesting_staff
+                  ? editLeave?.requesting_staff.map((user, index) => (
+                      <Tag
+                        size={"lg"}
+                        key={index}
+                        variant="solid"
+                        colorScheme="teal"
+                      >
+                        {user.name}
+                      </Tag>
+                    ))
+                  : requestingStaff?.map((user, index) => (
+                      <Tag
+                        size={"lg"}
+                        key={index}
+                        variant="solid"
+                        colorScheme="teal"
+                      >
+                        {user.name}
+                      </Tag>
+                    ))}
+              </HStack>
+              <Select
+                  options={userList}
+                  name="requesting_staff_id"
+                  //defaultValue={userList[leaveDetails?.requestingStaff.id] || 0}
+                  //onChange={onSelect}
+                  //onChange={(option) => handleChange(option.value, "requesting_staff")}
+                  onChange={onOptionSelect}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                /> 
+            </InputGroup>
             {/*Approval Status Field */}
             <InputGroup>
               <InputLeftAddon children="approval_status" borderRadius="16px" />

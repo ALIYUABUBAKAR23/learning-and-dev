@@ -88,6 +88,7 @@ export default function ColumnsTable(props) {
   } = useDisclosure();
   const [leaveData, setLeaveData] = useState({});
   const [assignedTo, setAssignedTo] = useState([]);
+  const [requestingStaff, setRequestingStaff] = useState([])   
   const [formErrors, setFormErrors] = useState(null);
   const [userList, setUserList] = useState([]);
   const [leaveToEdit, setLeaveToEdit] = useState();
@@ -129,8 +130,8 @@ export default function ColumnsTable(props) {
       .then((response) => {
         setUserList(
           response.data.map((option) => ({
-            name: `${option?.first_name} ${option?.middle_name} ${option.last_name}`,
-            id: option.id,
+            label: `${option?.first_name} ${option?.middle_name} ${option.last_name}`,
+            value: option.id,
           }))
         );
       })
@@ -208,17 +209,19 @@ export default function ColumnsTable(props) {
 
   const onOptionSelect = (event, action) => {
     const { label, value } = event;
+    console.log("see the name, event : ", label, " ,", value);
     const leave = { ...leaveData };
     leave[action.name] = value;
     setLeaveData(leave);
   };
 
+
   const onSelect = (event) => {
     var newState;
-    if (event.length > 0) {
+    if (event.length !== null) {
       event?.map((input) => {
         newState = [
-          ...assignedTo,
+          ...requestingStaff,
           {
             id: input.value ? input.value : null,
             name: input.label ? input.label : null,
@@ -228,7 +231,8 @@ export default function ColumnsTable(props) {
     } else {
       newState = [];
     }
-    setAssignedTo(newState);
+    console.log(newState)
+    setRequestingStaff(newState);
   };
 
   const onSubmit = (httpVerb, leaveData) => {
@@ -338,7 +342,7 @@ export default function ColumnsTable(props) {
                   } else if (cell.column.Header === "REQUESTING STAFF") {
                       data = (
                         <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell.value} yo
+                          {cell.value}
                         </Text>
                       );
                   } else if (cell.column.Header === "ACTIONS") {
@@ -381,7 +385,7 @@ export default function ColumnsTable(props) {
         onOpen={onOpenCreate}
         onSelect={onSelect}
         userList={userList}
-        assignedTo={assignedTo}
+        requestingStaff={requestingStaff}
         onChange={onChange}
         onOptionSelect={onOptionSelect}
         onSubmit={onSubmit}
