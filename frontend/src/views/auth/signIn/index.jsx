@@ -8,6 +8,8 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  FormHelperText,
+  FormErrorMessage,
   Heading,
   Icon,
   Input,
@@ -46,10 +48,13 @@ function SignIn(props) {
     { bg: "whiteAlpha.200" }
   );
   const [show, setShow] = React.useState(false);
+
   const handleClick = () => setShow(!show);
 
   const [userCredentials, setUserCredentials] = useState({});
   const [formErrors, setFormErrors] = useState(null);
+  const [emailInput, setEmailInput] = useState('')
+  const [passInput, setPassInput] = useState('')  
 
   const onSubmit = () => {
      const csrfToken = Cookies.get("csrftoken") || CSRF_TOKEN;
@@ -80,7 +85,29 @@ function SignIn(props) {
       });
   };
 
+  const validateEmail = (value) =>{
+    let regex = /([A-Za-z0-9]+(\.[A-Za-z0-9]+)+)@rightclicksolutions\.com\.ng/i;
+
+    if (regex.test(value)){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
+  const isInvalidEmail = validateEmail(emailInput)
+  const emailIsRequired = emailInput === ""
+  const passIsRequired = passInput === ""
+
   const onChange = (event) => {
+    if(event.target.name == "email"){
+      setEmailInput(event.target.value)
+    }
+    else{
+      setPassInput(event.target.value)
+    }
+    console.log(event.target.name)
     const { name, value } = event.target;
     const credentials = { ...userCredentials };
     credentials[name] = value;
@@ -169,14 +196,27 @@ function SignIn(props) {
               fontSize="sm"
               ms={{ base: "0px", md: "0px" }}
               type="email"
-              placeholder="mail@simmmple.com"
-              mb="24px"
+              placeholder="mail@rightclicksolutions.com.ng"
+              mb="10px"
               fontWeight="500"
               size="lg"
               name="email"
               onChange={onChange}
               error={formErrors}
+              value={emailInput}
             />
+            {!isInvalidEmail? (
+              <Text  
+              mb="10px"
+              fontSize="sm"
+              color={"red.400"}>Enter Valid Email</Text>
+            ) : null}         
+            {emailIsRequired? (
+              <Text  
+              mb="10px"
+              fontSize="sm"
+              color={"red.400"}>Is Required</Text>
+            ) : null}     
             <FormLabel
               ms="4px"
               fontSize="sm"
@@ -191,11 +231,12 @@ function SignIn(props) {
                 isRequired={true}
                 fontSize="sm"
                 placeholder="Min. 8 characters"
-                mb="24px"
+                mb="10px"
                 size="lg"
                 type={show ? "text" : "password"}
                 variant="auth"
                 name="password"
+                value={passInput}
                 onChange={onChange}
                 error={formErrors}
               />
@@ -208,6 +249,18 @@ function SignIn(props) {
                 />
               </InputRightElement>
             </InputGroup>
+            {passIsRequired? (
+              <Text  
+              mb="10px"
+              fontSize="sm"
+              color={"red.400"}>Is Required</Text>
+            ) : null}    
+            {formErrors? (
+              <Text  
+              mb="10px"
+              fontSize="sm"
+              color={"red.400"}>Invalid Username or Password</Text>
+            ) : null}    
             <Flex justifyContent="space-between" align="center" mb="24px">
               <FormControl display="flex" alignItems="center">
                 <Checkbox
@@ -255,7 +308,7 @@ function SignIn(props) {
             maxW="100%"
             mt="0px"
           >
-            <Text color={textColorDetails} fontWeight="400" fontSize="14px">
+            {/* <Text color={textColorDetails} fontWeight="400" fontSize="14px">
               Not registered yet?
               <NavLink to="/auth/sign-up">
                 <Text
@@ -267,7 +320,7 @@ function SignIn(props) {
                   Create an Account
                 </Text>
               </NavLink>
-            </Text>
+            </Text> */}
           </Flex>
         </Flex>
       </Flex>
