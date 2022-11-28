@@ -20,14 +20,11 @@ class ProfileUpdateAPI(APIView):
         if self.method == 'POST':
             profile = UserResetDetails(self.POST, instance=self.user)
             if profile.is_valid():
-                email = UserResetDetails.cleaned_data[User]
-                send_mail(
-                    subject="Reseting details",
-                    message="details reset success",
-                    from_email="",
-                    recipient_list=""
-                )
-                
+                send_mail(subject ='profile reset',
+                          message ='profile reset sucess', 
+                          from_email ='', 
+                          recipient_list =[''], 
+                          fail_silently=False)    
                 profile.save()
                 messages.success(self, 'Your profile is updated successfully')
                 return redirect(to='users-profile')
