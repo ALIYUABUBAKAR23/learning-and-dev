@@ -188,3 +188,34 @@ export const columnsDataLedger = [
     accessor: "actions",
   },
 ];
+
+export const columnsDataLeaves = [
+  {
+    Header: "TITLE",
+    accessor: "title",
+  },
+  {
+    Header: "REASON",
+    accessor: "reason",
+  },
+  {
+    Header: "START DATE",
+    accessor: "start_date",
+  },
+  {
+    Header: "END DATE",
+    accessor: "end_date",
+  },
+  {
+    Header: "REQUESTING STAFF",
+    accessor: "requesting_staff",
+  },
+  {
+    Header: "APPROVAL STATUS",
+    accessor: "approval_status",
+  },
+  {
+    Header: "ACTIONS",
+    accessor: "actions",
+  },
+];

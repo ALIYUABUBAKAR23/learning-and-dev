@@ -8,4 +8,5 @@ urlpatterns = [
     path("departments", views.DepartmentAPI.as_view(), name="departments"),
     path("contracts", views.ContractAPI.as_view(), name="contracts"),
     path("locations", views.LocationAPI.as_view(), name="locations"),
+    path("leaves", views.LeaveAPI.as_view(), name="leaves"),
 ]

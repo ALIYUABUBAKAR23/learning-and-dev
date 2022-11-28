@@ -13,7 +13,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import include, path
 from allauth.account.views import confirm_email
 from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
@@ -31,5 +30,4 @@ urlpatterns = [
         r"^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$", confirm_email, name="account_confirm_email"
     ),
     path("", include("frontend.urls")),
-    path("admin/", admin.site.urls),
 ]

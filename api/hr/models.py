@@ -373,3 +373,69 @@ class Location(BaseModel):
         except Exception as e:
             print(f"The location could not b deleted. Error below: /n {e}")
         return location
+
+class ApprovalStatus(models.IntegerChoices):
+    waiting_for_validation = 1
+    validated = 2
+    refused = 3
+    cancelled = 4
+
+class Leave(BaseModel):   
+    title = models.CharField(max_length=200)
+    reason = models.TextField()
+    start_date = models.DateField(null=False, blank=True)
+    end_date = models.DateField(null=False, blank=True)
+    requesting_staff = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='requesting_staff', 
+        on_delete=models.SET_NULL, null=True, blank=True)    
+    approval_status =  (models.IntegerField(choices=ApprovalStatus.choices, default=ApprovalStatus.waiting_for_validation))   
+    
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = ("Leave")
+        verbose_name_plural = ("Leaves")
+    
+    @classmethod
+    def get_leaves_list(cls, **kwargs):
+        leave = Leave.objects.all().values()
+        return leave
+
+    @classmethod
+    def create_leave(cls, **kwargs):
+        leave = None
+        try:
+            leave = Leave.objects.create(**kwargs)
+        except Exception as e:
+            print(f"Failed to create leave. Error below: \n {e}")
+        return leave
+
+    @classmethod
+    def update_leave(cls, leave_id, **kwargs):
+        leave = None
+        try:
+            leave = Leave.objects.filter(id=leave_id).update(**kwargs)
+        except Exception as e:
+            print(f"Failed to update Leave. Error below: \n {e}")
+        return leave
+
+    @classmethod
+    def delete_leave(cls, leave_id, **leave_data):
+        leave = None
+        try:
+            leave = Leave.objects.filter(id=leave_id).delete(**leave_data)
+        except Exception as e:
+            print(f"Failed to delete leave. Error below: \n {e}")
+        return leave
+
+    @classmethod
+    def delete_all_leaves(cls):
+        leave = None
+        try:
+            leave = Leave.objects.all().delete()
+        except Exception as e:
+            print(f"Failed to create leave. Error below: \n {e}")
+        return leave
+
+        
