@@ -81,15 +81,6 @@ function SignIn(props) {
   };
 
   const onChange = (event) => {
-<<<<<<< Updated upstream
-=======
-    if(event.target.name == "email"){
-      setEmailInput(event.target.value)
-    }
-    else{
-      setPassInput(event.target.value)
-    }
->>>>>>> Stashed changes
     const { name, value } = event.target;
     const credentials = { ...userCredentials };
     credentials[name] = value;

@@ -48,15 +48,6 @@ export default function Settings() {
           setLeaveList={setLeaveList}
         />
       </SimpleGrid>
-{/*      <SimpleGrid
-        mb='20px'
-        >
-         <LedgeTable
-          columnsData={columnsDataLedger}
-          tableData={ledgerList}
-          setLedgerList={setLedgerList}
-        /> 
-      </SimpleGrid>*/}
     </Box>
   );
 }

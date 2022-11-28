@@ -11,6 +11,7 @@ import {
   useColorModeValue,
   useDisclosure,
   Button,
+  HStack
 } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
@@ -87,7 +88,6 @@ export default function ColumnsTable(props) {
     onClose: onCloseConfirm,
   } = useDisclosure();
   const [leaveData, setLeaveData] = useState({});
-  const [assignedTo, setAssignedTo] = useState([]);
   const [requestingStaff, setRequestingStaff] = useState([])   
   const [formErrors, setFormErrors] = useState(null);
   const [userList, setUserList] = useState([]);
@@ -131,7 +131,8 @@ export default function ColumnsTable(props) {
         setUserList(
           response.data.map((option) => ({
             label: `${option?.first_name} ${option?.middle_name} ${option.last_name}`,
-            value: option.id,
+            id: option.id,
+            value: {...option}
           }))
         );
       })
@@ -139,6 +140,11 @@ export default function ColumnsTable(props) {
         console.log(error);
       });
   };
+  //Return user object based on id
+  const findUser = (list, id) => {
+    let user = list.find(user => user.id === id);
+    return user
+  }
 
   const createLeave = (leaveData, httpVerb) => {
     const config = {
@@ -208,32 +214,16 @@ export default function ColumnsTable(props) {
   };
 
   const onOptionSelect = (event, action) => {
-    const { label, value } = event;
-    console.log("see the name, event : ", label, " ,", value);
+    const { label, value, user } = event;
+    console.log("see the name, event , user: ", label, " ,", user);
     const leave = { ...leaveData };
-    leave[action.name] = value;
+    console.log(action)
+    leave[action.name] = user;
     setLeaveData(leave);
   };
 
 
-  const onSelect = (event) => {
-    var newState;
-    if (event.length !== null) {
-      event?.map((input) => {
-        newState = [
-          ...requestingStaff,
-          {
-            id: input.value ? input.value : null,
-            name: input.label ? input.label : null,
-          },
-        ];
-      });
-    } else {
-      newState = [];
-    }
-    console.log(newState)
-    setRequestingStaff(newState);
-  };
+
 
   const onSubmit = (httpVerb, leaveData) => {
     let leave = { ...leaveData };
@@ -245,7 +235,7 @@ export default function ColumnsTable(props) {
     "Refused",
     "Cancelled"
   ];
-
+  
   useEffect(() => {
     getLeaves();
     getUsers();
@@ -340,10 +330,13 @@ export default function ColumnsTable(props) {
                     );
 
                   } else if (cell.column.Header === "REQUESTING STAFF") {
-                      data = (
-                        <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell.value}
+                    //user = findUser(userList,cell.row.original.requesting_staff_id).label
+                    data = (
+                        <Flex align="center">
+                         <Text color={textColor} fontSize="sm" fontWeight="700">
+                          ID: {cell.row.original.requesting_staff_id}
                         </Text>
+                      </Flex>
                       );
                   } else if (cell.column.Header === "ACTIONS") {
                       data = (
@@ -383,9 +376,9 @@ export default function ColumnsTable(props) {
         isOpen={isOpenCreate}
         onClose={onCloseCreate}
         onOpen={onOpenCreate}
-        onSelect={onSelect}
         userList={userList}
         requestingStaff={requestingStaff}
+        setRequestingStaff = {setRequestingStaff}
         onChange={onChange}
         onOptionSelect={onOptionSelect}
         onSubmit={onSubmit}

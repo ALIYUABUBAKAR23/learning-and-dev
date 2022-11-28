@@ -41,10 +41,10 @@ function LeaveModal(props) {
   ];
 
   const {
-    onSelect,
     userList,
     editLeave,
     requestingStaff,
+    setRequestingStaff,
     onChange,
     onOptionSelect,
     onSubmit,
@@ -72,6 +72,25 @@ function LeaveModal(props) {
     updatedLeaveDetails
   );
 
+  const onSelect = (event) => {
+    console.log("see the event: ", event);
+    var newState;
+    if (event.length > 0) {
+      event?.map((input) => {
+        newState = [
+          ...requestingStaff,
+          {
+            id: input.id? input.id : null,
+            value: input.value ? input.value : null,
+            name: input.label ? input.label : null,
+          },
+        ];
+      });
+    } else {
+      newState = [];
+    }
+    handleChange(event.value.id, "requesting_staff_id")    
+  };
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -182,11 +201,9 @@ function LeaveModal(props) {
               </HStack>
               <Select
                   options={userList}
-                  name="requesting_staff_id"
-                  //defaultValue={userList[leaveDetails?.requestingStaff.id] || 0}
-                  //onChange={onSelect}
-                  //onChange={(option) => handleChange(option.value, "requesting_staff")}
-                  onChange={onOptionSelect}
+                  name="requesting_staff"
+                  //onChange={(option) => handleChange(option.value.id, "requesting_staff_id")}
+                  onChange={onSelect}
                   className="basic-multi-select"
                   classNamePrefix="select"
                 /> 
