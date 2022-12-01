@@ -51,6 +51,12 @@ SEX = (
     ("Female", "female"),
 )
 
+STATUS = (
+    ("Active", "Active"),
+    ("InActive", "InActive"),
+    
+)
+
 # DEPARTMENTS=(
 #     ('Accounting','accounting'),
 #     ('Human Resources','human resources'),
@@ -438,4 +444,15 @@ class Leave(BaseModel):
             print(f"Failed to create leave. Error below: \n {e}")
         return leave
 
-        
+class Report(BaseModel):
+    title = models.CharField(max_length=100, blank=True, null=True)
+    reporter_name = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    report_date = models.DateField(auto_now=True)
+    incidence_report_date =models.DateField(auto_now=True)
+    status = models.CharField(max_length=50, choices=STATUS, blank=True, null=True)
+    
+    
+    class Meta:
+        verbose_name = "Report"
+        verbose_name_plural = "Reports" 

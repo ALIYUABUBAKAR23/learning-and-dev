@@ -32,6 +32,7 @@ import Contract from "./views/admin/contracts";
 import Accounting from "./views/admin/accounting";
 import UserManagement from "./views/admin/usermanagement";
 import Leaves from "./views/admin/leaves";
+import Report from "./views/admin/reports";
 
 
 
@@ -115,7 +116,7 @@ const routes = [
   {
     name: "User Management",
     layout: "/admin",
-    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     path: "/usermanagement",
     component: UserManagement,
   },
@@ -125,6 +126,13 @@ const routes = [
     icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
     path: "/leaves",
     component: Leaves,
+  },
+  {
+    name: "Report Management",
+    layout: "/admin",
+    icon: <Icon as={MdGroupWork} width="20px" height="20px" color="inherit" />,
+    path: "/report",
+    component: Report,
   },
   
 ];
