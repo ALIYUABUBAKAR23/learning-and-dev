@@ -37,6 +37,7 @@ class ProfileAPI(APIView):
             return Response(data={"message": "Successfully updated profile."}, status=status.HTTP_201_CREATED)
         return Response(data={"message": "Failed to update profile."}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
+
     def delete(self, request):
         # profile_id = request.data.get("id", None)
         # profile = Profile.delete_profile(profile_id)
