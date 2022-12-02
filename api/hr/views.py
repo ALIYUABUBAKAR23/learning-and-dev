@@ -1,8 +1,10 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from api.hr.models import Staff, Department, Contract, Location, Leave,Report
+from .serializers import ReportSerializer
 
-from api.hr.models import Staff, Department, Contract, Location, Leave
 
 
 class GetStaff(APIView):
@@ -205,3 +207,36 @@ class LeaveAPI(APIView):
             )
 
         return Response(data={"message": "Successfully deleted leave."}, status=status.HTTP_201_CREATED)
+
+class ReportList(APIView):
+    def get(self, request):
+        queryset = Report.objects.all()
+        serializer = ReportSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = ReportSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data={"message": "created successfully"}, status=status.HTTP_201_CREATED)
+
+class ReportDetail(APIView):
+    def get(self, request, id):
+        report = get_object_or_404(Report, pk=id)
+        serializer = ReportSerializer(report)
+        return Response(serializer.data)
+ 
+    def put(self, request, id):
+        report = get_object_or_404(Report, pk=id)
+        serializer = ReportSerializer(report, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data={"message": "updated successfully "}, status=status.HTTP_201_CREATED)
+    
+    def delete(self, request, id):
+        report = get_object_or_404(Report, pk=id)
+        report.delete()
+        return Response(data={"message": "Successfully deleted"},status=status.HTTP_204_NO_CONTENT)
+    
+
+        

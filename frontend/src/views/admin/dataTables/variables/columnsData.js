@@ -1,3 +1,4 @@
+
 export const columnsDataDevelopment = [
   {
     Header: "NAME",
@@ -219,3 +220,40 @@ export const columnsDataLeaves = [
     accessor: "actions",
   },
 ];
+
+export const columnsReportData = [
+  {
+    Header: "REPORTER NAME",
+    accessor: "reporter_name",
+  },
+
+  {
+    Header: "INCIDENCE TITLE",
+    accessor: "title",
+  },
+
+  {
+    Header: "REPORT DATE",
+    accessor: "report_date",
+  },
+
+  {
+    Header: "INCIDENCE REPORT DATE",
+    accessor: "incidence_report_date",
+  },
+
+  {
+    Header: "DESCRIPTION",
+    accessor: "description",
+  },
+
+  {
+    Header: "STATUS",
+    accessor: "status",
+  },
+
+  {
+    Header: "ACTIONS",
+    accessor: "actions",
+  },
+]
