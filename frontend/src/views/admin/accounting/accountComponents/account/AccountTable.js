@@ -244,7 +244,7 @@ export default function ColumnsTable(props) {
         >
           Accounts
         </Text>
-        <Button onClick={onOpenCreate}>Create Account</Button>
+        <Button onClick={onOpenCreate} colorScheme='blue'>Create Account</Button>
       </Flex>
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
         <Thead>

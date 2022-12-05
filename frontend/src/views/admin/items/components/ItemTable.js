@@ -214,7 +214,7 @@ export default function ColumnsTable(props) {
         >
          Items
         </Text>
-        <Button onClick={onOpen}>Add Items</Button>
+        <Button onClick={onOpen} colorScheme='blue'>Add Items</Button>
       </Flex>
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
         <Thead>

@@ -14,7 +14,7 @@ export default function StaffModal() {
     const [scrollBehavior, setScrollBehavior] = React.useState('inside')
     return (
         <>
-        <Button onClick={onOpen}>Create Staff</Button>
+        <Button onClick={onOpen} colorScheme='blue'>Create Staff</Button>
 
         <Modal scrollBehavior={'inside'} isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />

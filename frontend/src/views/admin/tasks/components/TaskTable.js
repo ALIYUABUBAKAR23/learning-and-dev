@@ -308,7 +308,7 @@ export default function ColumnsTable(props) {
         >
           My Tasks
         </Text>
-        <Button onClick={onOpen}>Create Task</Button>
+        <Button onClick={onOpen} colorScheme='blue'>Create Task</Button>
       </Flex>
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
         <Thead>

@@ -23,7 +23,7 @@ import {
 
 // Custom components
 import IconBox from "components/icons/IconBox";
-import { HorizonLogo } from "components/icons/Icons";
+import Logo  from "../../assets/img/logo/logo.png";
 import { SidebarResponsive } from "components/sidebar/Sidebar";
 import { SidebarContext } from "contexts/SidebarContext";
 
@@ -101,7 +101,7 @@ export default function AuthNavbar(props) {
       alignItems='center'
       color={mainText}>
       <Stack direction='row' spacing='12px' align='center' justify='center'>
-        <HorizonLogo h='26px' w='175px' color={logoColor} />
+        <img src ={Logo} h='26px' w='175px' color={logoColor} />
       </Stack>
       <Text fontsize='sm' mt='3px'>
         {logoText}

@@ -243,7 +243,7 @@ export default function ColumnsTable(props) {
           Inventory
         </Text>
         <Flex px="25px" justify="flex-end" mb="20px" align="center">
-        <Button onClick={onOpen}>Create Inventory</Button>
+        <Button onClick={onOpen} colorScheme='blue'>Create Inventory</Button>
         </Flex>
       </Flex>
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
