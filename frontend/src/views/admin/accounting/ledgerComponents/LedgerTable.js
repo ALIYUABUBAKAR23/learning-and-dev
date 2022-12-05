@@ -310,7 +310,7 @@ export default function ColumnsTable(props) {
 					>
 						Ledger
 					</Text>
-					<Button onClick={onOpenCreate}>Create Ledger</Button>
+					<Button onClick={onOpenCreate} colorScheme='blue'>Create Ledger</Button>
 				</Flex>
 				<Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
 					<Thead>

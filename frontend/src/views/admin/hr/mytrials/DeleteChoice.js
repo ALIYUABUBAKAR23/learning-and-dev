@@ -13,7 +13,7 @@ function DeleteStaff() {
   
     return (
       <>
-        <Button onClick={onOpen}>Delete</Button>
+        <Button onClick={onOpen} colorScheme='blue'>Delete</Button>
   
         <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />

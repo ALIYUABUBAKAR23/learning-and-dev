@@ -219,7 +219,7 @@ import {MdAddCircleOutline} from 'react-icons/md';
           >
             Department
           </Text>
-          <Button onClick={onOpen}>Create Department</Button>
+          <Button onClick={onOpen} colorScheme='blue'>Create Department</Button>
         </Flex>
         <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
           <Thead>

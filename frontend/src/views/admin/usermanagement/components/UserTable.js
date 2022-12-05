@@ -101,7 +101,7 @@ export default function UserTable(props){
           >
            Users
           </Text>
-          <Button onClick={onOpen}>Add User</Button>
+          <Button onClick={onOpen} colorScheme='blue'>Add User</Button>
         </Flex>
         <UserModal
           isOpen={isOpen}

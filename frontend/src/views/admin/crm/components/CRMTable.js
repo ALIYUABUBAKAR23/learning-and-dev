@@ -306,7 +306,7 @@ export default function ColumnsTable(props) {
         >
           Customers
         </Text>
-        <Button onClick={onOpen}>Create Customer</Button>
+        <Button onClick={onOpen} colorScheme='blue'>Create Customer</Button>
       </Flex>
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
         <Thead>
