@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "api.resources",
     "api.hr",
     "drf_api_logger",
+    "api.application",
 ]
 
 MIDDLEWARE = [
