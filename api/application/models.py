@@ -13,30 +13,29 @@ class JobApplications(BaseModel):
     postal_code = models.CharField(max_length=50, blank=True)
     country = models.CharField(max_length=50, blank=True)
     resume = models.CharField(max_length=50, blank=True)
-    date_available = models.DateTimeField(null=False, blank=True)
+    date = models.DateTimeField(null=False, blank=True)
     desired_pay = models.CharField(max_length=50, blank=True)
     website_blog_portfolio = models.CharField(max_length=50, blank=True)
-    linkedin_Profile_URL = models.CharField(max_length=50, blank=True)
-    resume = models.FileField(upload_to='uploads/')
-
+    linkedin_profile_url = models.CharField(max_length=50, blank=True)
+    resume = models.FileField(upload_to="uploads/")
 
     class Meta:
         verbose_name = "JobApplication"
-        verbose_name_plural = "job_application"
+        verbose_name_plural = "JobApplications"
 
     @classmethod
-    def get_job_list(cls):
+    def get_job_applications(cls):
         applicant_list = JobApplications.objects.all().values()
         return applicant_list
     
     @classmethod
     def create_application(cls, **kwargs):
-       applicant =  None
-       try:
+        applicant =  None
+        try:
            applicant = JobApplications.objects.create(**kwargs)
-       except Exception as e:
+        except Exception as e:
             return applicant
-
+    
     @classmethod
     def update_application(cls, applicant_id, **kwargs):
         applicant = None
@@ -44,11 +43,11 @@ class JobApplications(BaseModel):
             applicant = JobApplications.objects.filter(id=applicant_id).update(**kwargs)
         except Exception as e:
             return applicant
-        
+
     @classmethod
     def delete_applicant(cls, applicant_id):
         applicant = None
-        try : 
+        try:
             applicant = JobApplications.objects.filter(id=applicant_id).delete()
         except Exception as e:
             return applicant

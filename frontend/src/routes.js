@@ -33,7 +33,8 @@ import Accounting from "./views/admin/accounting";
 import UserManagement from "./views/admin/usermanagement";
 import Leaves from "./views/admin/leaves";
 import Report from "./views/admin/reports";
-
+// import Application from "./views/admin/jobs";
+import Application from "./views/admin/applications";
 
 
 
@@ -68,6 +69,13 @@ const routes = [
     path: "/inventory",
     icon: <Icon as={MdShoppingBasket} width="20px" height="20px" color="inherit" />,
     component: Inventory,
+  },
+  {
+    name: "Applications",
+    layout: "/admin",
+    path: "/applications",
+    icon: <Icon as={MdReceipt} width="20px" height="20px" color="inherit" />,
+    component: Application,
   },
   {
     name: "Items",

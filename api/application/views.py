@@ -1,4 +1,4 @@
-from email.mime import application
+# from email.mime import application
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
@@ -7,12 +7,12 @@ from .models import JobApplications
 
 class ApplicantAPI(APIView):
     def get(self, request):
-        applicant_list = JobApplications.get_job_list()
+        applicant_list = JobApplications.get_job_applications()
         return Response(data=applicant_list, status=status.HTTP_200_OK)
     
     def post(self, request):
         application = request.data
-        applicant_list = JobApplications.get_job_list(**application)
+        applicant_list = JobApplications.get_job_applications(**application)
         if application:
             return Response(data={"message": "Successfully created application."}, status=status.HTTP_200_OK)
         return Response(data={"message": "Failed to create application."}, status=status.HTTP_501_NOT_IMPLEMENTED)
@@ -29,7 +29,7 @@ class ApplicantAPI(APIView):
         return Response(data={"message": "Failed to update application."}, status=status.HTTP_501_NOT_IMPLEMENTED)
     
     def delete(self, request):
-        application = JobApplications.delete_applicant(1)
+        application = JobApplications.delete
         if application is None:
             return Response(
                 data={"message": "Failed to delete application."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
