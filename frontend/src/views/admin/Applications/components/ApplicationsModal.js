@@ -63,7 +63,7 @@ function ApplicationsModal(props) {
             <InputGroup>
               <InputLeftAddon children="first name" borderRadius="16px" />
               <Input
-                name="first name"
+                name="first_name"
                 placeholder="first Name"
                 borderRadius="16px"
                 onChange={onChange}
@@ -72,7 +72,7 @@ function ApplicationsModal(props) {
             <InputGroup>
               <InputLeftAddon children="last name" borderRadius="16px" />
               <Input
-                name="name"
+                name="last_name"
                 placeholder="last name"
                 borderRadius="16px"
                 onChange={onChange}
@@ -80,7 +80,7 @@ function ApplicationsModal(props) {
             </InputGroup>
             <InputGroup>
             <InputLeftAddon children="email" borderRadius="16px" />
-            <Input name="email" placeholder="email" borderRadius="16px" type="date" onChange={onChange}/>
+            <Input name="Email" placeholder="email" borderRadius="16px" type="Email" onChange={onChange}/>
             <InputRightElement
               borderRadius="16px"
             />
@@ -88,7 +88,9 @@ function ApplicationsModal(props) {
           <InputGroup>
           <InputLeftAddon children="phone number" borderRadius="16px" />
           <Select
-            name="phone number"
+            name="phone_number"
+            type="name"
+            placeholder="phone number"
             options={conditionOptions}
             onChange={onOptionSelect}
           />
@@ -97,7 +99,6 @@ function ApplicationsModal(props) {
           <InputLeftAddon children="address" borderRadius="16px" />
           <Select
             name="address"
-            options={conditionOptions}
             onChange={onOptionSelect}
           />
         </InputGroup>
@@ -146,7 +147,7 @@ function ApplicationsModal(props) {
       onChange={onChange}
     />
 </InputGroup>
-{/* <InputGroup>
+<InputGroup>
     <InputLeftAddon children="project" borderRadius="16px" />
     <Input
       name="name"
@@ -163,13 +164,14 @@ function ApplicationsModal(props) {
       borderRadius="16px"
       onChange={onChange}
     />
-</InputGroup> */}
-{/* <InputGroup>
+</InputGroup> 
+<InputGroup>
     <InputLeftAddon children="desired pay" borderRadius="16px" />
     <Input
       name="name"
       placeholder="desired pay"
       borderRadius="16px"
+      type="number"
       onChange={onChange}
     />
 </InputGroup>
@@ -190,7 +192,7 @@ function ApplicationsModal(props) {
       borderRadius="16px"
       onChange={onChange}
     />
-</InputGroup>           */}
+</InputGroup>          
           </Stack>
         </ModalBody>
         <ModalFooter>

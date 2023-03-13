@@ -96,7 +96,7 @@ export default function ColumnsTable(props) {
     { label: "Bad", value: "Bad" },
   ];
 
-  const getApplications = () =>{
+  const getApplications = (applicationsData, httpVerb) => {
     const config = {
       headers: {
         Accept: "application/json",
@@ -175,12 +175,13 @@ export default function ColumnsTable(props) {
       .then((response) => {
         onClose();
         getApplications();
-        console.log("check our fss:", response.data);
+        setApplicationsData();
+        console.log("check our response:", response.data);
         toast.success(`${response.data.message}`);
       })
       .catch((error) => {
         console.log(error);
-        toast.error('approved');
+        toast.error('not created!');
       });
   }
 
@@ -363,18 +364,19 @@ export default function ColumnsTable(props) {
         <ModalBody>
           <Stack spacing={4}>
             <InputGroup>
-              <InputLeftAddon children="FIRST NAME" borderRadius="16px" />
+              <InputLeftAddon children="first name" borderRadius="16px" />
               <Input
                 name="first name"
                 placeholder="first name"
                 borderRadius="16px"
+                type="text"
                 onChange={onChange}
               />
             </InputGroup>
             <InputGroup>
               <InputLeftAddon children="last name" borderRadius="16px" />
               <Input
-                name="LAST name"
+                name="last name"
                 placeholder="last name"
                 borderRadius="16px"
                 type="text"
@@ -428,7 +430,7 @@ export default function ColumnsTable(props) {
                 name="date"
                 placeholder="date"
                 borderRadius="16px"
-                type="text"
+                type="date"
                 onChange={onChange}
               />
             </InputGroup>
@@ -438,7 +440,7 @@ export default function ColumnsTable(props) {
                 name="desired pay"
                 placeholder="desired pay"
                 borderRadius="16px"
-                type="text"
+                type="number"
                 onChange={onChange}
               />
             </InputGroup>

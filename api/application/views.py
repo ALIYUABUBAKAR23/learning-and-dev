@@ -11,9 +11,10 @@ class ApplicantAPI(APIView):
         return Response(data=applicant_list, status=status.HTTP_200_OK)
     
     def post(self, request):
+        print(request.data)
         application = request.data
-        applicant_list = JobApplications.get_job_applications(**application)
-        if application:
+        applicant_list = JobApplications.create_application(**application)
+        if applicant_list:
             return Response(data={"message": "Successfully created application."}, status=status.HTTP_200_OK)
         return Response(data={"message": "Failed to create application."}, status=status.HTTP_501_NOT_IMPLEMENTED)
     

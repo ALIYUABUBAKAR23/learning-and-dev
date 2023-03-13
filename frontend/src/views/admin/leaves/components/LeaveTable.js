@@ -152,7 +152,7 @@ export default function ColumnsTable(props) {
         Accept: "application/json",
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
-        authorization: `Token ${Cookies.get("token")}`,
+        'authorization': `Token ${Cookies.get("token")}`,
       },
     };
 

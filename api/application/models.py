@@ -24,17 +24,14 @@ class JobApplications(BaseModel):
         verbose_name_plural = "JobApplications"
 
     @classmethod
-    def get_job_applications(cls):
+    def get_applications(cls):
         applicant_list = JobApplications.objects.all().values()
         return applicant_list
     
     @classmethod
     def create_application(cls, **kwargs):
-        applicant =  None
-        try:
-           applicant = JobApplications.objects.create(**kwargs)
-        except Exception as e:
-            return applicant
+        applicant = JobApplications.objects.create(**kwargs)
+        return applicant
     
     @classmethod
     def update_application(cls, applicant_id, **kwargs):

@@ -35,7 +35,7 @@ import { baseUrl } from "../../../utility";
 export default function Settings() {
   // Chakra Color Mode
   const [leaveList, setLeaveList] = useState([])
-  //const [ledgerList, setLedgerList] = useState([])
+  //const [ledgerLipst, setLedgerList] = useState([])
 
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
